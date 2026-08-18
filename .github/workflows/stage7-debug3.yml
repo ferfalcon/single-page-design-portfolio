@@ -1,0 +1,77 @@
+name: Stage 7 full-run diagnostic
+
+on:
+  push:
+    branches:
+      - workflow/stage-7-plan
+    paths:
+      - .workflow/stage7-debug3-kick.tmp
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: workflow/stage-7-plan
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Replay Stage 7 runner steps
+        shell: bash
+        run: |
+          set +e
+          LOG=/tmp/stage7-debug3.log
+          python3 <<'PY' > "$LOG" 2>&1
+          from pathlib import Path
+          import subprocess
+
+          workflow = Path('.github/workflows/stage7-plan-runner.yml')
+          lines = workflow.read_text().splitlines()
+
+          def extract(name):
+              marker = f'- name: {name}'
+              start = next(i for i, line in enumerate(lines) if line.strip() == marker)
+              run_index = next(i for i in range(start + 1, len(lines)) if lines[i].strip() == 'run: |')
+              out = []
+              for line in lines[run_index + 1:]:
+                  if line.startswith('      - name: '):
+                      break
+                  if line.startswith('          '):
+                      out.append(line[10:])
+                  elif not line.strip():
+                      out.append('')
+                  else:
+                      break
+              return '\n'.join(out) + '\n'
+
+          for name in [
+              'Advance canonical workflow to Stage 7',
+              'Write Stage 7 repository context and plan',
+              'Review artifact and run Stage 7 preflight',
+          ]:
+              print(f'=== {name} ===', flush=True)
+              script = extract(name)
+              result = subprocess.run(['bash', '-euo', 'pipefail', '-c', script], text=True)
+              print(f'exit={result.returncode}', flush=True)
+              if result.returncode != 0:
+                  break
+          PY
+          RC=$?
+          echo "diagnostic_python_exit=$RC" >> "$LOG"
+          echo '=== git diff check after replay ===' >> "$LOG"
+          git diff --check >> "$LOG" 2>&1
+          echo "git_diff_exit=$?" >> "$LOG"
+          git reset --hard HEAD
+          cp "$LOG" .workflow/stage7-debug3.log
+          rm -f .github/workflows/stage7-debug3.yml .workflow/stage7-debug3-kick.tmp
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A .workflow/stage7-debug3.log .github/workflows/stage7-debug3.yml .workflow/stage7-debug3-kick.tmp
+          git commit -m "Capture Stage 7 full-run diagnostic"
+          git push origin HEAD:workflow/stage-7-plan
