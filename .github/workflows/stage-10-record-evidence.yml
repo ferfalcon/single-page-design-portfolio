@@ -1,0 +1,27 @@
+name: Stage 10 evidence record
+
+on:
+  pull_request:
+    types: [synchronize]
+    branches:
+      - main
+
+jobs:
+  inspect-validation:
+    if: github.head_ref == 'agent/stage-10-implementation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout implementation branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/stage-10-implementation
+
+      - name: Show canonical task validation definitions
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const record = JSON.parse(fs.readFileSync('.workflow/workflow-record.json', 'utf8'));
+          const task = record.tasks.find((item) => item.id === 'P01-T01');
+          if (!task) throw new Error('P01-T01 not found');
+          console.log(JSON.stringify(task.validation, null, 2));
+          NODE
