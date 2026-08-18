@@ -72,6 +72,8 @@ updated: 2026-08-18
 - Source verification: Canonical checks exist through `VER-008`; the Stage 5 read-only challenge found no upstream design drift and no frontend implementation changes since `SRC-REPO-001`.
 - Stage 5 finding: `AUD-009` — every scoped `Work Image / 05` instance currently resolves to `Asset/Work/02`, while standalone `Asset/Work/05` exists unused.
 - Owner resolution: **Option 2** — logical Work position 05 will use standalone `Asset/Work/05` (`6:380`). Treat the current repeated Work 02 instance as a source-assembly mistake for implementation purposes; keep the deviation traceable rather than rewriting it as observed Figma behavior.
-- Remaining Stage 5 requirement: Normalize affected owning documentation and run Stage 5 preflight. The owner decision blocker itself is resolved.
-- Validation limitation: The local runtime available in this session cannot clone GitHub because outbound DNS/network access is unavailable, so canonical CLI preflight has not been executed and must not be claimed as passed.
-- Next permitted action: Finish Stage 5 document normalization and preflight, then request explicit Stage 5 gate approval. Architecture, planning, task decomposition, and frontend implementation remain unstarted.
+- Stage 5 documentation normalization: Complete. `DESIGN-AUDIT.md`, `IMPLEMENTATION-BRIEF.md`, and this workflow-state summary consistently record Option 2 and preserve the source-vs-owner-decision distinction.
+- Project-owner approval: **Received for Stage 5 on 2026-08-18.** This approval is captured narratively but cannot be converted into canonical `GATE-006` until the required preflight succeeds.
+- Remaining Stage 5 requirement: Canonically mark `ART-IMPLEMENTATION-BRIEF` Reviewed, run Stage 5 preflight, and only then record the approved passing gate.
+- Validation limitation: The local runtime available in this session cannot clone GitHub because outbound DNS/network access is unavailable. No connected execution tool exposed a repository shell capable of running the project CLI, so canonical CLI preflight has not been executed and must not be claimed as passed.
+- Next permitted action: Run the canonical Stage 5 artifact-review/preflight/gate sequence in an execution environment with repository access. Architecture, planning, task decomposition, and frontend implementation remain unstarted.
