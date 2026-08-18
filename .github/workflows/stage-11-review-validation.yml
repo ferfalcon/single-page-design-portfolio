@@ -38,7 +38,7 @@ jobs:
 
           $CLI trace define IMPL-001 \
             --owner ART-IMPLEMENTATION-REVIEW \
-            --required true \
+            --required false \
             --references PLAN-003,PLAN-004
 
           $CLI task create \
