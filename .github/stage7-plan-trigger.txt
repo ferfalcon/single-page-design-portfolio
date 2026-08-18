@@ -1,1 +1,1 @@
-diagnose Stage 7 transition after projection repair
+run Stage 7 planning without diagnostics
