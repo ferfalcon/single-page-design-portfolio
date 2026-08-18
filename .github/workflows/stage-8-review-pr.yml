@@ -1,0 +1,56 @@
+name: Stage 8 review PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    if: github.head_ref == 'workflow/stage-8-plan-review'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out head branch
+        uses: actions/checkout@v4
+        with:
+          ref: workflow/stage-8-plan-review
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Apply and validate Stage 8 review
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs artifact reopen ART-IMPLEMENTATION-BRIEF --evidence "Stage 8 adversarial review requires corrections to the approved Stage 7 plan before a new readiness decision."
+          node .github/stage-8-review.mjs
+          node docs/implementation-workflow/cli/design-workflow.mjs artifact review ART-IMPLEMENTATION-BRIEF --evidence "Stage 8 adversarial review completed: sources/repository rechecked, PLAN-003 fallback geometry assumption corrected, validation/deployment/rollback and traceability challenged, and readiness concluded Ready for task decomposition pending owner approval."
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+          node docs/implementation-workflow/cli/design-workflow.mjs validate
+          node docs/implementation-workflow/cli/design-workflow.mjs stage check --json | tee /tmp/stage-check.json
+          node docs/implementation-workflow/cli/design-workflow.mjs context --json
+          git diff --check
+
+      - name: Require recordable passing recommendation
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const check = JSON.parse(fs.readFileSync('/tmp/stage-check.json', 'utf8'));
+          if (check.stage?.number !== 8) throw new Error(`Expected Stage 8, got ${check.stage?.number}`);
+          if (!check.decision?.recordable) throw new Error((check.decision?.findings ?? []).join('; '));
+          if (!['Passed', 'Passed with assumptions'].includes(check.decision?.recommendedResult)) throw new Error(`Unexpected recommendation: ${check.decision?.recommendedResult}`);
+          console.log(`Stage 8 preflight recommends ${check.decision.recommendedResult}.`);
+          NODE
+
+      - name: Persist review and remove temporary runners
+        run: |
+          rm -f .github/workflows/stage-8-review.yml .github/workflows/stage-8-review-pr.yml .github/stage-8-review.mjs
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add IMPLEMENTATION-BRIEF.md .workflow .github
+          git commit -m "Review Stage 8 implementation plan"
+          git push origin HEAD:workflow/stage-8-plan-review
