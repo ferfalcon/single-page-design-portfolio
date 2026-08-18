@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node ../docs/implementation-workflow/cli/design-workflow.mjs artifact review ART-IMPLEMENTATION-BRIEF --evidence \"Stage 5 documentation consistency review completed\" && node ../docs/implementation-workflow/cli/design-workflow.mjs stage check --json && node ../docs/implementation-workflow/cli/design-workflow.mjs stage review --result Passed --evidence \"Stage 5 document review and preflight passed\" --approved-by \"Fernando Falcon\" && rm -rf public/workflow-export && mkdir -p public/workflow-export/generated && cp ../.workflow/workflow-record.json public/workflow-export/workflow-record.json && cp ../.workflow/generated/*.md public/workflow-export/generated/ && astro build",
+    "build": "rm -rf /tmp/workflow-repo && git clone --branch workflow/stage-5-document-review --single-branch https://github.com/ferfalcon/single-page-design-portfolio.git /tmp/workflow-repo && cd /tmp/workflow-repo && node docs/implementation-workflow/cli/design-workflow.mjs artifact review ART-IMPLEMENTATION-BRIEF --evidence \"Stage 5 documentation consistency review completed\" && node docs/implementation-workflow/cli/design-workflow.mjs stage check --json && node docs/implementation-workflow/cli/design-workflow.mjs stage review --result Passed --evidence \"Stage 5 document review and preflight passed\" --approved-by \"Fernando Falcon\" && cd /vercel/path1 && rm -rf public/workflow-export && mkdir -p public/workflow-export/generated && cp /tmp/workflow-repo/.workflow/workflow-record.json public/workflow-export/workflow-record.json && cp /tmp/workflow-repo/.workflow/generated/*.md public/workflow-export/generated/ && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
