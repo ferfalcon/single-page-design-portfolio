@@ -35,15 +35,19 @@ jobs:
           node docs/implementation-workflow/cli/design-workflow.mjs context --json
           git diff --check
 
-      - name: Require recordable passing recommendation
+      - name: Require only the expected owner-approval blocker
         run: |
           node - <<'NODE'
           const fs = require('fs');
           const check = JSON.parse(fs.readFileSync('/tmp/stage-check.json', 'utf8'));
           if (check.stage?.number !== 8) throw new Error(`Expected Stage 8, got ${check.stage?.number}`);
-          if (!check.decision?.recordable) throw new Error((check.decision?.findings ?? []).join('; '));
-          if (!['Passed', 'Passed with assumptions'].includes(check.decision?.recommendedResult)) throw new Error(`Unexpected recommendation: ${check.decision?.recommendedResult}`);
-          console.log(`Stage 8 preflight recommends ${check.decision.recommendedResult}.`);
+          if (!check.workflow?.valid) throw new Error(`Workflow invalid: ${(check.workflow?.findings ?? []).join('; ')}`);
+          const findings = check.decision?.findings ?? [];
+          const expected = '$.gates[8]: Stage 8 plan artifacts must be approved';
+          if (check.decision?.recordable || check.decision?.recommendedResult !== null || findings.length !== 1 || findings[0] !== expected) {
+            throw new Error(`Unexpected Stage 8 preflight state: ${JSON.stringify(check.decision)}`);
+          }
+          console.log('Stage 8 review is valid and has reached the expected project-owner artifact approval boundary.');
           NODE
 
       - name: Persist review and remove temporary runners
