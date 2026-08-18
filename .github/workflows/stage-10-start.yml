@@ -1,0 +1,83 @@
+name: Stage 10 start
+
+on:
+  push:
+    branches:
+      - agent/stage-10-implementation
+    paths:
+      - .github/workflows/stage-10-start.yml
+
+permissions:
+  contents: write
+
+jobs:
+  start-stage-10:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Inspect canonical workflow context
+        run: node docs/implementation-workflow/cli/design-workflow.mjs context --json
+
+      - name: Verify task-start repository baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --quiet 07635a8eafb4323909619a0b62e41a4d8144d764 HEAD -- frontend/
+          node docs/implementation-workflow/cli/design-workflow.mjs snapshot verify SRC-REPO-001 \
+            --result "Expected workflow output" \
+            --method "Immutable baseline and task-start branch comparison" \
+            --evidence "The Stage 10 branch descends from approved main 6e562dcb53de6aa122d8c309f66b83820f0bce6e, and frontend/ is byte-unchanged from SRC-REPO-001; intervening changes are workflow/documentation only."
+
+      - name: Record fresh Figma verification
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs snapshot verify SRC-DS-001 \
+            --result Unchanged \
+            --method "Fresh read-only Figma MCP inspection of Workflow page and 375/768/1440 Home exemplars" \
+            --evidence "Immediately before Stage 10, the Workflow page still contained the recorded Mobile, Tablet, and Desktop Home frames, responsive section/component structure, carousel controls, profile portrait, service artwork, and five standalone Work assets; no material design drift was observed."
+
+      - name: Advance to Stage 10 and start task
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs stage advance
+          node docs/implementation-workflow/cli/design-workflow.mjs task start P01-T01
+
+      - name: Mandatory modern web guidance
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx -y modern-web-guidance@latest search "Implement an accessible responsive single-page portfolio with a dependency-free progressively enhanced carousel, keyboard focus retention, polite live-region updates, reduced motion, no-JavaScript fallback, resilient reflow, and efficient image loading" --skill-version 2026_05_16-c5e78707 | tee /tmp/modern-web-guidance-search.json
+          IDS="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/modern-web-guidance-search.json','utf8'));console.log(x.slice(0,3).map(v=>v.id).join(','));")"
+          if [ -z "$IDS" ]; then
+            npx -y modern-web-guidance@latest list
+          else
+            echo "Retrieving guidance: $IDS"
+            npx -y modern-web-guidance@latest retrieve "$IDS"
+          fi
+
+      - name: Validate canonical state
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+          node docs/implementation-workflow/cli/design-workflow.mjs validate
+          node docs/implementation-workflow/cli/design-workflow.mjs context --json
+
+      - name: Persist workflow state and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm .github/workflows/stage-10-start.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git add .workflow
+          git add -u .github/workflows/stage-10-start.yml 2>/dev/null || true
+          git commit -m "Start Stage 10 implementation"
+          git push
