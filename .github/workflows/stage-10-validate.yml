@@ -90,3 +90,144 @@ jobs:
           test "$(find frontend/dist -name index.html -type f | wc -l)" -eq 1
           grep -q 'Design solutions made easy' frontend/dist/index.html
           grep -q 'work-05' frontend/dist/index.html
+
+      - name: Install browser test tooling
+        run: |
+          pnpm --dir frontend add --save-dev @playwright/test@latest --lockfile=false
+          pnpm --dir frontend exec playwright install --with-deps chromium
+
+      - name: Start production preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm --dir frontend preview --host 127.0.0.1 --port 4321 > /tmp/astro-preview.log 2>&1 &
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4321/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/astro-preview.log
+          exit 1
+
+      - name: Create browser validation suite
+        shell: bash
+        run: |
+          mkdir -p frontend/tests
+          cat > frontend/tests/portfolio.spec.ts <<'TEST'
+          import { test, expect } from '@playwright/test';
+
+          const url = 'http://127.0.0.1:4321/';
+
+          for (const width of [320, 375, 768, 1024, 1440]) {
+            test(`responsive layout ${width}px`, async ({ page }) => {
+              await page.setViewportSize({ width, height: 900 });
+              await page.goto(url);
+              await expect(page.getByRole('heading', { level: 1, name: 'Design solutions made easy' })).toBeVisible();
+              await expect(page.locator('.service-card')).toHaveCount(6);
+              await expect(page.locator('[data-carousel-slide]')).toHaveCount(5);
+              await expect(page.getByRole('heading', { level: 2 })).toHaveCount(3);
+              const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+              expect(scrollWidth).toBeLessThanOrEqual(width);
+
+              if (width === 375) await expect(page.locator('.hero')).toHaveCSS('width', '343px');
+              if (width === 768) await expect(page.locator('.hero')).toHaveCSS('width', '704px');
+              if (width === 1440) await expect(page.locator('.hero')).toHaveCSS('width', '1110px');
+
+              const current = page.locator('[data-carousel-slide][aria-current="true"]');
+              await expect(current).toHaveAttribute('data-index', '2');
+
+              if ([375, 768, 1440].includes(width)) {
+                await page.screenshot({ path: `test-results/visual/portfolio-${width}.png`, fullPage: true });
+              }
+            });
+          }
+
+          test('carousel is cyclic, serialized, focus-safe, and announced', async ({ page }) => {
+            await page.setViewportSize({ width: 375, height: 900 });
+            await page.goto(url);
+            const next = page.getByRole('button', { name: 'Next project' });
+            const previous = page.getByRole('button', { name: 'Previous project' });
+            await expect(next).toBeEnabled();
+            await expect(previous).toBeEnabled();
+
+            await next.focus();
+            await next.click();
+            await expect(page.locator('[data-carousel-slide][aria-current="true"]')).toHaveAttribute('data-index', '3');
+            await expect(page.locator('[data-carousel-status]')).toHaveText('Project 4 of 5');
+            await expect(next).toBeFocused();
+
+            await page.evaluate(() => {
+              const button = document.querySelector<HTMLButtonElement>('[data-carousel-next]');
+              button?.click(); button?.click(); button?.click();
+            });
+            await page.waitForTimeout(700);
+            await expect(page.locator('[data-carousel-slide][aria-current="true"]')).toHaveAttribute('data-index', '1');
+            await expect(page.locator('[data-carousel-status]')).toHaveText('Project 2 of 5');
+
+            await page.evaluate(() => {
+              const button = document.querySelector<HTMLButtonElement>('[data-carousel-previous]');
+              button?.click(); button?.click();
+            });
+            await page.waitForTimeout(450);
+            await expect(page.locator('[data-carousel-slide][aria-current="true"]')).toHaveAttribute('data-index', '4');
+            await expect(page.locator('[data-carousel-status]')).toHaveText('Project 5 of 5');
+
+            const stableIndex = await page.locator('[data-carousel-slide][aria-current="true"]').getAttribute('data-index');
+            await page.waitForTimeout(450);
+            await expect(page.locator('[data-carousel-slide][aria-current="true"]')).toHaveAttribute('data-index', stableIndex ?? '');
+          });
+
+          test('reduced motion updates without animated delay', async ({ page }) => {
+            await page.emulateMedia({ reducedMotion: 'reduce' });
+            await page.setViewportSize({ width: 768, height: 900 });
+            await page.goto(url);
+            await page.getByRole('button', { name: 'Next project' }).click();
+            await page.waitForTimeout(30);
+            await expect(page.locator('[data-carousel-slide][aria-current="true"]')).toHaveAttribute('data-index', '3');
+            await expect(page.locator('[data-carousel-status]')).toHaveText('Project 4 of 5');
+          });
+
+          test('no-JavaScript fallback keeps all work items reachable with no dead controls', async ({ browser }) => {
+            const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 375, height: 900 } });
+            const page = await context.newPage();
+            await page.goto(url);
+            await expect(page.locator('[data-carousel-slide]')).toHaveCount(5);
+            await expect(page.locator('[data-carousel-controls]')).toBeHidden();
+            const geometry = await page.locator('[data-carousel-track]').evaluate((element) => ({
+              scrollWidth: element.scrollWidth,
+              clientWidth: element.clientWidth,
+            }));
+            expect(geometry.scrollWidth).toBeGreaterThan(geometry.clientWidth);
+            await page.locator('[data-carousel-track]').evaluate((element) => { element.scrollLeft = element.scrollWidth; });
+            expect(await page.locator('[data-carousel-track]').evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+            await context.close();
+          });
+
+          test('keyboard focus and approved accessibility color overrides are present', async ({ page }) => {
+            await page.setViewportSize({ width: 375, height: 900 });
+            await page.goto(url);
+            await page.keyboard.press('Tab');
+            await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeFocused();
+            await page.keyboard.press('Tab');
+            await expect(page.getByRole('link', { name: 'Home' }).first()).toBeFocused();
+
+            const accent = page.locator('.consultation-link--accent').first();
+            await expect(accent).toHaveCSS('color', 'rgb(3, 3, 3)');
+            for (const selector of ['.service-card--ui', '.service-card--apps', '.service-card--photography']) {
+              await expect(page.locator(selector)).toHaveCSS('color', 'rgb(3, 3, 3)');
+            }
+            await expect(page.locator('a[href="#"]')).toHaveCount(4);
+          });
+          TEST
+
+      - name: Run browser validation suite
+        run: pnpm --dir frontend exec playwright test tests/portfolio.spec.ts --reporter=line
+
+      - name: Upload visual validation screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage-10-visual-validation
+          path: frontend/test-results/visual
+          if-no-files-found: warn
