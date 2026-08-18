@@ -1,0 +1,7 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="48" cy="16" r="14" stroke="#030303" stroke-width="4"/><rect width="32" height="32" fill="#E16B5B"/>
+<rect y="32" width="4" height="4" fill="#030303"/><rect x="14" y="32" width="4" height="4" fill="#030303"/><rect x="28" y="32" width="4" height="4" fill="#030303"/>
+<rect y="46" width="4" height="4" fill="#030303"/><rect x="14" y="46" width="4" height="4" fill="#030303"/><rect x="28" y="46" width="4" height="4" fill="#030303"/>
+<rect y="60" width="4" height="4" fill="#030303"/><rect x="14" y="60" width="4" height="4" fill="#030303"/><rect x="28" y="60" width="4" height="4" fill="#030303"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M32 32L64 64V32H32Z" fill="#FFF7F0"/>
+</svg>
