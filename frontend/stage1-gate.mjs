@@ -20,6 +20,10 @@ function readJsonCommand(args) {
   return JSON.parse(run(args, { capture: true }));
 }
 
+console.log('=== Repair deterministic generated projections ===');
+run(['sync']);
+run(['sync', '--check']);
+
 console.log('=== Canonical context before retry ===');
 const contextBefore = readJsonCommand(['context', '--json']);
 console.log(JSON.stringify(contextBefore, null, 2));
