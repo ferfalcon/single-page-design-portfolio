@@ -1,6 +1,6 @@
 ---
 artifact: DESIGN-AUDIT
-status: Draft
+status: Approved
 baseline:
   design:
     - SRC-DS-001
@@ -16,8 +16,8 @@ updated: 2026-08-18
 
 ## 1. Document Information
 
-- Status: Draft
-- Version: 0.2
+- Status: Approved
+- Version: 0.4
 - Last updated: 2026-08-18
 - Auditor: ChatGPT
 - Project: Single-page design portfolio
@@ -34,6 +34,8 @@ updated: 2026-08-18
 This audit establishes the observed design evidence for the scoped Single-page design portfolio before requirements, design intent, specification, and planning are derived. It records what the active Figma snapshot demonstrates, where that evidence appears, and what remains unresolved.
 
 The audit does not choose implementation breakpoints, HTML semantics, JavaScript behavior, CTA destinations, carousel logic, or other product and technical rules that the design source does not establish. Project-owner decisions made after inspection are recorded separately as Confirmed downstream direction and do not alter what was or was not observed in Figma.
+
+Stage 5 later challenged this evidence against the approved requirements/design/specification. That review did not change the source baseline, but it corrected one missed source-assembly observation as `AUD-009`. The project owner subsequently resolved `AUD-009` for implementation by selecting standalone `Asset/Work/05` (`6:380`) for logical Work position 05. That resolution is an explicit downstream correction and does not rewrite the observed Figma assembly.
 
 ## 3. Scope
 
@@ -189,8 +191,9 @@ Confirmed owner direction for downstream specification does not change that sour
 
 - The same “Free Consultation” label is reused in header, About, Contact, and footer contexts.
 - The services group contains six fixed example categories and paired decorative illustrations.
-- The Work source provides five portfolio preview assets (`Asset/Work/01` through `Asset/Work/05`).
-- The supplied Home compositions show only a subset of Work assets simultaneously, varying by viewport.
+- The scoped page contains five standalone portfolio preview assets (`Asset/Work/01` through `Asset/Work/05`).
+- The `Section/Work` variants contain five logical image slots named 01 through 05, but Stage 5 inspection established that logical slot 05 currently instances `Asset/Work/02` rather than standalone `Asset/Work/05`; see `AUD-009`.
+- The supplied Home compositions show only a subset of Work slots simultaneously, varying by viewport.
 - No empty, failed-image, long-label, localization, validation, or alternate-content examples are supplied.
 - Visual repetition does not establish an underlying API, CMS, or data model.
 
@@ -202,13 +205,13 @@ Confirmed owner direction for downstream specification does not change that sour
 | Profile portrait | `SRC-DS-001` → `4:3032` | PNG at 3× export | Meaningful About image | Available | Licensing not evidenced in source |
 | Work images 01–05 | `SRC-DS-001` → `6:376`–`6:380` | PNG at 2× export | Meaningful portfolio previews | Available | Licensing not evidenced in source |
 
-Component descriptions explicitly classify service illustrations as decorative, while the profile portrait and portfolio work imagery are described as meaningful content. Final alternative text wording is not provided.
+Component descriptions explicitly classify service illustrations as decorative, while the profile portrait and portfolio work imagery are described as meaningful content. Final alternative text wording is not provided by Figma. Standalone `Asset/Work/05` exists and is exportable even though it is not currently used by the Work variants.
 
 ## 15. Accessibility Observations
 
 - **Observed — `EVD-009`:** Dark and Accent buttons and both carousel controls include explicit Focus variants. Source: `4:680`, `4:684`, `7:1784`, `7:1791`.
 - **Observed — `EVD-010`:** Component descriptions include implementation-oriented accessible-name and alternative-text guidance: logo-as-link naming, previous/next project naming, decorative service artwork, meaningful portrait/work imagery. Source: component descriptions in `2141:14881`.
-- **Observed — `EVD-011`:** Button controls are 234×56 in their source variants; carousel controls are 64×64. Source: `4:680`, `4:684`, `7:1784`, `7:1791`.
+- **Observed — `EVD-011`:** Button controls are 234×56 in their source variants; carousel controls are 64×64 in their base component variants. Mobile `Section/Work` scales the carousel control instances to 48×48. Source: `4:680`, `4:684`, `7:1784`, `7:1791`, `2171:3172`, `2171:3173`.
 - **Observed — `EVD-012`:** The Accent button default uses 16px Bold `Typography/Label/Action` text in `color/neutral/200` over `#E16B5B`, approximately 3.07:1 contrast. Its Hover variant uses white over `#F6A560`, approximately 2.01:1. Both are below the WCAG AA 4.5:1 threshold for normal text.
 - **Observed — `EVD-013`:** Service labels are 24px Bold white text. Graphic Design on `#755CDE` (~4.84:1), Illustrations on `#E16B5B` (~3.25:1), and Motion Graphics on `#552049` (~12.43:1) meet the 3:1 large-text threshold. UI/UX on `#F6A560` (~2.01:1), Apps on `#F39E9E` (~2.06:1), and Photography on `#61C4B7` (~2.08:1) do not.
 - **Missing evidence:** Figma does not prove semantic HTML, heading levels, DOM reading order, keyboard operation, programmatic names, focus order, screen-reader behavior, reflow at intermediate widths, zoom behavior, or reduced-motion handling.
@@ -225,6 +228,7 @@ Component descriptions explicitly classify service illustrations as decorative, 
 | `AUD-006` | Accessibility / Motion | 200ms dissolve hover transitions are demonstrated; reduced-motion behavior is not | `SRC-DS-001` → interactive component variants | Implementation must not treat the prototype as complete reduced-motion guidance | Observed |
 | `AUD-007` | Accessibility / Content | Profile and Work imagery are marked meaningful, but final alternative-text copy is not provided | `SRC-DS-001` → asset component descriptions | Final accessible text requires content/implementation resolution | Observed |
 | `AUD-008` | Accessibility / State | Focus variants exist, but the design source cannot establish keyboard triggering, focus order, or focus management | `SRC-DS-001` → interactive component sets | Implementation accessibility behavior remains to be specified and validated | Observed |
+| `AUD-009` | Content / Source assembly | In Mobile, Tablet, and Desktop `Section/Work`, the layer named `Work Image / 05` resolves to `Asset/Work/02` (`6:377`) and uses the Work 02 image, while the distinct standalone `Asset/Work/05` (`6:380`) exists on the same scoped page but is not used by those variants | `SRC-DS-001` → `2171:3170`, `2171:3182`, `2171:3194`; standalone `6:380` | Owner resolution for implementation: logical Work position 05 uses standalone `Asset/Work/05` (`6:380`). The current repeated Work 02 assembly remains recorded as observed source evidence and is treated as a source-assembly mistake for implementation purposes | Observed; owner-resolved downstream |
 
 ## 17. Questions and Owner Resolutions
 
@@ -234,25 +238,27 @@ Component descriptions explicitly classify service illustrations as decorative, 
 - **`AUD-002`:** Treat the Work interaction as a standard previous/next carousel. The later specification should define its observable mechanics without claiming those mechanics were demonstrated by Figma.
 - **`AUD-003`:** Do not alter the Figma source during this audit. Carry the Accent CTA contrast finding into implementation and ensure the implemented treatment meets the applicable accessibility requirement.
 - **`AUD-004`:** Do not alter the Figma source during this audit. Carry the affected service-label contrast findings into implementation and ensure the implemented treatments meet the applicable accessibility requirement.
+- **`AUD-009`:** Use standalone `Asset/Work/05` (`6:380`) for logical Work position 05. Treat the repeated `Asset/Work/02` instance in the current scoped `Section/Work` variants as a source-assembly mistake for implementation. This is an explicit owner correction, not observed intended Figma behavior, and does not authorize a Figma edit.
 
 ### Product questions
 
-- No blocking product question remains from `AUD-001` or `AUD-002`. Exact carousel boundary/wrap behavior is a downstream specification detail under the confirmed “standard carousel” direction.
+- No blocking product question remains from `AUD-001`, `AUD-002`, or `AUD-009`; their downstream behavior/content mapping is resolved.
 - Whether Work images are also clickable project links is not demonstrated and has not been requested; do not add project-link behavior unless later evidence or owner direction introduces it.
 
 ### Design questions
 
-- The exact compliant visual treatment for `AUD-003` and `AUD-004` is intentionally deferred. The owner has confirmed that these findings must be addressed in implementation rather than changing Figma during Stage 1.
-- Should the supplied hover dissolves remain motion-enabled for users who request reduced motion, or should the implementation remove/reduce them? The Figma source does not decide this.
+- The exact compliant visual treatment for `AUD-003` and `AUD-004` was intentionally deferred from Stage 1 and was later specified with the existing dark text role.
+- Reduced-motion behavior was not supplied by Figma and was later made explicit in the specification.
 
 ### Content questions
 
-- What concise alternative text should describe the profile portrait and each meaningful portfolio preview in context?
-- Are the five Work preview images associated with project names or destinations not currently shown in the scoped source?
+- Final contextual alternative text was not supplied by Figma; Stage 4 defined candidate text from direct asset inspection. Because `AUD-009` is resolved to standalone `Asset/Work/05`, logical slot 05 uses that asset-specific Work 05 alternative text.
+- Are the five Work preview assets associated with project names or destinations not currently shown in the scoped source? No such behavior should be added without evidence or owner direction.
 
 ### Technical questions
 
-- Implementation breakpoints, exact carousel edge behavior, accessible carousel semantics, and reduced-motion handling must be made precise in later approved design/specification work. The Stage 1 audit does not invent them.
+- Implementation breakpoints, carousel semantics, reduced-motion handling, and progressive enhancement were made precise in the approved Stage 4 specification.
+- `AUD-009` is resolved as a content/source-correction decision. Implementation must keep the intentional slot-05 deviation traceable rather than presenting it as current Figma assembly.
 
 ## 18. Assumptions and Recommendations
 
@@ -261,18 +267,19 @@ Component descriptions explicitly classify service illustrations as decorative, 
 - Consultation CTAs use `href="#"` as the current placeholder destination.
 - Work is implemented as a standard previous/next carousel.
 - `AUD-003` and `AUD-004` are implementation accessibility obligations; no Stage 1 Figma change is requested.
+- Logical Work position 05 uses standalone `Asset/Work/05` (`6:380`) under the approved `AUD-009` correction; the current Figma Work 02 duplicate remains unchanged unless a separate Figma-edit request is made.
 
 ### Inferred
 
-- No material inference remains for the CTA destination or whether Work should behave as a carousel; both now have owner direction. The Figma source itself still does not demonstrate the resulting activation behavior.
+- No material inference remains for the CTA destination, carousel direction, or logical slot-05 implementation mapping; all now have owner direction. The Figma source itself still does not demonstrate the resulting activation behavior or the corrected slot-05 assembly.
 
 ### Recommended
 
-- Translate `href="#"` and the standard-carousel direction into precise requirements/specification without misrepresenting them as Figma evidence.
-- Carry `AUD-003` and `AUD-004` into later design/spec/planning and implementation validation, selecting a compliant treatment that preserves the approved visual intent as closely as practical.
+- Preserve the approved `href="#"` and standard-carousel direction without misrepresenting them as Figma evidence.
+- Implement logical Work position 05 with standalone `Asset/Work/05` and keep `AUD-009`/`EX-002` as the traceable reason for the intentional deviation from the current assembled Figma variants.
+- Carry the approved `AUD-003` and `AUD-004` accessibility treatments into implementation validation.
 - Treat 375, 768, and 1440px as supplied evidence points; choose actual implementation breakpoints later from observed transformation/failure behavior and repository constraints.
 - Preserve visible focus and accessible names in implementation, while defining semantic and keyboard behavior independently of Figma’s visual states.
-- Provide final contextual alternative text for meaningful imagery before implementation acceptance.
 
 ## 19. Evidence Index
 
@@ -288,19 +295,20 @@ Component descriptions explicitly classify service illustrations as decorative, 
 | `EVD-008` | `SRC-DS-001` | `2171:2051`, `2171:3130`, `2171:3199`, `2171:3305` | Responsive section variants | Later responsive design |
 | `EVD-009` | `SRC-DS-001` | `4:680`, `4:684`, `7:1784`, `7:1791` | Visible Focus variants | Later accessibility specification |
 | `EVD-010` | `SRC-DS-001` | Component descriptions in `2141:14881` | Accessible-name and image-alt intent | Later accessibility specification |
-| `EVD-011` | `SRC-DS-001` | Interactive component sets | Observed control dimensions | Later accessibility/design |
+| `EVD-011` | `SRC-DS-001` | Interactive component sets and mobile Work instances | Observed control dimensions | Later accessibility/design |
 | `EVD-012` | `SRC-DS-001` | `Button/Accent` `4:684` + variables | Confirmed accent CTA contrast gap | Implementation accessibility constraint / acceptance |
 | `EVD-013` | `SRC-DS-001` | Desktop Hero `2171:2050` + variables | Confirmed service-label contrast results | Implementation accessibility constraint / acceptance |
 | `EVD-014` | `SRC-DS-001` | Local variables and text styles | Primitive/semantic visual system | Later design/implementation plan |
 | `EVD-015` | `SRC-DS-001` | Asset components `4:2275`–`6:380` | Exportable service/profile/work assets | Later implementation plan |
 | `EVD-016` | `SRC-DS-001` | Prototype reactions on button/carousel components | Hover-only interaction evidence, 200ms dissolve | Later behavior specification |
+| `EVD-017` | `SRC-DS-001` | `2171:3170`, `2171:3182`, `2171:3194`; `6:377`; `6:380` | Slot named Work 05 instances Work 02 in every Work viewport while standalone Work 05 exists unused | Stage 5 correction / slot-05 decision |
 
 ## 20. Source Verification
 
-- Verification date and method: 2026-08-18; direct Figma page metadata inspection, read-only Figma Plugin API inspection of components/variants/variables/styles/assets/reactions, and rendered screenshots of all three Home frames.
-- Active snapshot status: Verified for this audit inspection; the source remains time-bound and mutable.
-- Newer source content detected: No material change from the Stage 0 scoped structure was observed.
-- Action required: Reverify `SRC-DS-001` before material downstream work according to the workflow’s time-bound snapshot rules.
+- Verification date and method: 2026-08-18; direct Figma page metadata inspection, read-only Figma Plugin API inspection of components/variants/variables/styles/assets/reactions, and rendered screenshots of all three Home frames. Stage 5 additionally re-queried the live `Section/Work` variant trees, parent offsets, main-component IDs, and image hashes.
+- Active snapshot status: Canonically reverified through `VER-007`; the source remains time-bound and mutable.
+- Newer source content detected: No material upstream change from the registered scope was observed. Stage 5 did uncover the previously missed existing `AUD-009` assembly inconsistency; this is a review correction, not source drift.
+- Action required: Carry the owner-resolved `AUD-009` correction into downstream implementation/validation and continue to reverify `SRC-DS-001` before later material work according to the time-bound snapshot rules.
 
 ## 21. Audit Review
 
@@ -311,6 +319,7 @@ Component descriptions explicitly classify service illustrations as decorative, 
 - [x] Important observations include snapshot IDs and precise source references.
 - [x] Missing evidence, inconsistencies, and source limitations are recorded.
 - [x] Accessibility implications are included.
+- [x] Stage 5 corrected the missed Work-slot assembly inconsistency as `AUD-009` rather than silently treating standalone asset inventory as the displayed slot mapping.
 
 ### Review pass 2 — Consistency, traceability, source integrity, and uncertainty
 
@@ -320,14 +329,14 @@ Component descriptions explicitly classify service illustrations as decorative, 
 - [x] No product rule or implementation decision was invented; owner decisions are labeled Confirmed and separate from observed source evidence.
 - [x] Evidence identifiers and source references are internally consistent.
 - [x] Questions are categorized and blocking status is clear.
+- [x] `AUD-009` preserves the observed Work 02 source assembly while recording the owner-approved Work 05 implementation correction separately.
 
 ## 22. Completion Summary
 
-- Files created or modified: `DESIGN-AUDIT.md`.
-- Snapshot IDs used: `SRC-DS-001`.
-- Source verification performed: Yes — Figma metadata, Plugin API inspection, and screenshots.
-- Important findings: Figma does not demonstrate CTA activation or Work carousel activation mechanics; the owner has resolved current implementation direction as `href="#"` for consultation links and a standard previous/next carousel for Work. Accent CTA and three service-label combinations have confirmed contrast gaps that must be addressed in implementation. Intermediate responsive behavior, reduced-motion handling, keyboard behavior, and final image alt copy are not proven by Figma.
-- Assumptions introduced: No material assumption remains for `AUD-001` or `AUD-002`; those items now have explicit owner direction. Exact carousel edge/wrap behavior remains a downstream specification detail rather than a Stage 1 assumption.
-- Open questions or blockers: `AUD-001` and `AUD-002` are owner-resolved for downstream work. `AUD-003` and `AUD-004` are confirmed implementation notes rather than Stage 1 blockers. Remaining non-blocking gaps include exact contrast treatment, reduced-motion behavior, carousel edge semantics, and final alternative text. Formal Stage 1 closure is still blocked only by the unexecuted stage preflight and explicit Stage 1 approval.
-- Stage preflight: Not executed in this runtime because no local repository checkout/`design-workflow` CLI is available. This prevents formal Stage 1 gate closure here.
-- Ready for requirements: No — pending Stage 1 preflight and explicit project-owner approval of the Stage 1 audit.
+- Artifact status: Approved through `GATE-002`; canonical Stage 1 closure and preflight were completed after the original audit draft.
+- Snapshot IDs used: `SRC-DS-001`, with repository context carried by canonical `SRC-REPO-001` downstream.
+- Important Stage 1 findings: `AUD-001` and `AUD-002` received owner direction; `AUD-003` and `AUD-004` became implementation accessibility obligations; `AUD-005`–`AUD-008` defined downstream responsive/accessibility evidence gaps.
+- Stage 5 correction: `AUD-009` records a previously missed existing source assembly inconsistency in Work position 05. The project owner resolved it for implementation by selecting standalone `Asset/Work/05` (`6:380`) for logical slot 05 while preserving the current Figma duplicate as observed source evidence.
+- Current blocker: No product/content blocker remains from `AUD-009`; Stage 5 closure depends on normalized consolidated documentation and canonical preflight/gate recording.
+- Source verification: Canonical Figma verification exists through `VER-007`; Stage 5’s additional read-only Figma check found no upstream drift.
+- Frontend/Figma mutation during Stage 5 review: None.

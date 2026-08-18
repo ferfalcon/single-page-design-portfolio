@@ -48,7 +48,7 @@ updated: 2026-08-18
 - **Lockfile/workspace evidence:** `frontend/pnpm-lock.yaml` and `frontend/pnpm-workspace.yaml` are present.
 - **Uncommitted changes or patch:** Not applicable to the GitHub commit snapshot.
 - **Access and reproduction instructions:** Check out the recorded commit and inspect `frontend/`.
-- **Build or inspection context:** Astro + TypeScript project using pnpm; current `frontend/src/pages/index.astro` still renders the Astro starter `Welcome` component.
+- **Build or inspection context:** Astro + TypeScript project using pnpm; current baseline `frontend/src/pages/index.astro` renders the Astro starter `Welcome` component.
 - **Known limitations:** This baseline records committed repository state only; local uncommitted work outside GitHub is not represented.
 
 ## 5. Runtime Source Evidence
@@ -67,12 +67,20 @@ No separate asset snapshot is registered. Figma-local assets in the scoped desig
 
 | Date and time | Snapshot | Verification method | Result classification | Change detected | Action |
 |---|---|---|---|---|---|
-| 2026-08-18T01:55:05Z | `SRC-DS-001` | Direct Figma metadata inspection | Pending canonical verification | Unknown | Record a CLI verification before Stage 0 closure |
-| 2026-08-18T01:55:05Z | `SRC-REPO-001` | GitHub branch/commit inspection | Pending canonical verification | No observed change | Record a CLI verification before Stage 0 closure |
+| 2026-08-18T02:20:31Z | `SRC-DS-001` | Direct Figma metadata inspection | Unchanged (`VER-001`) | No | Canonically verified for Stage 0 |
+| 2026-08-18T02:20:32Z | `SRC-REPO-001` | GitHub branch and immutable-commit inspection | Expected workflow output (`VER-002`) | No frontend change | Canonically verified for Stage 0 |
+| 2026-08-18T03:39:15Z | `SRC-DS-001` | Fresh Figma metadata inspection | Unchanged (`VER-003`) | No material upstream change | Used for Stage 2 approval |
+| 2026-08-18T03:39:16Z | `SRC-REPO-001` | Git baseline and workflow-output inspection | Expected workflow output (`VER-004`) | No frontend change | Used for Stage 2 approval |
+| 2026-08-18T04:10:35Z | `SRC-DS-001` | Fresh Figma metadata inspection | Unchanged (`VER-005`) | No material upstream change | Used for Stage 3 approval |
+| 2026-08-18T04:10:35Z | `SRC-REPO-001` | Git baseline and workflow-output inspection | Expected workflow output (`VER-006`) | No frontend change | Used for Stage 3 approval |
+| 2026-08-18T05:16:57Z | `SRC-DS-001` | Fresh Figma metadata inspection | Unchanged (`VER-007`) | No material upstream change | Used for Stage 4 approval |
+| 2026-08-18T05:16:57Z | `SRC-REPO-001` | Git baseline and workflow-output inspection | Expected workflow output (`VER-008`) | No frontend change | Used for Stage 4 approval |
+
+Stage 5 performed an additional read-only source challenge. The source identity and scoped structures remain stable, but the deeper check uncovered a previously missed **existing source inconsistency**: the layer named `Work Image / 05` in every `Section/Work` viewport variant instances `Asset/Work/02` (`6:377`), while the distinct standalone `Asset/Work/05` (`6:380`) exists but is unused by those variants. This is documented as `AUD-009`; it is not evidence of upstream source drift and does not by itself create a new `SRC-*` snapshot.
 
 ## 9. Upstream Rebaseline and Impact Assessments
 
-No rebaseline has been required at initialization.
+No rebaseline has been required. Stage 5's `AUD-009` finding corrects interpretation of evidence already present in `SRC-DS-001`; it does not silently redefine the source snapshot.
 
 ## 10. Baseline Review
 
@@ -82,7 +90,7 @@ No rebaseline has been required at initialization.
 - [x] Exact Figma scope and repository commit are recorded.
 - [x] The mutable Figma source is not mislabeled immutable.
 - [x] Repository scope identifies `frontend/` and the starter implementation state.
-- [ ] Canonical `snapshot verify` records still need to be written before Stage 0 closure.
+- [x] Canonical `snapshot verify` records were written before Stage 0 closure (`VER-001`, `VER-002`).
 
 ### Pass 2 — Consistency, traceability, source integrity, risks, and uncertainty
 
@@ -90,4 +98,6 @@ No rebaseline has been required at initialization.
 - [x] Repository and Figma evidence use the same active snapshot IDs as generated state.
 - [x] No later-stage product behavior or implementation detail is asserted here.
 - [x] Figma mutability is an explicit limitation.
-- [ ] Re-run generated-state and stage preflight checks after canonical verification.
+- [x] Generated-state and Stage 0 preflight checks were rerun before `GATE-001` was recorded.
+
+**Stage 0 status:** Approved through `GATE-001`. The canonical `.workflow/workflow-record.json` owns the complete mutable verification history.

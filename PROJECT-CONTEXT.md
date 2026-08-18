@@ -41,7 +41,7 @@ updated: 2026-08-18
 - Relevant application, package, or directory: `frontend/`
 - Existing implementation state: Astro starter page; `frontend/src/pages/index.astro` renders `Welcome.astro`.
 - Known technical constraints: Astro + TypeScript, pnpm, Node 24.x; follow root and `frontend/AGENTS.md`, including background Astro dev-server guidance when local runtime work begins.
-- Access or tooling limitations: Workflow initialization is being committed through the connected GitHub interface; later implementation must use the repository's normal branch/PR/preview verification policy.
+- Access or tooling limitations: Workflow initialization was committed through the connected GitHub interface; implementation must use the repository's normal branch/PR/preview verification policy.
 
 ## 5. Runtime References
 
@@ -77,9 +77,9 @@ updated: 2026-08-18
 
 ## 8. Quality Baseline
 
-- Accessibility: Semantic, keyboard-accessible, contrast-aware implementation with visible focus and resilient text/reflow behavior; exact acceptance checks will be defined from source evidence.
+- Accessibility: Semantic, keyboard-accessible, contrast-aware implementation with visible focus and resilient text/reflow behavior; exact acceptance checks are defined downstream from source evidence.
 - Responsive coverage: Reproduce the observed mobile, tablet, and desktop compositions; derive implementation breakpoints from design evidence and layout behavior rather than arbitrary device presets.
-- Browser/device coverage: To be made explicit during specification/planning from project constraints; do not invent unsupported browser targets.
+- Browser/device coverage: To be made explicit during specification/planning only from real project constraints; do not invent unsupported browser targets.
 - Performance: Preserve a lightweight static Astro implementation and avoid unnecessary client JavaScript.
 - Security/privacy: No sensitive data flow is in current scope.
 - Testing: Build plus targeted accessibility, responsive, and visual verification appropriate to the implementation tasks.
@@ -98,7 +98,7 @@ updated: 2026-08-18
 
 | Decision | Owner | Evidence or snapshot | Status |
 |---|---|---|---|
-| Use Lite profile | Workflow | `SRC-DS-001`, `SRC-REPO-001` | Proposed for Stage 0 approval |
+| Use Lite profile | Workflow | `SRC-DS-001`, `SRC-REPO-001` | Confirmed through `GATE-001` |
 | Use Gated execution mode | Project contract | `SRC-REPO-001` | Confirmed |
 | Treat Figma `🤖 Workflow` as design authority | Project contract | `SRC-DS-001`, `SRC-REPO-001` | Confirmed |
 
@@ -106,12 +106,11 @@ updated: 2026-08-18
 
 ### Blocking
 
-- Canonical verification records for `SRC-DS-001` and `SRC-REPO-001` are still required before Stage 0 can close.
-- Stage 0 artifacts and gate require explicit approval before advancement.
+- None. Stage 0 was approved and closed through `GATE-001`; later workflow blockers are owned by the active downstream stage rather than this initialization artifact.
 
 ### Non-blocking
 
-- The design source is time-bound rather than immutable, so later source verification is mandatory.
+- The design source is time-bound rather than immutable, so later source verification remains mandatory.
 - Runtime evidence is intentionally not active yet; it can be registered when preview/final validation needs it.
 
 ## 12. Stage 0 Completion
@@ -124,5 +123,7 @@ updated: 2026-08-18
 - [x] Quality expectations are evidence-based and avoid unsupported details.
 - [x] Source limitations are visible.
 - [x] `WORKFLOW-STATE.md` uses the same baseline.
-- [ ] Canonical source verifications are recorded.
-- [ ] Stage 0 approval/gate is recorded.
+- [x] Canonical source verifications are recorded.
+- [x] Stage 0 approval/gate is recorded.
+
+**Stage 0 status:** Approved through `GATE-001`. Later mutable workflow state is owned by `.workflow/workflow-record.json`.

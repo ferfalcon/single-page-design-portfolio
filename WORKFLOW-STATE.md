@@ -9,23 +9,26 @@ updated: 2026-08-18
 
 # Workflow State
 
+> `.workflow/workflow-record.json` is the canonical mutable workflow state. This narrative file summarizes decisions and history and must not contradict the canonical record.
+
 ## 2. Blocking Questions
 
 | ID | Question | Decision owner | Impact | Required before | Status |
 |---|---|---|---|---|---|
-| BQ-001 | Approve the initialized Lite Stage 0 baseline and allow canonical source verification/gate closure? | Project owner | Controls entry to Stage 1 | Stage 0 advance | Open |
+| BQ-001 | Approve the initialized Lite Stage 0 baseline and allow canonical source verification/gate closure? | Project owner | Controlled entry to Stage 1 | Stage 0 advance | Resolved — approved through `GATE-001` |
+| BQ-002 | For logical Work position 05, preserve the scoped `Section/Work` assembly that repeats `Asset/Work/02`, or use the distinct standalone `Asset/Work/05` (`6:380`)? | Project owner | Determines visible carousel content and matching alternative text for slot 05 | Stage 5 approval | Resolved — use standalone `Asset/Work/05` (`6:380`) (Option 2) |
 
 ## 3. Non-blocking Assumptions
 
 | Assumption | Classification | Impact | Validation or correction point | Status |
 |---|---|---|---|---|
-| The current implementation target remains a static Astro page with no backend/integration scope | Inferred from repository + Figma evidence | Supports Lite profile | Recheck during design audit | Open |
-| Existing production runtime is not required as an active Stage 0 input | Recommended | Keeps initial baseline limited to authoritative design/repository inputs | Register runtime snapshot before preview/final validation if needed | Open |
+| The current implementation target remains a static Astro page with no backend/integration scope | Inferred from repository + Figma evidence | Supports Lite profile | Rechecked through Stage 4 | Confirmed for current scope |
+| Existing production runtime is not required as an active Stage 0 input | Recommended | Keeps initial baseline limited to authoritative design/repository inputs | Register runtime snapshot before preview/final validation if needed | Deferred |
 
 ## 4. Architecture Decision
 
 - Separate `ARCHITECTURE.md`: Undecided
-- Reason: Architecture is evaluated at the workflow's architecture checkpoint; Stage 0 evidence does not justify making that decision early.
+- Reason: Architecture is evaluated at the workflow's architecture checkpoint; Stages 0–5 have not established a need to decide it early.
 - Evidence and constraints: `SRC-DS-001`, `SRC-REPO-001`
 - Recorded by: Workflow initialization
 
@@ -33,8 +36,11 @@ updated: 2026-08-18
 
 | Date | Classification | Previous snapshot | New snapshot | Change or result | Affected stage or task | Action | Status |
 |---|---|---|---|---|---|---|---|
-| 2026-08-18 | Initialization | — | `SRC-DS-001` | Time-bound Figma source registered | Stage 0 | Canonically verify before gate | Open |
-| 2026-08-18 | Initialization | — | `SRC-REPO-001` | Immutable repository commit registered | Stage 0 | Canonically verify before gate | Open |
+| 2026-08-18 | Initialization | — | `SRC-DS-001` | Time-bound Figma source registered | Stage 0 | Canonically verify before gate | Closed by `VER-001` / `GATE-001` |
+| 2026-08-18 | Initialization | — | `SRC-REPO-001` | Immutable repository commit registered | Stage 0 | Canonically verify before gate | Closed by `VER-002` / `GATE-001` |
+| 2026-08-18 | Stage verification | `SRC-DS-001` | `SRC-DS-001` | Reverified unchanged through `VER-007` | Stages 2–4 | Preserve time-bound identity; continue rechecks | Active |
+| 2026-08-18 | Stage verification | `SRC-REPO-001` | `SRC-REPO-001` | Reverified as expected workflow-only output through `VER-008` | Stages 2–4 | Preserve immutable implementation baseline | Active |
+| 2026-08-18 | Stage 5 review | `SRC-DS-001` | `SRC-DS-001` | No upstream drift; previously missed Work-slot source inconsistency found (`AUD-009`) | Stage 5 | Resolve slot-05 mapping before gate approval | Resolved by owner: use standalone `Asset/Work/05` (`6:380`) |
 
 ## 6. Profile or Mode Change History
 
@@ -47,6 +53,7 @@ updated: 2026-08-18
 | ID | Expected process or behavior | Deviation | Reason | Impact | Approval or resolution | Status |
 |---|---|---|---|---|---|---|
 | EX-001 | `design-workflow init --repository .` normally records an accessible local repository path | Repository reference is recorded as the canonical GitHub URL with the immutable main commit | The connected GitHub interface is authoritative in this environment and the local runtime cannot access the repository clone | No loss of repository identity or commit reproducibility | Revisit only if CLI lineage operations require a local path during task execution | Accepted for initialization |
+| EX-002 | Logical `Work Image / 05` would normally resolve to its correspondingly numbered source asset | The current scoped `Section/Work` variants instance `Asset/Work/02` for slot 05 even though standalone `Asset/Work/05` exists | Stage 5 source review found an assembly inconsistency that changes visible content | Implementation will intentionally differ from the current assembled Work variants at logical slot 05 | Project owner selected Option 2: use standalone `Asset/Work/05` (`6:380`) for logical position 05 | Accepted for implementation scope |
 
 ## 8. Stage Advancement Rules
 
@@ -58,15 +65,15 @@ updated: 2026-08-18
 
 ## 9. Latest Completion Summary
 
-- Files created or modified: Stage 0 narrative artifacts plus CLI-managed workflow record/generated views.
-- Input snapshot IDs used: `SRC-DS-001`, `SRC-REPO-001`
-- Task-start snapshot: None
-- Implementation-output snapshot: None
-- Validation-runtime snapshot: None
-- Source verification performed: Direct Figma and GitHub inspection completed; canonical verification record pending approval/closure.
-- Important findings: The Figma scope is a responsive single portfolio page; the repository frontend is still the Astro starter.
-- Decisions: Initialize as Lite + Gated.
-- Validation performed: Source identity and repository commit inspected; generated state was reproduced from the repository's schema-v2 initializer/rendering rules.
-- Deviations: Repository reference uses the canonical GitHub URL rather than a local filesystem path because initialization is being committed through the connected GitHub interface.
-- Remaining risks: Mutable Figma source; source verification/gate not yet recorded.
-- Next permitted action: Review and approve Stage 0, then record canonical input verification and the Stage 0 gate before advancing to Stage 1.
+- Canonical workflow state: **Stage 5 — Review documentation consistency, In progress**.
+- Gates passed: `GATE-001` through `GATE-005` (Stages 0–4).
+- Active inputs: `SRC-DS-001`, `SRC-REPO-001`.
+- Current task / implementation output / validation runtime: None.
+- Source verification: Canonical checks exist through `VER-008`; the Stage 5 read-only challenge found no upstream design drift and no frontend implementation changes since `SRC-REPO-001`.
+- Stage 5 finding: `AUD-009` — every scoped `Work Image / 05` instance currently resolves to `Asset/Work/02`, while standalone `Asset/Work/05` exists unused.
+- Owner resolution: **Option 2** — logical Work position 05 will use standalone `Asset/Work/05` (`6:380`). Treat the current repeated Work 02 instance as a source-assembly mistake for implementation purposes; keep the deviation traceable rather than rewriting it as observed Figma behavior.
+- Stage 5 documentation normalization: Complete. `DESIGN-AUDIT.md`, `IMPLEMENTATION-BRIEF.md`, and this workflow-state summary consistently record Option 2 and preserve the source-vs-owner-decision distinction.
+- Project-owner approval: **Received for Stage 5 on 2026-08-18.** This approval is captured narratively but cannot be converted into canonical `GATE-006` until the required preflight succeeds.
+- Remaining Stage 5 requirement: Canonically mark `ART-IMPLEMENTATION-BRIEF` Reviewed, run Stage 5 preflight, and only then record the approved passing gate.
+- Validation limitation: The local runtime available in this session cannot clone GitHub because outbound DNS/network access is unavailable. No connected execution tool exposed a repository shell capable of running the project CLI, so canonical CLI preflight has not been executed and must not be claimed as passed.
+- Next permitted action: Run the canonical Stage 5 artifact-review/preflight/gate sequence in an execution environment with repository access. Architecture, planning, task decomposition, and frontend implementation remain unstarted.
