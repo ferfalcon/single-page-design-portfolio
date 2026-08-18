@@ -1,0 +1,151 @@
+name: Stage 8 review
+
+on:
+  push:
+    branches:
+      - workflow/stage-8-plan-review
+    paths:
+      - .github/workflows/stage-8-review.yml
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: workflow/stage-8-plan-review
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Reopen reviewed Lite brief
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs artifact reopen ART-IMPLEMENTATION-BRIEF --evidence "Stage 8 adversarial review requires corrections to the approved Stage 7 plan before a new readiness decision."
+
+      - name: Apply Stage 8 adversarial corrections
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('IMPLEMENTATION-BRIEF.md')
+          text = path.read_text()
+
+          old_checkpoint = '''- Current workflow checkpoint: **Stage 7 — Create the repository-aware implementation plan**
+          - Requirements are approved through `GATE-003`, design intent through `GATE-004`, specification through `GATE-005`, documentation review through `GATE-006`, and architecture through `GATE-007`. Stage 7 is active. Architecture remains **Not required** and the project remains Lite; this checkpoint now owns repository inspection, implementation structure, ordering, dependencies, risks, and validation planning. Stage 8 adversarial review, task decomposition, and implementation remain intentionally unstarted.'''
+          new_checkpoint = '''- Current workflow checkpoint: **Stage 8 — Challenge and refine the plan**
+          - Requirements are approved through `GATE-003`, design intent through `GATE-004`, specification through `GATE-005`, documentation review through `GATE-006`, architecture through `GATE-007`, and the repository-aware implementation plan through `GATE-008`. Architecture remains **Not required** and the project remains Lite. Stage 8 now owns the adversarial plan challenge and corrections; task decomposition and implementation remain intentionally unstarted.'''
+          if old_checkpoint not in text:
+              raise SystemExit('Expected current-checkpoint text was not found.')
+          text = text.replace(old_checkpoint, new_checkpoint, 1)
+
+          old_fallback = '''  - Default/no-JavaScript presentation is a horizontally reachable five-item gallery. Keep controls hidden/inert until enhancement succeeds so failed initialization exposes no dead controls.'''
+          new_fallback = '''  - Default/no-JavaScript presentation must keep all five originals reachable and expose no dead controls. Use a horizontally reachable five-item gallery only if rendered testing proves the fallback remains fully reachable without relying on scripted initial scrolling; otherwise use an equivalent static all-five presentation permitted by `SPEC-BEH-004`. Do not claim item-03 centered fallback geometry unless it is actually demonstrated. The successfully enhanced carousel must still start with item 03 centered/emphasized at the 375px, 768px, and 1440px validation anchors.'''
+          if old_fallback not in text:
+              raise SystemExit('Expected PLAN-003 fallback bullet was not found.')
+          text = text.replace(old_fallback, new_fallback, 1)
+
+          old_validation = '''- Validation: `pnpm build`; no-JS/failure fallback; Enter/Space, pointer/touch, focus retention; item-03 start; one-step movement; both cyclic edges; rapid-input serialization; live-region/slide-label inspection; reduced motion; 375px/768px/1440px plus intermediate-width visual checks; verify all five assets/alts including Work 05.'''
+          new_validation = '''- Validation: `pnpm build`; verify the unenhanced all-five fallback separately from the successfully enhanced item-03-centered initial state; Enter/Space, pointer/touch, focus retention; one-step movement; both cyclic edges; rapid-input serialization; live-region/slide-label inspection; reduced motion; 375px/768px/1440px plus intermediate-width visual checks; verify all five assets/alts including Work 05. Any claim that the no-JavaScript presentation also starts centered on item 03 requires rendered evidence rather than assumption.'''
+          if old_validation not in text:
+              raise SystemExit('Expected PLAN-003 validation line was not found.')
+          text = text.replace(old_validation, new_validation, 1)
+
+          stage8 = r'''
+
+          ## 15. Stage 8 — Adversarial Plan Review
+
+          Stage 8 challenged the approved Stage 7 plan against the current scoped Figma structure, the approved requirements/specification and acceptance criteria, the Stage 6 architecture decision, the current repository, accessibility and responsive behavior, failure states, validation feasibility, deployment/rollback boundaries, and traceability. This review corrects implementation assumptions; it does not introduce Stage 9 tasks or Stage 10 implementation.
+
+          ### Stage 8 source and repository recheck
+
+          - A fresh read-only Figma metadata inspection on 2026-08-18 reconfirmed the scoped `🤖 Workflow` page (`2141:862`), Home / Mobile (`2141:14174`), Home / Tablet (`2141:14238`), Home / Desktop (`2141:14302`), `Section/Work` (`2171:3199`), all five standalone Work assets (`6:376` through `6:380`), and Default/Hover/Focus variants for both carousel controls. No structural evidence requiring an upstream workflow rewind was found.
+          - The repository still contains the Astro starter composition: `frontend/src/pages/index.astro` renders `Welcome.astro` through `Layout.astro`; no current frontend implementation has displaced the Stage 7 repository assumptions.
+          - `frontend/package.json` still exposes Astro `^7.2.2`, Node `>=22.12.0`, and only the `dev`, `build`, `preview`, and `astro` scripts. The plan therefore continues to treat `pnpm build` as the only repository-confirmed frontend validation command and does not invent lint/test commands or dependencies.
+          - Root guidance says to follow `frontend/package.json` for Node while its explanatory parenthetical refers to `24.x`; the package itself currently declares `>=22.12.0`. This is a non-blocking documentation mismatch. Implementation and validation must satisfy the package engine and must not assert an exact Node 24 requirement unless the repository/runtime is explicitly updated to establish one.
+
+          ### Review pass 1 — Feasibility, completeness, and hidden assumptions
+
+          - [x] Scope containment: `PLAN-001`–`PLAN-004` still produce one static Astro page with one bounded client interaction. No route, backend, API, authentication, persistence, modal, Work-detail navigation, autoplay, or invented consultation destination is introduced.
+          - [x] Architecture: the Stage 6 **Not required** decision remains valid. No Stage 8 finding introduces a routing, data-flow, persistence, integration, security/privacy, migration, reliability, observability, or deployment-topology concern that warrants reopening architecture or upgrading the Lite profile.
+          - [x] Repository assumptions: existing and proposed paths remain distinguishable, the starter files named for replacement still exist, and the proposed components/styles/script remain proposals rather than falsely claimed current files.
+          - [x] Commands/dependencies: `pnpm build` maps to the real frontend build script; no test/lint/a11y command or carousel/framework dependency is accepted without repository evidence.
+          - [x] Accessibility/responsive/state coverage: semantics, focus, contrast, image alternatives, reflow/zoom, reduced motion, carousel naming/feedback, cyclic navigation, rapid input, and failed-enhancement behavior remain integrated into the plan items that create those behaviors.
+          - [x] Deployment/rollback: branch → PR → Vercel preview → verification → merge remains sufficient for this static change; rollback is normal Git/PR rollback because there is no migration, persistence, API contract, or production data change.
+          - [x] Asset/font uncertainty remains non-blocking but explicit: implementation must resolve real Figma exports and a permitted Plus Jakarta Sans delivery source before claiming fidelity; it must not fabricate filenames, packages, licenses, or runtime requests.
+          - [x] Breakpoints remain failure-driven and are validated at 375px, 768px, 1440px, intermediate widths, 320 CSS px reflow, and 200% zoom rather than being copied blindly from device labels.
+
+          ### Correction from review pass 1 — Separate enhanced initial geometry from fallback reachability
+
+          `PLAN-003` previously named a horizontally reachable no-JavaScript gallery while also inheriting the specification's item-03-centered initial geometry. A normal overflow scroller does not, by itself, prove that its initial scroll position will center the third item when JavaScript is unavailable. Treating both outcomes as automatic would create an unverified implementation assumption.
+
+          The plan is corrected as follows:
+
+          - The initial HTML still contains semantic Work items 01→05 and standalone Work 05 at logical position 05.
+          - Failed/unavailable enhancement must expose all five originals through a non-scripted presentation and must not expose dead Previous/Next controls.
+          - A horizontal fallback is acceptable only if rendered testing proves full reachability without depending on scripted initial scrolling; otherwise an equivalent static all-five fallback is explicitly allowed by `SPEC-BEH-004`.
+          - The successfully enhanced carousel remains responsible for the exact source-facing initial geometry: item 03 centered/emphasized at 375px, 768px, and 1440px with the specified neighboring-content cues.
+          - If implementation later claims that the unenhanced fallback also starts with item 03 centered, that claim requires rendered evidence. Stage 8 does not prescribe a brittle CSS trick merely to manufacture that claim.
+
+          This correction preserves `AC-004` for the functioning carousel and `AC-014` for failure recovery while removing an unsupported implementation assumption from their coexistence.
+
+          ### Review pass 2 — Consistency, traceability, regression risk, and readiness
+
+          - [x] `PLAN-001`–`PLAN-004` still cover every approved `AC-001`–`AC-016`; the Stage 8 correction narrows an implementation assumption and does not remove a requirement, source decision, or acceptance check.
+          - [x] `AUD-001` remains literal `href="#"`; `AUD-002` remains a conventional manual carousel; `AUD-003`/`AUD-004` remain implementation contrast fixes; `AUD-009` remains standalone `Asset/Work/05` at logical slot 05.
+          - [x] The Work semantic order remains 01→05. Any optional visual clones remain implementation-only, assistive-hidden, non-focusable, and unnecessary unless rendered cyclic-edge behavior actually requires them.
+          - [x] Progressive enhancement is still failure-safe: non-carousel content never depends on the Work script, all five Work originals remain available without successful initialization, and controls are exposed only after enhancement succeeds.
+          - [x] The plan does not defer accessibility, responsive behavior, error/failure states, or reduced motion to `PLAN-004`; that final plan item remains integrated regression verification and correction only.
+          - [x] Validation claims are executable with the repository and connected preview/browser tooling available to the implementation workflow. Nonexistent automation is not represented as passing evidence.
+          - [x] No migration or production-data rollback plan is needed; no security/privacy-sensitive flow is added; the Vercel preview gate remains the correct deployment verification boundary before merge.
+          - [x] Remaining implementation uncertainty—asset export filenames/formats, permitted font delivery, exact failure-driven media queries, and whether cyclic clones are needed—is bounded, testable during implementation, and does not block task decomposition.
+
+          ### Stage 8 readiness
+
+          **Ready for task decomposition.** The Stage 7 plan has been adversarially challenged and corrected without uncovering an unresolved technical decision or a reason to upgrade the Lite profile. Canonical Stage 8 preflight must pass and the project owner must explicitly approve the Stage 8 gate before the workflow may advance to Stage 9. Stage 9 task decomposition and Stage 10 implementation remain intentionally unstarted.
+          '''
+
+          if '## 15. Stage 8 — Adversarial Plan Review' in text:
+              raise SystemExit('Stage 8 review section already exists.')
+          text = text.rstrip() + stage8 + '\n'
+          path.write_text(text)
+          PY
+
+      - name: Review artifact and run Stage 8 preflight
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs artifact review ART-IMPLEMENTATION-BRIEF --evidence "Stage 8 adversarial review completed: current sources/repository rechecked, PLAN-003 fallback geometry assumption corrected, validation/deployment/rollback and traceability challenged, and readiness concluded Ready for task decomposition pending owner gate approval."
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+          node docs/implementation-workflow/cli/design-workflow.mjs validate
+          node docs/implementation-workflow/cli/design-workflow.mjs stage check --json | tee /tmp/stage-check.json
+          node docs/implementation-workflow/cli/design-workflow.mjs context --json | tee /tmp/context.json
+          git diff --check
+
+      - name: Require recordable Stage 8 decision
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const check = JSON.parse(fs.readFileSync('/tmp/stage-check.json', 'utf8'));
+          if (check.stage?.number !== 8) throw new Error(`Expected Stage 8, got ${check.stage?.number}`);
+          if (!check.decision?.recordable) throw new Error(`Stage 8 decision is not recordable: ${(check.decision?.findings ?? []).join('; ')}`);
+          if (!['Passed', 'Passed with assumptions'].includes(check.decision?.recommendedResult)) {
+            throw new Error(`Unexpected Stage 8 recommendation: ${check.decision?.recommendedResult}`);
+          }
+          console.log(`Stage 8 preflight recommends ${check.decision.recommendedResult}.`);
+          NODE
+
+      - name: Persist review and remove runner
+        run: |
+          rm .github/workflows/stage-8-review.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add IMPLEMENTATION-BRIEF.md .workflow .github/workflows/stage-8-review.yml
+          git commit -m "Review Stage 8 implementation plan"
+          git push origin HEAD:workflow/stage-8-plan-review
