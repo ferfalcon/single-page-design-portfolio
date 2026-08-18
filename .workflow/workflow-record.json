@@ -7,13 +7,13 @@
   },
   "state": {
     "stage": 10,
-    "status": "Blocked",
+    "status": "Ready",
     "activeInputs": [
       "SRC-DS-001",
       "SRC-REPO-001"
     ],
     "currentTask": null,
-    "latestOutput": null,
+    "latestOutput": "SRC-REPO-002",
     "latestValidationRuntime": null,
     "architectureDecision": {
       "result": "Not required",
@@ -36,6 +36,16 @@
       "status": "Active",
       "reference": "https://github.com/ferfalcon/single-page-design-portfolio",
       "commit": "07635a8eafb4323909619a0b62e41a4d8144d764"
+    },
+    {
+      "id": "SRC-REPO-002",
+      "role": "Implementation output",
+      "pinStrength": "Immutable",
+      "status": "Active",
+      "reference": "https://github.com/ferfalcon/single-page-design-portfolio",
+      "commit": "edd76540e89eb4e82c82ab567c183eb1b9abf0f4",
+      "parent": "SRC-REPO-001",
+      "task": "P01-T01"
     }
   ],
   "verifications": [
@@ -473,7 +483,7 @@
   "tasks": [
     {
       "id": "P01-T01",
-      "status": "Blocked",
+      "status": "Complete",
       "baseline": "SRC-REPO-001",
       "prerequisites": [],
       "references": [
@@ -482,12 +492,8 @@
         "PLAN-003",
         "PLAN-004"
       ],
-      "output": null,
-      "blocker": {
-        "reason": "Waiting for Vercel to accept a preview deployment of the repaired implementation; current branch builds are blocked by the Vercel build-rate limit.",
-        "previousStatus": "In progress",
-        "recordedAt": "2026-08-18T10:03:09.728Z"
-      },
+      "output": "SRC-REPO-002",
+      "blocker": null,
       "validation": [
         {
           "name": "Build",
@@ -563,12 +569,13 @@
           "name": "Vercel preview",
           "kind": "Manual",
           "required": true,
-          "status": "Not executed",
+          "status": "Passed",
           "expected": "The implementation branch Vercel preview renders the approved page without material regression before merge.",
+          "actual": "Git-connected preview deployment dpl_5C55vhnqxTdKWoZRyfmuGJ3CEVEn is READY and returns HTTP 200 with the complete approved single-page markup; its deployed frontend is byte-identical to the current branch frontend.",
+          "executedAt": "2026-08-18T10:06:42Z",
           "evidence": [
-            "GitHub commit status for the repaired implementation reports Vercel failure with target upgradeToPro=build-rate-limit; Vercel project latest available implementation preview is the earlier Sharp-failing deployment dpl_Hu3FjrnZZPWcFh2CXjYc5hsHxd7z."
+            "Vercel deployment dpl_5C55vhnqxTdKWoZRyfmuGJ3CEVEn for PR #16 commit 942dc181d9111cda59bff6ca45ca9ea2efdc3060 is READY at single-page-design-portfolio-ma34jkdb1-fer-falcons-team.vercel.app; the Vercel connector fetched it with HTTP 200 and complete page markup, and git diff from deployed commit to task-completion HEAD is empty for frontend/."
           ],
-          "reason": "The repaired implementation cannot currently obtain a Vercel preview because Vercel is rejecting branch builds with the account build-rate limit. The earlier pre-repair preview failed on the now-fixed Sharp issue and is not valid completion evidence.",
           "references": [
             "PLAN-004"
           ]
