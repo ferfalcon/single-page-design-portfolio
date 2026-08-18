@@ -46,6 +46,14 @@
       "commit": "edd76540e89eb4e82c82ab567c183eb1b9abf0f4",
       "parent": "SRC-REPO-001",
       "task": "P01-T01"
+    },
+    {
+      "id": "SRC-RUN-001",
+      "role": "Validation runtime",
+      "pinStrength": "Versioned",
+      "status": "Active",
+      "reference": "https://single-page-design-portfolio-ma34jkdb1-fer-falcons-team.vercel.app/",
+      "parent": "SRC-REPO-002"
     }
   ],
   "verifications": [
@@ -128,6 +136,30 @@
       "method": "Fresh read-only Figma MCP inspection of Workflow page and 375/768/1440 Home exemplars",
       "evidence": "Immediately before Stage 10 task start, the Workflow page still contained the recorded Mobile, Tablet, and Desktop Home frames, responsive section/component structure, carousel controls, profile portrait, service artwork, and five standalone Work assets; no material design drift was observed.",
       "checkedAt": "2026-08-18T09:27:15.236Z"
+    },
+    {
+      "id": "VER-011",
+      "snapshot": "SRC-DS-001",
+      "result": "Unchanged",
+      "method": "Fresh read-only Figma metadata inspection of Workflow page 2141:862",
+      "evidence": "Stage 11 inspection still shows the approved 375x3318, 768x2966, and 1440x2642 Home exemplars, responsive section components, button/carousel states, portrait, service artwork, and five standalone Work assets. No material design drift was observed.",
+      "checkedAt": "2026-08-18T14:33:25.404Z"
+    },
+    {
+      "id": "VER-012",
+      "snapshot": "SRC-REPO-002",
+      "result": "Expected workflow output",
+      "method": "Git output-to-HEAD and deployed-commit comparison",
+      "evidence": "SRC-REPO-002 commit edd76540e89eb4e82c82ab567c183eb1b9abf0f4 remains the Stage 10 implementation output. Comparing it with the Stage 11 branch head changes only workflow/generated review files and removes the temporary completion runner; frontend/ is unchanged. Comparing READY Vercel commit 942dc181d9111cda59bff6ca45ca9ea2efdc3060 with SRC-REPO-002 also changes only workflow metadata/runners, with no frontend change.",
+      "checkedAt": "2026-08-18T14:33:25.465Z"
+    },
+    {
+      "id": "VER-013",
+      "snapshot": "SRC-RUN-001",
+      "result": "Unchanged",
+      "method": "Vercel deployment and Git lineage inspection",
+      "evidence": "Deployment dpl_5C55vhnqxTdKWoZRyfmuGJ3CEVEn remains READY for PR #16. Stage 10 recorded an authenticated HTTP 200 render with the complete page; Stage 11 fresh Vercel inspection still reports READY. Direct anonymous-style fetch now redirects through Vercel SSO, which is preview access protection rather than an implementation change. The deployed frontend is byte-identical to SRC-REPO-002.",
+      "checkedAt": "2026-08-18T14:33:25.585Z"
     }
   ],
   "artifacts": [
