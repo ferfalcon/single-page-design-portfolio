@@ -24,12 +24,19 @@ updated: 2026-08-18
 - Source baseline: `SOURCE-BASELINE.md`
 - Evidence baseline: `DESIGN-AUDIT.md`
 - Repository snapshot: `SRC-REPO-001`
-- Current workflow checkpoint: Stage 4 — Specification
-- Requirements are approved through `GATE-003` and design intent through `GATE-004`. Specification is the active checkpoint; repository-aware planning, architecture decision, and final Lite review are intentionally not started.
+- Current workflow checkpoint: **Stage 5 — Review documentation consistency**
+- Requirements are approved through `GATE-003`, design intent through `GATE-004`, and specification through `GATE-005`. Stage 5 document review is active; repository-aware planning, architecture handling, task decomposition, and implementation are intentionally not started.
+
+### Stage 5 source challenge
+
+- A fresh read-only Figma metadata and Plugin API check on 2026-08-18 confirmed the same scoped `🤖 Workflow` page (`2141:862`), Home exemplars, responsive components, control states, and standalone Work assets; no material upstream design drift was observed.
+- A GitHub comparison from immutable `SRC-REPO-001` to current `main` shows workflow/documentation changes only and no `frontend/` changes.
+- The deeper Work-instance check uncovered `AUD-009`: every viewport variant's layer named `Work Image / 05` currently instances `Asset/Work/02` (`6:377`), while standalone `Asset/Work/05` (`6:380`) exists unused. This was present in the active source but missed by earlier review; it is not treated as source drift.
+- Stage 5 therefore reopens only the logical slot-05 content mapping. The rest of the approved Stage 4 carousel behavior remains supported unless the owner's `AUD-009` decision requires a narrower correction.
 
 ### Stage 2 source check
 
-- `SRC-DS-001` is time-bound. A fresh metadata inspection on 2026-08-18 confirmed that the scoped `🤖 Workflow` page (`2141:862`), Home / Mobile (`2141:14174`), Home / Tablet (`2141:14238`), Home / Desktop (`2141:14302`), responsive section/navigation component sets, carousel controls, and five Work assets remain present under the same node IDs and supplied dimensions.
+- `SRC-DS-001` is time-bound. A fresh metadata inspection on 2026-08-18 confirmed that the scoped `🤖 Workflow` page (`2141:862`), Home / Mobile (`2141:14174`), Home / Tablet (`2141:14238`), Home / Desktop (`2141:14302`), responsive section/navigation component sets, carousel controls, and five standalone Work assets remain present under the same node IDs and supplied dimensions.
 - This check confirms structural continuity for the requirements checkpoint; it does not convert the mutable Figma source into an immutable snapshot or replace later source verification.
 - `SRC-REPO-001` remains an immutable repository baseline. Workflow documentation changes after that input commit are expected workflow output and do not alter the implementation baseline used for product requirements.
 
@@ -90,13 +97,14 @@ updated: 2026-08-18
 
 - Classification: Confirmed
 - Priority: Must
-- Description: The Work section must provide conventional previous and next controls that allow users to navigate through the five source-provided Work items.
-- Rationale: The design supplies five Work assets and previous/next controls; `AUD-002` was explicitly resolved by the project owner as a standard carousel.
-- Snapshot or evidence: `SRC-DS-001`; `EVD-005`; `EVD-015`; `AUD-002`.
+- Description: The Work section must provide conventional previous and next controls that allow users to navigate through five logical Work positions.
+- Rationale: The design supplies five logical Work slots, standalone Work assets 01–05, and previous/next controls; `AUD-002` was explicitly resolved as a standard carousel. Stage 5 later found that the scoped slot named 05 currently instances Work 02 rather than the standalone Work 05 asset (`AUD-009`).
+- Snapshot or evidence: `SRC-DS-001`; `EVD-005`; `EVD-015`; `EVD-017`; `AUD-002`; `AUD-009`.
 - Acceptance criteria:
   - Previous and next controls are present and operable.
-  - All five source-provided Work items are reachable through the carousel interaction.
-  - The precise start position, wrap/boundary behavior, and transition behavior are defined later in Stage 4 rather than invented here.
+  - All five logical Work positions are reachable through the carousel interaction.
+  - The visible asset used for logical position 05 must follow the explicit resolution of `AUD-009`; this requirement does not silently choose between the source duplicate and standalone Work 05 asset.
+  - The precise start position, wrap/boundary behavior, and transition behavior are defined in Stage 4 rather than invented here.
 
 ### REQ-FR-005 — Do not add unsupported Work-item navigation
 
@@ -161,14 +169,15 @@ updated: 2026-08-18
 
 - Classification: Confirmed
 - Priority: Must
-- Description: Decorative service artwork must not add redundant screen-reader content, while the meaningful profile portrait and Work imagery must receive context-appropriate alternative text.
-- Rationale: The design component descriptions explicitly classify service illustrations as decorative and portrait/Work imagery as meaningful, but do not provide final alternative-text wording.
-- Snapshot or evidence: `SRC-DS-001`; `EVD-010`; `EVD-015`.
+- Description: Decorative service artwork must not add redundant screen-reader content, while the meaningful profile portrait and rendered Work imagery must receive context-appropriate alternative text matching the actual asset shown.
+- Rationale: The design component descriptions explicitly classify service illustrations as decorative and portrait/Work imagery as meaningful, but do not provide final alternative-text wording. `AUD-009` requires the slot-05 text to follow the resolved asset rather than the layer name alone.
+- Snapshot or evidence: `SRC-DS-001`; `EVD-010`; `EVD-015`; `EVD-017`; `AUD-009`.
 - Acceptance criteria:
   - Decorative service artwork is ignored by assistive technologies.
   - The profile portrait has meaningful alternative text appropriate to its role.
-  - Each meaningful Work image has alternative text appropriate to the visible project imagery/context.
-  - Final wording may be refined during specification/implementation, but images are not left with misleading or redundant alternatives.
+  - Each rendered Work position has alternative text appropriate to the actual visible imagery/context.
+  - Logical slot 05 never receives the standalone Work 05 description unless that standalone asset is the resolved visible content.
+  - Images are not left with misleading or redundant alternatives.
 
 ### REQ-AR-005 — Meet applicable text contrast requirements in implemented states
 
@@ -199,7 +208,7 @@ updated: 2026-08-18
 
 - Classification: Confirmed
 - Priority: Must
-- Description: Non-essential hover/carousel transition motion must not create an accessibility barrier and must respect the user’s reduced-motion preference while preserving the perceivable state change and carousel functionality.
+- Description: Non-essential hover/carousel transition motion must not create an accessibility barrier and must respect the user's reduced-motion preference while preserving the perceivable state change and carousel functionality.
 - Rationale: The design demonstrates 200ms dissolve hover transitions but supplies no reduced-motion guidance; the repository contract explicitly requires reduced-motion consideration.
 - Snapshot or evidence: `SRC-DS-001`; `EVD-016`; `AUD-006`; root `AGENTS.md`.
 - Acceptance criteria:
@@ -223,12 +232,12 @@ updated: 2026-08-18
 
 - Classification: Confirmed
 - Priority: Must
-- Description: The implemented page must preserve the visual hierarchy, typography intent, spacing relationships, imagery, responsive composition, and recognizable interaction states evidenced by `SRC-DS-001`, except where an approved accessibility correction requires a documented deviation.
-- Rationale: Design fidelity is a repository-wide quality requirement, while `AUD-003` and `AUD-004` explicitly require accessibility corrections that may need controlled visual adjustment.
-- Snapshot or evidence: `SRC-DS-001`; `EVD-001` through `EVD-016`; root `AGENTS.md`.
+- Description: The implemented page must preserve the visual hierarchy, typography intent, spacing relationships, imagery, responsive composition, and recognizable interaction states evidenced by `SRC-DS-001`, except where an approved accessibility correction or an explicitly resolved source inconsistency requires a documented deviation.
+- Rationale: Design fidelity is a repository-wide quality requirement, while `AUD-003`, `AUD-004`, and `AUD-009` require controlled, traceable handling instead of silent divergence.
+- Snapshot or evidence: `SRC-DS-001`; `EVD-001` through `EVD-017`; root `AGENTS.md`.
 - Acceptance criteria:
   - Visual comparison at the supplied exemplar widths shows the same major composition and hierarchy as the approved source.
-  - Any intentional visual deviation required for accessibility is traceable to an approved requirement/finding.
+  - Any intentional visual deviation required for accessibility or the `AUD-009` owner decision is traceable to its approved finding/decision.
   - Unrelated redesign is not introduced.
 
 ### Existing project constraints carried forward
@@ -244,15 +253,15 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 #### Blocking
 
-- None identified for Stage 2 requirements.
+- Stage 2 originally had no blocker. Stage 5 review later identified `AUD-009`; it must be resolved before the document-review gate, not retroactively misrepresented as a Stage 2 source fact.
 
 #### Non-blocking / deferred
 
-- Carousel start position, boundary behavior, wrap/loop behavior, and visual transition mechanics are intentionally deferred to Stage 4 specification under the approved “standard carousel” direction.
-- Exact implementation breakpoint values are intentionally deferred; supplied viewport widths are exemplars, not automatically breakpoints.
-- Exact compliant color/token changes for `AUD-003` and `AUD-004` are deferred to design intent/specification/planning.
-- Final alternative-text wording for meaningful imagery is deferred to specification/implementation because Figma provides intent but not copy.
-- No browser-support matrix is invented at this stage; later specification/planning may define one only from real project constraints or explicit owner direction.
+- Carousel start position, boundary behavior, wrap/loop behavior, and visual transition mechanics were deferred to Stage 4 specification under the approved “standard carousel” direction and are now specified.
+- Exact implementation breakpoint values remain deferred; supplied viewport widths are exemplars, not automatically breakpoints.
+- Exact compliant color/token changes for `AUD-003` and `AUD-004` were deferred and are now specified.
+- Final alternative-text wording for meaningful imagery was defined in Stage 4 from direct asset inspection; slot 05 remains conditional on the `AUD-009` asset choice.
+- No browser-support matrix is invented; later planning may define one only from real project constraints or explicit owner direction.
 
 ### Stage 2 Review Pass 1 — Completeness and correctness
 
@@ -274,26 +283,26 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - [x] Every material requirement references approved project context, `SRC-DS-001`, `SRC-REPO-001`, `EVD-*`, `AUD-*`, or an explicit owner resolution as applicable.
 - [x] Requirement ownership remains distinct from later design, specification, and plan responsibilities.
-- [x] The fresh Stage 2 Figma metadata check confirms structural continuity while preserving the snapshot’s time-bound limitation.
+- [x] The fresh Stage 2 Figma metadata check confirms structural continuity while preserving the snapshot's time-bound limitation.
 - [x] No requirement silently depends on newer implementation code than `SRC-REPO-001`.
 - [x] Known uncertainty is visible and deferred to the correct later stage rather than presented as confirmed behavior.
 - [x] The work remains Lite-eligible: one static page, no material routing/shared-state/persistence/authentication/integration architecture introduced by Stage 2.
 
 ### Stage 2 readiness
 
-**Approved through `GATE-003`.** Stage 3 — Design Intent is the active gated checkpoint.
+**Approved through `GATE-003`.**
 
 ## 3. Design Intent
 
 ### Stage 3 source check
 
-- `SRC-DS-001` remains time-bound. A fresh metadata inspection on 2026-08-18 again confirmed the scoped `🤖 Workflow` page (`2141:862`), the 375px, 768px, and 1440px Home exemplars, responsive Header/Footer/Hero/About/Work/Contact component sets, Default/Hover/Focus control variants, the profile portrait, and all five Work assets.
+- `SRC-DS-001` remains time-bound. A fresh metadata inspection on 2026-08-18 again confirmed the scoped `🤖 Workflow` page (`2141:862`), the 375px, 768px, and 1440px Home exemplars, responsive Header/Footer/Hero/About/Work/Contact component sets, Default/Hover/Focus control variants, the profile portrait, and five standalone Work assets.
 - The supplied widths remain design exemplars rather than implementation breakpoint instructions. Stage 3 describes intended transformations and failure conditions; Stage 4 and planning may make them testable and select concrete implementation values where necessary.
 - The immutable implementation baseline remains `SRC-REPO-001`. Stage 3 does not prescribe repository architecture or implementation paths.
 
 ### Design principles
 
-- Preserve the source’s friendly portfolio character: warm neutral page surface, bold Plus Jakarta Sans typography, colorful service cards, large imagery, rounded controls, generous whitespace, and a dark closing call-to-action.
+- Preserve the source's friendly portfolio character: warm neutral page surface, bold Plus Jakarta Sans typography, colorful service cards, large imagery, rounded controls, generous whitespace, and a dark closing call-to-action.
 - Preserve the one-page narrative order and visual pacing rather than flattening the page into equally weighted blocks.
 - Treat accessibility corrections from `AUD-003` and `AUD-004` as controlled design deviations: preserve recognizable color roles and hierarchy while changing a failing foreground/background pairing when required for compliant text contrast.
 - Keep responsive changes content-driven. Layout transforms when the current arrangement can no longer preserve readable copy, meaningful image prominence, comfortable controls, or the source-observed visual relationships.
@@ -320,7 +329,7 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - Classification: Confirmed
 - Confidence: High
-- Intent: The hero remains the dominant page heading. About, Work, and Contact remain section-level headings. Service labels remain subordinate to the hero introduction. Mobile may use the source’s compact large heading treatment while larger layouts use larger heading styles, but visual size changes must not change document meaning or reading hierarchy.
+- Intent: The hero remains the dominant page heading. About, Work, and Contact remain section-level headings. Service labels remain subordinate to the hero introduction. Mobile may use the source's compact large heading treatment while larger layouts use larger heading styles, but visual size changes must not change document meaning or reading hierarchy.
 - Snapshot and evidence: `SRC-DS-001`; `EVD-002` through `EVD-006`; Figma Typography usage guidance.
 - Requirement references: `REQ-AR-001`, `REQ-AR-006`, `REQ-NFR-002`.
 - Content edge intent: Heading and paragraph containers may grow vertically when text wraps; typography must not depend on fixed heights that clip required content.
@@ -329,7 +338,7 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - Classification: Observed
 - Confidence: High
-- Intent: Preserve all six service categories as distinct colored cards with their paired decorative illustrations. The cards remain a deliberately varied visual group rather than six generic identical list rows. Graphic Design remains a prominent anchor while the other categories retain the source’s grouped mosaic character as available width changes.
+- Intent: Preserve all six service categories as distinct colored cards with their paired decorative illustrations. The cards remain a deliberately varied visual group rather than six generic identical list rows. Graphic Design remains a prominent anchor while the other categories retain the source's grouped mosaic character as available width changes.
 - Snapshot and evidence: `SRC-DS-001`; `EVD-003`, `EVD-008`, `EVD-013`, `EVD-015`.
 - Requirement references: `REQ-FR-002`, `REQ-FR-006`, `REQ-AR-004`, `REQ-AR-005`, `REQ-NFR-002`.
 - Accessibility intent: Service illustrations remain decorative; label readability takes priority over retaining a known failing text/background combination.
@@ -338,7 +347,7 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - Classification: Observed
 - Confidence: High
-- Intent: Preserve the strong relationship between Amy’s portrait and the About copy. At narrower supplied layouts the portrait precedes the text; at the wide composition the portrait and copy form a side-by-side relationship. The portrait remains meaningful content rather than decorative texture.
+- Intent: Preserve the strong relationship between Amy's portrait and the About copy. At narrower supplied layouts the portrait precedes the text; at the wide composition the portrait and copy form a side-by-side relationship. The portrait remains meaningful content rather than decorative texture.
 - Snapshot and evidence: `SRC-DS-001`; `EVD-004`, `EVD-008`, `EVD-010`, `EVD-015`.
 - Requirement references: `REQ-FR-001`, `REQ-FR-006`, `REQ-AR-004`, `REQ-NFR-002`.
 - Content edge intent: If copy expansion creates collision or excessive compression, preserve readable text and portrait recognition by allowing the layout to stay or return to the stacked relationship sooner.
@@ -348,9 +357,9 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 - Classification: Confirmed
 - Confidence: High
 - Intent: Keep Work visually image-first: large project imagery carries the section, with previous/next controls visibly associated with the gallery but not competing with it. Work images remain presentation content, not project-detail links, in the current scope.
-- Snapshot and evidence: `SRC-DS-001`; `EVD-005`, `EVD-010`, `EVD-015`; `AUD-002` owner resolution.
+- Snapshot and evidence: `SRC-DS-001`; `EVD-005`, `EVD-010`, `EVD-015`, `EVD-017`; `AUD-002`; `AUD-009`.
 - Requirement references: `REQ-FR-004`, `REQ-FR-005`, `REQ-AR-003`, `REQ-AR-004`, `REQ-NFR-002`.
-- Design boundary: Stage 3 does not define the initial slide, wrap/loop rule, boundary state, or exact transition algorithm.
+- Design boundary: Stage 3 did not define the initial slide, wrap/loop rule, boundary state, exact transition algorithm, or resolve the later-discovered slot-05 asset inconsistency.
 
 ### DES-007 — Preserve the closing Contact hierarchy and separate Footer role
 
@@ -365,7 +374,7 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - Classification: Confirmed
 - Confidence: High
-- Intent: Correct the Accent CTA text pairing and the UI/UX, Apps, and Photography service-label pairings while preserving the source’s recognizable palette roles, hierarchy, and state distinction as closely as practical. A compliant pairing is more important than pixel-identical reproduction of a known accessibility failure.
+- Intent: Correct the Accent CTA text pairing and the UI/UX, Apps, and Photography service-label pairings while preserving the source's recognizable palette roles, hierarchy, and state distinction as closely as practical. A compliant pairing is more important than pixel-identical reproduction of a known accessibility failure.
 - Snapshot and evidence: `SRC-DS-001`; `EVD-012`, `EVD-013`; `AUD-003`, `AUD-004` and their owner resolutions.
 - Requirement references: `REQ-AR-005`, `REQ-NFR-002`.
 - Deferred detail: Stage 4/planning will make the compliant treatment testable and select concrete values or token mappings; Stage 3 does not invent replacement colors without implementation-context validation.
@@ -374,10 +383,10 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - Classification: Confirmed
 - Confidence: High
-- Intent: Service artwork remains visual ornament attached to already visible service labels. The profile portrait and Work imagery remain meaningful visual content. Alternative text should communicate meaningful images’ role without duplicating nearby text or turning decorative service artwork into screen-reader noise.
-- Snapshot and evidence: `SRC-DS-001`; `EVD-010`, `EVD-015`.
+- Intent: Service artwork remains visual ornament attached to already visible service labels. The profile portrait and Work imagery remain meaningful visual content. Alternative text should communicate meaningful images' role without duplicating nearby text or turning decorative service artwork into screen-reader noise.
+- Snapshot and evidence: `SRC-DS-001`; `EVD-010`, `EVD-015`, `EVD-017`.
 - Requirement references: `REQ-AR-004`, `REQ-NFR-002`.
-- Deferred detail: Final alternative-text wording belongs to Stage 4/implementation once visible context and asset treatment are fixed.
+- Deferred detail: Final alternative-text wording belongs to Stage 4/implementation once visible context and asset treatment are fixed; `AUD-009` means slot 05 must use text matching the eventual resolved asset.
 
 ### Responsive intent
 
@@ -406,14 +415,14 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 - Snapshot and evidence: `SRC-DS-001`; `EVD-004`, `EVD-008`; `Section/About` responsive variants.
 - Requirement references: `REQ-FR-006`, `REQ-AR-004`, `REQ-AR-006`, `REQ-NFR-002`.
 
-#### DES-RWD-004 — Preserve the Work carousel’s intentional neighboring-image visibility
+#### DES-RWD-004 — Preserve the Work carousel's intentional neighboring-image visibility
 
 - Classification: Observed
 - Confidence: High
 - Intent: The Work viewport should communicate that more projects exist beyond the currently emphasized imagery. The narrow composition shows a cropped/partial horizontal gallery, the middle composition emphasizes a large central image with neighboring imagery visible at the edges, and the wide composition exposes three large items across. Preserve that “more content exists” cue rather than collapsing the section into a single isolated image at every width.
-- Snapshot and evidence: `SRC-DS-001`; `EVD-005`, `EVD-008`, `EVD-015`; `Section/Work` responsive variants.
+- Snapshot and evidence: `SRC-DS-001`; `EVD-005`, `EVD-008`, `EVD-015`, `EVD-017`; `Section/Work` responsive variants.
 - Requirement references: `REQ-FR-004`, `REQ-FR-006`, `REQ-NFR-002`.
-- Deferred detail: Stage 4 defines observable slide positioning, clipping, reachability, boundary behavior, and transition mechanics.
+- Deferred detail: Stage 4 defines observable slide positioning, clipping, reachability, boundary behavior, and transition mechanics. The later-discovered slot-05 asset mapping is handled separately by `AUD-009`.
 
 #### DES-RWD-005 — Let Contact move from centered stacking to horizontal wide-layout emphasis
 
@@ -437,7 +446,7 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - Classification: Confirmed
 - Confidence: High
-- Intent: Preserve the source’s Dark and Accent action roles and their Default/Hover/Focus visual distinction while implementing consultation controls as links. Dark actions remain appropriate in header/footer contexts; Accent actions remain appropriate in About/Contact contexts, subject to the approved contrast correction.
+- Intent: Preserve the source's Dark and Accent action roles and their Default/Hover/Focus visual distinction while implementing consultation controls as links. Dark actions remain appropriate in header/footer contexts; Accent actions remain appropriate in About/Contact contexts, subject to the approved contrast correction.
 - Snapshot and evidence: `SRC-DS-001`; `EVD-009`, `EVD-012`, `EVD-016`; `AUD-001` owner resolution.
 - Requirement references: `REQ-FR-003`, `REQ-AR-002`, `REQ-AR-005`, `REQ-AR-007`.
 - Design boundary: The placeholder `href="#"` is a product requirement, not a new destination or interaction flow.
@@ -446,7 +455,7 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - Classification: Confirmed
 - Confidence: High
-- Intent: Keep the 64×64 circular previous/next controls visually paired with the Work gallery, with distinct Default/Hover/Focus presentations and directional iconography. Their accessible meaning remains equivalent to “Previous project” and “Next project”.
+- Intent: Keep the circular previous/next controls visually paired with the Work gallery, with distinct Default/Hover/Focus presentations and directional iconography. Their accessible meaning remains equivalent to “Previous project” and “Next project”. The source base components are 64×64; the mobile Work composition scales the instances to 48×48.
 - Snapshot and evidence: `SRC-DS-001`; `EVD-005`, `EVD-009`, `EVD-010`, `EVD-011`; `AUD-002` owner resolution.
 - Requirement references: `REQ-FR-004`, `REQ-AR-002`, `REQ-AR-003`.
 - Deferred detail: Stage 4 owns exact activation results, start state, wrap/boundary behavior, and disabled-state decisions if any.
@@ -455,7 +464,7 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 
 - Classification: Recommended from observed source behavior
 - Confidence: Medium
-- Intent: Preserve the source’s quick dissolve-style feedback as a restrained visual cue where useful, but reduce or suppress non-essential interpolation for users who prefer reduced motion. Visual distinction between states must remain perceivable even when motion is absent.
+- Intent: Preserve the source's quick dissolve-style feedback as a restrained visual cue where useful, but reduce or suppress non-essential interpolation for users who prefer reduced motion. Visual distinction between states must remain perceivable even when motion is absent.
 - Snapshot and evidence: `SRC-DS-001`; `EVD-016`; `AUD-006`.
 - Requirement references: `REQ-AR-007`, `REQ-NFR-002`.
 - Deferred detail: Stage 4 owns exact transition properties and carousel motion behavior.
@@ -474,7 +483,7 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 - Longer or zoomed text should increase block height or trigger an earlier responsive transformation rather than overlap imagery, clip text, or hide required actions. This carries `REQ-AR-006` into design intent without inventing fixed content limits.
 - Service names remain fixed to the six approved labels. Decorative service artwork should never become more semantically prominent than those labels.
 - Meaningful portrait and Work imagery should preserve recognizability when cropped; arbitrary cropping that removes the subject or makes a portfolio image unintelligible is outside the intended design.
-- Work images remain non-interactive presentation content. Carousel controls are the current scope’s Work interaction.
+- Work images remain non-interactive presentation content. Carousel controls are the current scope's Work interaction.
 - Consultation actions retain their source label and visual prominence even though their destination is temporarily `#`.
 
 ### Design-system mapping and deviations
@@ -487,20 +496,20 @@ The following constraints are already defined in `PROJECT-CONTEXT.md` and remain
 | Accent actions | Light-red default / yellow hover role with light label | Preserve accent-action identity but correct failing text contrast | Approved accessibility deviation required (`AUD-003`) |
 | Service cards | Six accent surfaces with white labels and decorative artwork | Preserve category color identity while correcting failing label pairings | Approved accessibility deviation required for UI/UX, Apps, Photography (`AUD-004`) |
 | Spacing/radius | Local primitive spacing and radius scales | Preserve spacing rhythm and rounded geometry | No repository mapping chosen yet |
-| Work imagery | Five 540×360 source assets | Preserve image-first gallery and neighboring-item cue | No project-link behavior added |
+| Work imagery | Five logical Work slots and five standalone 540×360 assets; slot 05 currently instances Work 02 | Preserve image-first gallery and neighboring-item cue; resolve visible slot-05 asset explicitly | `AUD-009` blocks final mapping |
 
 ### Deferred Stage 4 decisions
 
-The following are intentionally **not** resolved as precise behavior in Stage 3:
+The following were intentionally **not** resolved as precise behavior in Stage 3:
 
 - Numeric implementation breakpoints and exact interpolation thresholds.
 - Carousel initial item/position, step size, wrap/loop or boundary behavior, disabled states if any, and exact transition mechanics.
 - Exact compliant foreground/background token or color values for `AUD-003` and `AUD-004`.
-- Final alternative-text wording for the profile portrait and five Work images.
+- Final alternative-text wording for the profile portrait and Work assets.
 - Exact focus-ring CSS, keyboard event implementation, or announcement behavior.
 - Browser-support targets or performance thresholds not established by an authoritative project source.
 
-None of these items blocks the design-intent checkpoint because their outcomes or ownership boundaries are explicit.
+Stage 5 adds one newly discovered unresolved item: `AUD-009` slot-05 asset mapping. It must be decided by the owner rather than treated as a Stage 3/4 assumption.
 
 ### Stage 3 Review Pass 1 — Completeness and correctness
 
@@ -524,22 +533,23 @@ None of these items blocks the design-intent checkpoint because their outcomes o
 - [x] All `DES-*`, `DES-RWD-*`, and `DES-INT-*` decisions reference approved `REQ-*` requirements and source/audit evidence.
 - [x] Confirmed, Observed, Recommended, and deferred information remain visibly distinct.
 - [x] No implementation architecture, component-file structure, arbitrary breakpoint, carousel business rule, or browser target is presented as design-source fact.
-- [x] The fresh Stage 3 Figma metadata check is consistent with `VER-003` and does not silently redefine the time-bound `SRC-DS-001` snapshot.
+- [x] The fresh Stage 3 Figma metadata check is consistent with the canonical source-verification history and does not silently redefine the time-bound `SRC-DS-001` snapshot.
 - [x] Approved owner resolutions for `AUD-001` through `AUD-004` remain intact and are not reframed as Figma-observed behavior.
 - [x] The project remains Lite-eligible: Stage 3 introduces no routing, persistence, authentication, integration, or cross-cutting state architecture.
 
 ### Stage 3 readiness
 
-**Approved through `GATE-004`.** Stage 4 — Specification is the active gated checkpoint.
+**Approved through `GATE-004`.**
 
 ## 4. Specification
 
 ### Stage 4 source check
 
-- `SRC-DS-001` remains time-bound. A fresh read-only Figma inspection on 2026-08-18 confirmed the scoped `🤖 Workflow` page (`2141:862`), the three Home exemplars, `Section/Work` (`2171:3199`), the five ordered Work assets (`6:376` through `6:380`), and the Default/Hover/Focus variants of both carousel controls.
-- The supplied Work geometry establishes `Asset/Work/03` as the initially centered/emphasized item at all three exemplars: 375px, 768px, and 1440px.
+- `SRC-DS-001` remains time-bound. A fresh read-only Figma inspection on 2026-08-18 confirmed the scoped `🤖 Workflow` page (`2141:862`), the three Home exemplars, `Section/Work` (`2171:3199`), five standalone Work assets (`6:376` through `6:380`), and the Default/Hover/Focus variants of both carousel controls.
+- The supplied Work geometry establishes logical Work position 03 as the initially centered/emphasized item at all three exemplars: 375px, 768px, and 1440px.
 - The carousel controls expose no Disabled variant. Combined with the owner-approved “standard previous/next carousel” direction, Stage 4 specifies cyclic manual navigation rather than inventing a disabled visual state at the two ends.
 - No autoplay, timed rotation, project-detail navigation, or consultation destination beyond `href="#"` is demonstrated by the source; none is added by this specification.
+- Stage 5 later established that the scoped position named `Work Image / 05` instances `Asset/Work/02` in all three Work variants while `Asset/Work/05` exists unused. The original Stage 4 assumption that logical position 05 unambiguously maps to `6:380` is therefore corrected below and remains blocked by `AUD-009`.
 - `SRC-REPO-001` remains the immutable implementation baseline. Stage 4 defines observable behavior and acceptance criteria, not repository file structure or implementation order.
 
 ### Behavioral specification
@@ -550,7 +560,7 @@ None of these items blocks the design-intent checkpoint because their outcomes o
 - Design references: `DES-001`, `DES-007`.
 - Behavior:
   - Render one continuous page in the sequence Hero → About → Work → Contact → Footer.
-  - Keep the header/hero composition, six service categories, About portrait/copy/action, five Work items, Contact card, and footer available in the same page.
+  - Keep the header/hero composition, six service categories, About portrait/copy/action, five logical Work positions, Contact card, and footer available in the same page.
   - Do not require a route change, modal, overlay, or project-detail surface to access any current-scope content.
 
 #### SPEC-BEH-002 — Preserve the six fixed service categories
@@ -578,8 +588,9 @@ None of these items blocks the design-intent checkpoint because their outcomes o
 - Requirement references: `REQ-FR-004`, `REQ-NFR-001`.
 - Design references: `DES-006`, `DES-RWD-004`.
 - Behavior:
-  - The initial HTML contains all five Work images; client JavaScript is not required to render the portfolio content.
-  - If carousel JavaScript does not initialize, the five Work items remain reachable through a static horizontally scrollable gallery or equivalent non-scripted fallback.
+  - The initial HTML contains all five logical Work positions; client JavaScript is not required to render the portfolio content.
+  - If carousel JavaScript does not initialize, the five logical positions remain reachable through a static horizontally scrollable gallery or equivalent non-scripted fallback.
+  - The asset assigned to logical position 05 is governed by the eventual `AUD-009` resolution; progressive enhancement must not hide that decision.
   - Previous/next controls must not remain exposed as dead controls when their behavior is unavailable.
   - Failure of the Work enhancement must not affect Hero, About, Contact, footer, consultation links, or normal page scrolling.
 
@@ -625,7 +636,7 @@ None of these items blocks the design-intent checkpoint because their outcomes o
 - Behavior at source exemplars:
   - At 375px, the active Work item is 270×180 and centered; small portions of the previous and next logical items remain visible at the left and right edges.
   - At 768px, the active Work item is 540×360 and centered; neighboring items remain partially visible at both edges.
-  - At 1440px, the active Work item is 540×360 and centered; substantial portions of both neighboring items remain visible, preserving the source’s broad three-item gallery impression.
+  - At 1440px, the active Work item is 540×360 and centered; substantial portions of both neighboring items remain visible, preserving the source's broad three-item gallery impression.
   - When navigation wraps at item 01 or item 05, the logical neighboring item on the opposite end of the ordered set supplies the corresponding edge cue.
   - Intermediate widths preserve the same relationship proportionally rather than snapping to a generic one-image-only layout.
 
@@ -634,9 +645,9 @@ None of these items blocks the design-intent checkpoint because their outcomes o
 - Requirement references: `REQ-AR-007`, `REQ-NFR-002`.
 - Design references: `DES-INT-003`.
 - Behavior:
-  - Default manual carousel movement may animate as one short 200ms translation using an ease-out timing curve, derived from the source’s established short interaction timing.
+  - Default manual carousel movement may animate as one short 200ms translation using an ease-out timing curve, derived from the source's established short interaction timing.
   - Repeated activations are serialized so the active logical item changes one step per accepted activation; the carousel must not end in an indeterminate half-position.
-  - Hover/focus state feedback may preserve the source’s short dissolve-style feedback.
+  - Hover/focus state feedback may preserve the source's short dissolve-style feedback.
   - Under `prefers-reduced-motion: reduce`, non-essential interpolation is removed and the new carousel position/state appears without motion while preserving the same logical result.
 
 ### Accessibility specification
@@ -687,7 +698,8 @@ None of these items blocks the design-intent checkpoint because their outcomes o
   - Work 02 alternative text: **“Purple geometric pattern with circles, arrows, arches, and starbursts.”**
   - Work 03 alternative text: **“Hand holding a colorful illustrated newspaper over a geometric background.”**
   - Work 04 alternative text: **“Black graphic design booklet on yellow papers beside vinyl records.”**
-  - Work 05 alternative text: **“Hand holding a smartphone displaying a designer portfolio beside a drink and small plant.”**
+  - Standalone `Asset/Work/05` (`6:380`) alternative text: **“Hand holding a smartphone displaying a designer portfolio beside a drink and small plant.”**
+  - **`AUD-009` guard:** do not assign the standalone Work 05 description to logical slot 05 unless the owner resolves that slot to `6:380`. If the exact scoped assembly is preserved, logical slot 05 repeats Work 02 and must use the Work 02 alternative text instead.
   - Alternative text is not duplicated as a visible caption unless a later product requirement adds captions.
 
 #### SPEC-ACC-005 — Correct the known text contrast failures with the existing dark text role
@@ -721,29 +733,30 @@ None of these items blocks the design-intent checkpoint because their outcomes o
 
 ### Data specification
 
-#### SPEC-DATA-001 — Work carousel has one fixed ordered five-item dataset
+#### SPEC-DATA-001 — Work carousel has one fixed ordered five-position dataset
 
-| Position | Source asset | Meaning |
+| Position | Current scoped source mapping | Meaning |
 |---:|---|---|
 | 1 | `Asset/Work/01` (`6:376`) | Meaningful Work image |
 | 2 | `Asset/Work/02` (`6:377`) | Meaningful Work image |
 | 3 | `Asset/Work/03` (`6:378`) | Meaningful Work image and initial active item |
 | 4 | `Asset/Work/04` (`6:379`) | Meaningful Work image |
-| 5 | `Asset/Work/05` (`6:380`) | Meaningful Work image |
+| 5 | `Work Image / 05` currently → `Asset/Work/02` (`6:377`); standalone `Asset/Work/05` (`6:380`) exists unused | Meaningful Work position; asset mapping blocked by `AUD-009` |
 
-- No item has a project-detail destination in current scope.
-- The ordered dataset is cyclic for Previous/Next navigation only; content order remains 01–05.
+- No position has a project-detail destination in current scope.
+- The ordered logical dataset is cyclic for Previous/Next navigation only; position order remains 01–05.
+- `AUD-009` must be resolved before implementation so position 05 has one intentional, traceable asset/alternative-text mapping.
 
 ### Validation specification
 
 #### SPEC-VAL-001 — Visual and responsive validation
 
 Validate the rendered page against `SRC-DS-001` at:
-- 375px: mobile composition, active Work 03 centered at 270×180, mobile-sized controls, source hierarchy preserved.
+- 375px: mobile composition, active Work 03 centered at 270×180, 48×48 mobile carousel controls, source hierarchy preserved.
 - 768px: tablet composition, active Work 03 centered at 540×360, neighboring-image cue preserved.
 - 1440px: desktop composition, active Work 03 centered at 540×360, wide neighboring-image cue and desktop section relationships preserved.
 - At least one width between each supplied exemplar must be checked for overlap, clipping, control collision, and implementation-induced page-level horizontal scrolling.
-- Accessibility corrections from `SPEC-ACC-005` are expected visual deviations and must remain traceable; unrelated redesign is a failure.
+- Accessibility corrections from `SPEC-ACC-005` and any owner-approved `AUD-009` visual correction are expected traceable deviations; unrelated redesign is a failure.
 
 #### SPEC-VAL-002 — Interaction and accessibility validation
 
@@ -753,7 +766,7 @@ Validate at minimum:
 - Focus remains on the activated Previous/Next button after a slide change.
 - Five consecutive logical positions can be reached in each direction, including 01↔05 wrap.
 - No autoplay occurs.
-- Accessible names, carousel/slide structure, slide-position context, meaningful image alternatives, and polite manual-change feedback are exposed to assistive technology.
+- Accessible names, carousel/slide structure, slide-position context, meaningful image alternatives matching actual rendered assets, and polite manual-change feedback are exposed to assistive technology.
 - Default, Hover, and Focus states remain visually distinct.
 - Contrast is measured from rendered colors and meets the applicable threshold.
 - `prefers-reduced-motion: reduce` removes non-essential motion while preserving operation and state changes.
@@ -761,7 +774,7 @@ Validate at minimum:
 
 #### SPEC-VAL-003 — Progressive-enhancement and recovery validation
 
-- With carousel JavaScript prevented from initializing, all five Work images remain present and reachable.
+- With carousel JavaScript prevented from initializing, all five logical Work positions remain present and reachable.
 - Dead previous/next controls are not exposed in the failed/uninitialized state.
 - All non-carousel page content remains readable and operable.
 - A carousel script error must not block page rendering or normal document scrolling.
@@ -775,16 +788,16 @@ Validate at minimum:
 | `AC-003` | Every “Free Consultation” action is a native link whose current destination is exactly `#`; no invented booking/navigation behavior is present. |
 | `AC-004` | On initial load at 375px, 768px, and 1440px, Work item 03 is the centered/emphasized logical item. |
 | `AC-005` | Previous/Next changes exactly one logical item, wraps 01↔05, never auto-rotates, and never requires a Disabled control state. |
-| `AC-006` | All five Work items are reachable in both directions and none of the Work images is a project-detail link. |
+| `AC-006` | All five logical Work positions are reachable in both directions, none is a project-detail link, and slot 05 uses the owner-resolved `AUD-009` asset mapping. |
 | `AC-007` | Work preserves a centered active item and visible neighboring-content cue at the three supplied exemplars and usable interpolation between them. |
 | `AC-008` | Consultation links and carousel buttons use native keyboard semantics, have visible focus, and carousel activation does not move focus. |
 | `AC-009` | The carousel is programmatically labelled from “My Work”; controls have Previous/Next project names; items expose position context; manual changes produce polite position feedback. |
-| `AC-010` | Decorative service graphics are hidden from assistive technology and the profile plus all five Work images use the final alternative text in `SPEC-ACC-004`. |
+| `AC-010` | Decorative service graphics are hidden from assistive technology; the profile and each rendered Work position use alternative text matching the actual resolved asset, including the `AUD-009` slot-05 decision. |
 | `AC-011` | Accent CTA, UI/UX, Apps, and Photography text uses the specified dark text role and meets applicable WCAG AA contrast thresholds in rendered states. |
 | `AC-012` | At supplied and intermediate widths, at 200% zoom, and down to 320 CSS px reflow conditions, required content is not clipped or made unreachable and page-level horizontal overflow is not introduced. |
 | `AC-013` | With reduced motion requested, the same control/state outcomes occur without non-essential carousel or dissolve interpolation. |
-| `AC-014` | Without successful carousel JavaScript initialization, all five Work images remain reachable and no dead carousel controls are exposed. |
-| `AC-015` | Visual comparison at 375px, 768px, and 1440px preserves source hierarchy, spacing relationships, image emphasis, and component-state intent except for approved contrast deviations. |
+| `AC-014` | Without successful carousel JavaScript initialization, all five logical Work positions remain reachable and no dead carousel controls are exposed. |
+| `AC-015` | Visual comparison at 375px, 768px, and 1440px preserves source hierarchy, spacing relationships, image emphasis, and component-state intent except for approved contrast deviations and any explicit `AUD-009` resolution. |
 | `AC-016` | No backend, persistence, authentication, external API, extra route, modal, or Work-detail destination is introduced. |
 
 ### Stage 4 non-goals and deferred implementation detail
@@ -793,14 +806,14 @@ Validate at minimum:
 - DOM/component file boundaries, CSS organization, carousel implementation technique, clone/virtualization strategy for cyclic edges, and JavaScript module structure remain repository-aware planning decisions.
 - No browser-support matrix or performance budget is invented because no authoritative project source establishes one.
 - No additional Figma edits are required by this specification.
-- Stage 5 document review, architecture handling, planning, task decomposition, and implementation are not started here.
+- At Stage 4 authoring time, document review and later checkpoints were not started. Stage 5 is now active; architecture handling, planning, task decomposition, and implementation remain unstarted.
 
 ### Stage 4 Review Pass 1 — Completeness and correctness
 
 - [x] Every approved functional, accessibility, and quality requirement has an observable Stage 4 behavior or validation path.
 - [x] Carousel initial state, one-step movement, cyclic edge behavior, no-autoplay rule, focus behavior, accessible naming, position feedback, and reduced-motion outcome are defined.
 - [x] Responsive behavior is testable at all supplied anchors and at intermediate/reflow conditions without turning the Figma widths into arbitrary implementation breakpoints.
-- [x] Exact alternative-text wording is defined from direct inspection of the meaningful profile and Work assets.
+- [x] Alternative-text wording was defined from direct asset inspection; Stage 5 later constrained slot 05 so the standalone Work 05 text cannot be applied unless `AUD-009` resolves that asset into the carousel.
 - [x] Known contrast failures have concrete compliant text-role mappings and measurable rendered targets.
 - [x] Failure/recovery behavior keeps the static portfolio content available when client enhancement is unavailable.
 - [x] No project-detail behavior, consultation destination, backend, persistence, authentication, or unsupported product flow was invented.
@@ -808,9 +821,9 @@ Validate at minimum:
 ### Corrections from Stage 4 Review Pass 1
 
 - Replaced the previously unresolved carousel start position with Work item 03 after verifying that its center aligns with the viewport center in all three supplied Work variants.
-- Chose cyclic one-item navigation so the source’s always-available Previous/Next controls do not require an unsupported Disabled state.
+- Chose cyclic one-item navigation so the source's always-available Previous/Next controls do not require an unsupported Disabled state.
 - Explicitly prohibited autoplay because neither the design evidence nor owner direction establishes timed rotation.
-- Finalized image alternatives from rendered asset inspection rather than generic filenames.
+- Finalized image alternatives from rendered asset inspection rather than generic filenames; Stage 5 later identified that the scoped slot-05 instance does not currently use the standalone Work 05 asset.
 - Resolved `AUD-003` and `AUD-004` with the existing dark primary text role while preserving the source accent backgrounds.
 - Added a progressive-enhancement recovery path so the static Astro page never loses Work content solely because carousel JavaScript fails.
 
@@ -826,7 +839,7 @@ Validate at minimum:
 
 ### Stage 4 readiness
 
-**Ready for gated Stage 4 approval.** The Stage 4 specification is complete. Formal Stage 4 gate closure requires explicit project-owner approval and is not recorded here; Stage 5 — Document Review has not been started.
+**Approved through `GATE-005`.** The Stage 4 specification passed its gate and the workflow advanced to Stage 5. The Stage 5 challenge subsequently found `AUD-009`, which reopens only the slot-05 asset mapping until the project owner decides how to resolve the source inconsistency.
 
 ## 5. Repository Context
 
@@ -851,13 +864,13 @@ Not started. Reserved for the Lite planning checkpoint after requirements, desig
 
 ### Blocking
 
-- None for the Stage 4 specification checkpoint.
+- **`AUD-009` (Stage 5):** logical Work slot 05 is named as position 05 but currently instances `Asset/Work/02`; standalone `Asset/Work/05` exists unused. The implementation must not guess which visual is intended.
 
 ### Non-blocking
 
 - `SRC-DS-001` remains mutable and time-bound and must be reverified before downstream material work.
-- Stage 4 now resolves carousel start/wrap behavior, contrast treatment, final image-alt wording, keyboard semantics, manual-change feedback, reduced motion, and progressive-enhancement recovery. Exact CSS breakpoint values and repository implementation structure remain later-stage choices constrained by this specification.
-- `GATE-004` records the approved Stage 3 design intent. Stage 4 is ready for explicit project-owner review/approval; no Stage 4 gate pass or Stage 5 advancement is claimed here.
+- Stage 4 resolves carousel start/wrap behavior, contrast treatment, asset-specific image-alt wording, keyboard semantics, manual-change feedback, reduced motion, and progressive-enhancement recovery. Exact CSS breakpoint values and repository implementation structure remain later-stage choices constrained by the specification.
+- `GATE-005` records the approved Stage 4 specification. Stage 5 is active and is intentionally blocked on `AUD-009` until the project owner resolves the visible slot-05 content mapping.
 
 ## 10. Traceability
 
@@ -871,21 +884,44 @@ Stage 4 specification entries carry direct requirement and design references. Th
 | `SPEC-ACC-001`–`006` | `REQ-AR-001`–`007`, `REQ-NFR-002` | `DES-003`, `DES-005`, `DES-006`, `DES-008`, `DES-009`, `DES-RWD-*`, `DES-INT-*` | `AC-008`–`013`, `AC-015` |
 | `SPEC-DATA-001` | `REQ-FR-004`, `REQ-FR-005`, `REQ-AR-004` | `DES-006`, `DES-009` | `AC-004`–`006`, `AC-010` |
 | `SPEC-VAL-001`–`003` | All approved current-scope requirements | All Stage 3 design-intent areas | `AC-001`–`016` |
+| `AUD-009` propagation | `REQ-FR-004`, `REQ-AR-004`, `REQ-NFR-002` | `DES-006`, `DES-009`, `DES-RWD-004` | `SPEC-DATA-001`, `SPEC-ACC-004`, `AC-006`, `AC-010`, `AC-015` |
 
-Repository-aware plan and task identifiers do not exist yet and will be added at their owning later checkpoints rather than invented during Stage 4.
+Repository-aware plan and task identifiers do not exist yet and will be added at their owning later checkpoints rather than invented during Stage 5.
 
 ## 11. Review Pass 1 — Completeness and Correctness
 
-Overall Lite review not started. Stage-specific review passes are recorded in the Requirements and Design Intent sections.
+Stage 5 challenged the approved Stage 1–4 material after its stage-specific corrections.
+
+- [x] Requirements, design intent, specification, acceptance criteria, and source/audit evidence were cross-read for coverage and ownership.
+- [x] Canonical `.workflow/workflow-record.json` was compared with the narrative Stage 0–4 documents. Several stale narrative statements incorrectly still described Stage 0 or Stage 4 as awaiting approval.
+- [x] Fresh Figma metadata plus a read-only Plugin API tree inspection confirmed the scoped responsive structures, Work geometry, item-03 centering, control-state inventory, and absence of a Disabled carousel state.
+- [x] Fresh repository comparison confirmed no frontend implementation drift from `SRC-REPO-001`; changes since the baseline are workflow/documentation only.
+- [x] A material source/data inconsistency was found: `Work Image / 05` in all three `Section/Work` variants uses `Asset/Work/02`, while standalone `Asset/Work/05` exists unused (`AUD-009`).
+- [x] No additional unsupported route, backend, autoplay, project-link behavior, arbitrary breakpoint, or custom keyboard convention was found in the approved scope.
 
 ## 12. Corrections from Pass 1
 
-Overall Lite review corrections not started.
+- Corrected stale Stage 0 approval/verification statements in `PROJECT-CONTEXT.md`, `SOURCE-BASELINE.md`, and `WORKFLOW-STATE.md` so they no longer contradict canonical gates/verifications.
+- Corrected `DESIGN-AUDIT.md` to its canonical Approved state, removed its obsolete Stage 1 closure blocker, and added `AUD-009` with exact source references.
+- Updated this brief to make Stage 5 the active checkpoint and Stage 4 approved through `GATE-005`.
+- Replaced unsupported claims that logical position 05 unambiguously maps to standalone `Asset/Work/05` with the observed current source mapping and an explicit `AUD-009` decision boundary.
+- Kept the standalone Work 05 alternative text as asset-specific evidence while preventing it from being assigned to slot 05 unless that asset is explicitly selected.
+- Preserved the already supported carousel start position, cyclic one-step behavior, no-autoplay rule, accessibility behavior, contrast correction, responsive intent, and progressive-enhancement requirements.
 
 ## 13. Review Pass 2 — Consistency, Traceability, Source Integrity, Risks, and Uncertainty
 
-Overall Lite review not started. Stage-specific consistency reviews are recorded in the Requirements and Design Intent sections.
+- [x] Narrative stage status now agrees with canonical `GATE-001` through `GATE-005` and the Stage 5 In-progress state.
+- [x] The Stage 5 source check distinguishes **no upstream drift** from a **previously missed existing source inconsistency**; `SRC-DS-001` is not silently redefined.
+- [x] `AUD-009` is owned by the design-audit/source-evidence layer and propagated only where it affects requirements/specification/data/acceptance; it is not presented as a Figma-proven intended correction.
+- [x] The slot-05 ambiguity is visible as a blocker rather than being buried as acceptable debt or silently resolved by assumption.
+- [x] Architecture, repository planning, task IDs, implementation technique, and runtime evidence remain deferred to their owning later checkpoints.
+- [x] No frontend code or Figma node was modified during document review.
 
 ## 14. Readiness
 
-Not evaluated for task decomposition. The current gated checkpoint is **Stage 4 specification ready for approval**; Stage 5 document review has not started.
+**Blocked — Stage 5 is not ready for gate approval yet.** The project owner must resolve `AUD-009` by choosing one intentional slot-05 mapping:
+
+1. **Preserve exact scoped assembly:** logical position 05 repeats `Asset/Work/02`, matching the current `Section/Work` components and Home compositions.
+2. **Use standalone Work 05:** logical position 05 uses `Asset/Work/05` (`6:380`), treating the named slot plus otherwise-unused asset as evidence of an assembly mistake in the source.
+
+No Stage 6 architecture work, planning, task decomposition, or frontend implementation should begin until that choice is recorded, affected Stage 5 text is normalized, Stage 5 preflight passes, and the project owner explicitly approves the Stage 5 gate.
