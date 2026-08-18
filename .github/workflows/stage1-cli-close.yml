@@ -1,0 +1,79 @@
+name: Close Stage 1 workflow gate
+
+on:
+  push:
+    branches:
+      - agent/stage-1-design-audit
+
+permissions:
+  contents: write
+
+jobs:
+  close-stage-1:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Advance to Stage 1 and close its gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLI="node docs/implementation-workflow/cli/design-workflow.mjs"
+
+          echo '=== Initial context ==='
+          $CLI context --json
+
+          cp DESIGN-AUDIT.md /tmp/DESIGN-AUDIT.md
+          rm DESIGN-AUDIT.md
+
+          echo '=== Advance Stage 0 -> Stage 1 ==='
+          $CLI stage advance
+
+          cp /tmp/DESIGN-AUDIT.md DESIGN-AUDIT.md
+
+          echo '=== Review and approve design audit ==='
+          $CLI artifact review ART-DESIGN-AUDIT \
+            --evidence "Stage 1 design audit completed against SRC-DS-001; two review passes completed and owner resolutions recorded."
+          $CLI artifact approve ART-DESIGN-AUDIT \
+            --evidence "Project owner approved the Stage 1 design audit and its recorded owner resolutions." \
+            --approved-by "Fernando Falcon"
+
+          echo '=== Stage 1 preflight ==='
+          $CLI stage check --json | tee /tmp/stage1-check.json
+
+          node -e "const fs=require('fs'); const x=JSON.parse(fs.readFileSync('/tmp/stage1-check.json','utf8')); if(x.decision.recommendedResult!=='Passed'||!x.decision.recordable){console.error(JSON.stringify(x,null,2)); process.exit(1)}"
+
+          echo '=== Record Stage 1 approval ==='
+          $CLI stage review \
+            --result Passed \
+            --evidence "Stage 1 design audit passed CLI preflight; project owner approved the audit and explicitly deferred Stage 2 advancement." \
+            --approved-by "Fernando Falcon"
+
+          echo '=== Verify parked Stage 1 state ==='
+          $CLI stage check --json
+          $CLI context --json
+          $CLI sync --check
+          $CLI validate
+
+          node -e "const fs=require('fs'); const x=JSON.parse(fs.readFileSync('.workflow/workflow-record.json','utf8')); if(x.state.stage!==1||x.state.status!=='Ready'){console.error('Expected Stage 1 Ready, got',x.state); process.exit(1)}; const g=[...x.gates].reverse().find(g=>g.stage===1&&g.status==='Active'); if(!g||!['Passed','Passed with assumptions'].includes(g.result)){console.error('Expected active passing Stage 1 gate'); process.exit(1)}"
+
+      - name: Remove temporary workflow and commit canonical state
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/stage1-cli-close.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --stat
+          git commit -m "Close Stage 1 workflow gate"
+          git push origin HEAD:agent/stage-1-design-audit
