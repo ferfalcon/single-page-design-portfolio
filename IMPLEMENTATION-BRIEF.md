@@ -1,6 +1,6 @@
 ---
 artifact: IMPLEMENTATION-BRIEF
-status: Draft
+status: Reviewed
 baseline:
   design:
     - SRC-DS-001
@@ -17,15 +17,15 @@ updated: 2026-08-18
 
 ## 1. Document Information
 
-- Status: Draft
+- Status: Reviewed
 - Scope: Accessible, responsive implementation of the scoped Single-page design portfolio Home page in the existing Astro frontend.
 - Last updated: 2026-08-18
 - Project context: `PROJECT-CONTEXT.md`
 - Source baseline: `SOURCE-BASELINE.md`
 - Evidence baseline: `DESIGN-AUDIT.md`
 - Repository snapshot: `SRC-REPO-001`
-- Current workflow checkpoint: **Stage 5 — Review documentation consistency**
-- Requirements are approved through `GATE-003`, design intent through `GATE-004`, and specification through `GATE-005`. Stage 5 document review is active; the project owner has approved the completed Stage 5 content, but the canonical Stage 5 gate must still be recorded only after its required preflight succeeds. Repository-aware planning, architecture handling, task decomposition, and implementation are intentionally not started.
+- Current workflow checkpoint: **Stage 6 — Define or explicitly skip architecture**
+- Requirements are approved through `GATE-003`, design intent through `GATE-004`, specification through `GATE-005`, and documentation review through `GATE-006`. Stage 6 is active. The architecture checkpoint concludes that a separate architecture artifact is **not required** for this Lite-profile scope; repository-aware planning, task decomposition, and implementation remain intentionally unstarted pending the Stage 6 gate.
 
 ### Stage 5 source challenge
 
@@ -807,7 +807,7 @@ Validate at minimum:
 - DOM/component file boundaries, CSS organization, carousel implementation technique, clone/virtualization strategy for cyclic edges, and JavaScript module structure remain repository-aware planning decisions.
 - No browser-support matrix or performance budget is invented because no authoritative project source establishes one.
 - No additional Figma edits are required by this specification or by the owner-resolved `AUD-009` implementation correction.
-- At Stage 4 authoring time, document review and later checkpoints were not started. Stage 5 is now active; architecture handling, planning, task decomposition, and implementation remain unstarted.
+- At Stage 4 authoring time, document review and later checkpoints were not started. Stage 5 is now approved through `GATE-006`; Stage 6 architecture handling is active, while planning, task decomposition, and implementation remain unstarted.
 
 ### Stage 4 Review Pass 1 — Completeness and correctness
 
@@ -848,12 +848,32 @@ Detailed repository inspection for planning has not started. Current project con
 
 ## 6. Implementation Plan
 
-Not started. Reserved for the Lite planning checkpoint after requirements, design intent, specification, and documentation review are approved.
+Not started. Reserved for Stage 7 after the Stage 6 architecture checkpoint is approved. No implementation ordering, component decomposition, or task sequencing is selected here.
 
 ## 7. Architecture Decision
 
-- Separate architecture needed: Not evaluated yet.
-- Reason: Architecture handling remains reserved for its workflow checkpoint; approved requirements, design intent, and Stage 4 specification introduce no architecture-driving concern beyond the bounded client-side carousel behavior already in scope.
+- Separate architecture needed: **No — Not required**.
+- CLI decision: `architecture decide not-required`.
+- Profile impact: Remain **Lite**; no profile upgrade is required.
+- Reason: The approved product is one static Astro page. It adds no routes, shared application state, persistence, backend/API integration, authentication, data migration, security/privacy-sensitive workflow, or cross-service reliability/observability concern. Existing Astro/Vercel build and deployment behavior remains unchanged. The only client-side state is the bounded Work carousel, already specified as isolated progressive enhancement with a non-JavaScript fallback.
+- Consequence: Do not create `ARCHITECTURE.md`. Component boundaries, file placement, carousel implementation details, and validation order belong to Stage 7 planning and later task decomposition rather than a separate architecture layer.
+
+### Stage 6 review pass 1 — Architecture-driver scan
+
+- [x] Routing: no additional route, dynamic route, middleware, or navigation architecture is introduced.
+- [x] Shared state/data flow: no page-wide application state, cross-component store, persistence, server state, or synchronization concern is required.
+- [x] APIs/integrations/auth: no backend, external API, authentication, authorization, payments, analytics integration, or user-data workflow is in scope.
+- [x] Build/deployment/migration: the existing static Astro + Vercel delivery model remains sufficient; no deployment topology, runtime, storage, or migration change is required.
+- [x] Security/privacy/reliability/observability: the approved scope introduces no architecture-level concern in these areas beyond normal frontend implementation quality.
+- [x] Interactive behavior: the Work carousel is local, bounded client-side UI state with specified keyboard/accessibility behavior and progressive enhancement; it does not justify a separate architecture artifact.
+
+### Stage 6 review pass 2 — Consistency and over-engineering challenge
+
+- [x] The Not-required decision is consistent with the approved requirements, design intent, specification, Stage 5 document review, and current repository structure.
+- [x] No hidden requirement was found that would force routing, persistence, shared state, framework islands, third-party services, or a server runtime.
+- [x] Deferring component/file decomposition to Stage 7 preserves the workflow boundary: implementation structure is a planning decision, not evidence of architecture complexity by itself.
+- [x] Remaining Lite avoids an unnecessary profile upgrade while retaining explicit traceability for the only interactive subsystem, the Work carousel.
+- [x] If later scope adds routing, shared state, persistence, APIs, authentication, deployment topology changes, or other architecture drivers, this decision must be reopened rather than silently stretched.
 
 ## 8. Source-change Handling
 
@@ -866,13 +886,13 @@ Not started. Reserved for the Lite planning checkpoint after requirements, desig
 ### Blocking
 
 - No product/content blocker remains from `AUD-009`; logical Work position 05 uses standalone `Asset/Work/05` (`6:380`) under the explicit owner decision.
-- Stage 5 cannot be recorded as passed until the consolidated artifact is canonically marked Reviewed and the required Stage 5 preflight succeeds.
+- Stage 6 cannot advance until the architecture decision remains preflight-clean and explicit project-owner approval is recorded as the Stage 6 gate.
 
 ### Non-blocking
 
 - `SRC-DS-001` remains mutable and time-bound and must be reverified before downstream material work.
 - Stage 4 resolves carousel start/wrap behavior, contrast treatment, asset-specific image-alt wording, keyboard semantics, manual-change feedback, reduced motion, and progressive-enhancement recovery. Exact CSS breakpoint values and repository implementation structure remain later-stage choices constrained by the specification.
-- `GATE-005` records the approved Stage 4 specification. The project owner has approved the completed Stage 5 review, but canonical `GATE-006` recording remains pending the required Stage 5 preflight.
+- `GATE-006` records the approved Stage 5 documentation review. Stage 6 now records architecture as Not required; `GATE-007` remains intentionally pending explicit project-owner approval.
 
 ## 10. Traceability
 
@@ -916,11 +936,11 @@ Stage 5 challenged the approved Stage 1–4 material after its stage-specific co
 - [x] The Stage 5 source check distinguishes **no upstream drift** from a **previously missed existing source inconsistency**; `SRC-DS-001` is not silently redefined.
 - [x] `AUD-009` is owned by the design-audit/source-evidence layer and propagated only where it affects requirements/specification/data/acceptance; it is not presented as a Figma-proven intended correction.
 - [x] The owner-resolved slot-05 mapping is consistent throughout requirements, design intent, specification, data, alternative text, validation, and acceptance criteria: logical position 05 uses standalone `Asset/Work/05` (`6:380`).
-- [x] Architecture, repository planning, task IDs, implementation technique, and runtime evidence remain deferred to their owning later checkpoints.
+- [x] Stage 6 explicitly resolves separate architecture as Not required; repository planning, task IDs, implementation technique, and runtime evidence remain deferred to their owning later checkpoints.
 - [x] No frontend code or Figma node was modified during document review.
 
 ## 14. Readiness
 
-**Content review complete; ready for canonical Stage 5 preflight.** The project owner selected Option 2 for `AUD-009` and subsequently approved Stage 5. Logical Work position 05 therefore uses standalone `Asset/Work/05` (`6:380`), while the current Work 02 duplicate remains documented as observed Figma assembly and a traceable implementation deviation.
+**Stage 6 content complete; ready for canonical Stage 6 preflight and owner approval.** The architecture decision is **Not required**, the Lite profile remains appropriate, and both required review passes are complete. No `ARCHITECTURE.md`, frontend implementation, Figma edit, implementation plan, or task decomposition was created in this checkpoint.
 
-The Stage 5 gate must not be recorded as passed until the canonical consolidated artifact is marked Reviewed and the required Stage 5 preflight actually succeeds. Architecture work, planning, task decomposition, and frontend implementation remain unstarted.
+The Stage 6 gate is intentionally **not** recorded as passed by this change. The next permitted action after a successful preflight is explicit project-owner approval of Stage 6; Stage 7 planning must not start before that approval is recorded and the workflow advances.
