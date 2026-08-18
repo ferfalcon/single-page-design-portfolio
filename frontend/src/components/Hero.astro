@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import graphicDesign from '../assets/portfolio/services/graphic-design.svg';
+import uiUx from '../assets/portfolio/services/ui-ux.svg';
+import apps from '../assets/portfolio/services/apps.svg';
+import illustrations from '../assets/portfolio/services/illustrations.svg';
+import photography from '../assets/portfolio/services/photography.svg';
+import motionGraphics from '../assets/portfolio/services/motion-graphics.svg';
+---
+
+<section class="hero page-container" aria-labelledby="hero-title">
+  <div class="hero__copy">
+    <h1 id="hero-title">Design solutions made easy</h1>
+    <p>With over ten years of experience in various design disciplines, I’m your one-stop shop for your design needs.</p>
+  </div>
+
+  <ul class="services" aria-label="Design services">
+    <li class="service-card service-card--graphic">
+      <Image class="service-card__art service-card__art--graphic" src={graphicDesign} alt="" />
+      <span>Graphic Design</span>
+    </li>
+    <li class="service-card service-card--ui">
+      <Image class="service-card__art" src={uiUx} alt="" />
+      <span>UI/UX</span>
+    </li>
+    <li class="service-card service-card--apps">
+      <Image class="service-card__art" src={apps} alt="" />
+      <span>Apps</span>
+    </li>
+    <li class="service-card service-card--illustrations">
+      <Image class="service-card__art service-card__art--wide" src={illustrations} alt="" />
+      <span>Illustrations</span>
+    </li>
+    <li class="service-card service-card--photography">
+      <Image class="service-card__art service-card__art--photo" src={photography} alt="" />
+      <span>Photography</span>
+    </li>
+    <li class="service-card service-card--motion">
+      <Image class="service-card__art service-card__art--wide" src={motionGraphics} alt="" />
+      <span>Motion Graphics</span>
+    </li>
+  </ul>
+</section>
