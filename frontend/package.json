@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "pwd && ls -la .. && (test -f ../.workflow/workflow-record.json && echo WORKFLOW_FOUND || echo WORKFLOW_NOT_FOUND) && (test -f ../docs/implementation-workflow/cli/design-workflow.mjs && echo CLI_FOUND || echo CLI_NOT_FOUND) && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
