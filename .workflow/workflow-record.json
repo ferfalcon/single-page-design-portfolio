@@ -7,12 +7,12 @@
   },
   "state": {
     "stage": 10,
-    "status": "In progress",
+    "status": "Blocked",
     "activeInputs": [
       "SRC-DS-001",
       "SRC-REPO-001"
     ],
-    "currentTask": "P01-T01",
+    "currentTask": null,
     "latestOutput": null,
     "latestValidationRuntime": null,
     "architectureDecision": {
@@ -473,7 +473,7 @@
   "tasks": [
     {
       "id": "P01-T01",
-      "status": "In progress",
+      "status": "Blocked",
       "baseline": "SRC-REPO-001",
       "prerequisites": [],
       "references": [
@@ -483,18 +483,25 @@
         "PLAN-004"
       ],
       "output": null,
-      "blocker": null,
+      "blocker": {
+        "reason": "Waiting for Vercel to accept a preview deployment of the repaired implementation; current branch builds are blocked by the Vercel build-rate limit.",
+        "previousStatus": "In progress",
+        "recordedAt": "2026-08-18T10:03:09.728Z"
+      },
       "validation": [
         {
           "name": "Build",
           "kind": "Build",
           "required": true,
-          "status": "Not executed",
+          "status": "Passed",
           "expected": "The Astro production build succeeds with pnpm build.",
+          "actual": "Clean dependency installation and Astro production build succeeded on the current implementation frontend.",
           "command": "pnpm build",
           "environment": "frontend/",
-          "evidence": [],
-          "reason": "Pending Stage 10 implementation.",
+          "executedAt": "2026-08-18T10:03:09Z",
+          "evidence": [
+            "GitHub Actions run 32124723183 rebuilt the current branch successfully; prior full validation run 32124137537 also passed install, production build, static contract, and single-route output checks."
+          ],
           "references": [
             "PLAN-001",
             "PLAN-002",
@@ -506,10 +513,13 @@
           "name": "Accessibility",
           "kind": "Accessibility",
           "required": true,
-          "status": "Not executed",
+          "status": "Passed",
           "expected": "Semantic structure, keyboard and focus behavior, image alternatives, contrast, reflow/zoom, and reduced-motion checks pass.",
-          "evidence": [],
-          "reason": "Pending Stage 10 implementation and rendered validation.",
+          "actual": "Semantic landmarks and headings, native keyboard focus, image alternatives, approved contrast overrides, 320px reflow, 200%-zoom-equivalent reflow, reduced motion, and no-JavaScript behavior passed browser validation.",
+          "executedAt": "2026-08-18T10:03:09Z",
+          "evidence": [
+            "GitHub Actions run 32124137537 passed the full browser/accessibility matrix; run 32124723183 additionally passed 640-CSS-px 200%-zoom-equivalent reflow plus explicit Enter/Space keyboard activation."
+          ],
           "references": [
             "PLAN-002",
             "PLAN-003",
@@ -520,10 +530,13 @@
           "name": "Responsive and visual fidelity",
           "kind": "Responsive",
           "required": true,
-          "status": "Not executed",
+          "status": "Passed",
           "expected": "The page remains usable and source-faithful at 375px, 768px, 1440px, 320 CSS px reflow, 200% zoom, and relevant intermediate widths.",
-          "evidence": [],
-          "reason": "Pending Stage 10 rendered validation.",
+          "actual": "Rendered validation passed at 320, 375, 640, 768, 1024, and 1440 CSS px; the three supplied Figma exemplars match their exact frame dimensions after the desktop Hero correction.",
+          "executedAt": "2026-08-18T10:03:09Z",
+          "evidence": [
+            "GitHub Actions run 32124137537 captured 375x3318, 768x2966, and 1440x2642 screenshots matching Figma frame dimensions and passed no-overflow checks at 320/375/768/1024/1440; run 32124723183 passed the 640px 200%-zoom-equivalent reflow check."
+          ],
           "references": [
             "PLAN-002",
             "PLAN-003",
@@ -534,10 +547,13 @@
           "name": "Work carousel behavior",
           "kind": "Manual",
           "required": true,
-          "status": "Not executed",
+          "status": "Passed",
           "expected": "The five-item Work carousel satisfies the approved start state, cyclic one-step controls, keyboard/focus behavior, reduced motion, rapid input handling, and no-JavaScript fallback.",
-          "evidence": [],
-          "reason": "Pending Stage 10 implementation and interaction validation.",
+          "actual": "The five-item carousel passed initial item 03, both cyclic edges, one-step serialized navigation, focus retention, live status, reduced motion, no-JavaScript reachability, keyboard activation, pointer activation, and touch activation.",
+          "executedAt": "2026-08-18T10:03:09Z",
+          "evidence": [
+            "GitHub Actions run 32124137537 passed cyclic, rapid-input, focus, live-region, reduced-motion, pointer, and no-JavaScript checks; run 32124723183 additionally passed explicit Enter, Space, and touch activation checks."
+          ],
           "references": [
             "PLAN-003",
             "PLAN-004"
@@ -549,8 +565,10 @@
           "required": true,
           "status": "Not executed",
           "expected": "The implementation branch Vercel preview renders the approved page without material regression before merge.",
-          "evidence": [],
-          "reason": "Pending the Stage 10 implementation pull request and preview deployment.",
+          "evidence": [
+            "GitHub commit status for the repaired implementation reports Vercel failure with target upgradeToPro=build-rate-limit; Vercel project latest available implementation preview is the earlier Sharp-failing deployment dpl_Hu3FjrnZZPWcFh2CXjYc5hsHxd7z."
+          ],
+          "reason": "The repaired implementation cannot currently obtain a Vercel preview because Vercel is rejecting branch builds with the account build-rate limit. The earlier pre-repair preview failed on the now-fixed Sharp issue and is not valid completion evidence.",
           "references": [
             "PLAN-004"
           ]
