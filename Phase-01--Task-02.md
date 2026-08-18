@@ -1,7 +1,7 @@
 ---
 artifact: TASK
 id: P01-T02
-status: Draft
+status: Reviewed
 baseline:
   design:
     - SRC-DS-001
@@ -111,7 +111,7 @@ No other product files are expected to change.
 
 - The five-item ordered dataset and item-03 initial state remain unchanged.
 - The direct `<ul>` → `<li>` semantic relationship is mandatory after correction.
-- Per-slide position context must remain equivalent to “1 of 5” through “5 of 5”.
+- Per-slide position context must remain exposed for each logical Work item.
 - The carousel region remains labelled by “My Work”.
 - No-JavaScript fallback must remain a horizontally reachable five-item list without dead controls.
 
