@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "rm -rf /tmp/workflow-repo && git clone --branch workflow/stage-5-document-review --single-branch https://github.com/ferfalcon/single-page-design-portfolio.git /tmp/workflow-repo && cd /tmp/workflow-repo && git push --dry-run origin HEAD:workflow/stage-5-document-review && cd /vercel/path1 && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
