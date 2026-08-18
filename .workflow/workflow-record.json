@@ -6,7 +6,7 @@
     "executionMode": "Gated"
   },
   "state": {
-    "stage": 0,
+    "stage": 1,
     "status": "Ready",
     "activeInputs": [
       "SRC-DS-001",
@@ -91,6 +91,19 @@
       "statusChangedAt": "2026-08-18T02:20:38.219Z",
       "statusEvidence": "Stage 0 workflow control state reviewed and approved; the Stage 0 approval is resolved and advancement to Stage 1 is intentionally deferred.",
       "statusBy": "Fernando Falcon"
+    },
+    {
+      "id": "ART-DESIGN-AUDIT",
+      "type": "DESIGN-AUDIT",
+      "path": "DESIGN-AUDIT.md",
+      "status": "Approved",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "statusChangedAt": "2026-08-18T03:20:40.758Z",
+      "statusEvidence": "Project owner approved the Stage 1 design audit and its recorded owner resolutions.",
+      "statusBy": "Fernando Falcon"
     }
   ],
   "traceItems": [],
@@ -115,6 +128,29 @@
       ],
       "evidence": "Project owner approved Stage 0. Both active inputs have passing verification, the Stage 0 control artifacts are reviewed and approved, and Stage 1 advancement is intentionally deferred per owner instruction.",
       "recordedAt": "2026-08-18T02:20:39.219Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-002",
+      "stage": 1,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-001",
+        "VER-002"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT"
+      ],
+      "evidence": "Stage 1 design audit passed CLI preflight; the project owner approved Stage 1 and explicitly deferred Stage 2 advancement.",
+      "recordedAt": "2026-08-18T03:20:40.876Z",
       "approvedBy": "Fernando Falcon"
     }
   ],
