@@ -1,22 +1,23 @@
 name: Stage 10 start
 
 on:
-  push:
+  pull_request:
+    types: [opened, reopened]
     branches:
-      - agent/stage-10-implementation
-    paths:
-      - .github/workflows/stage-10-start.yml
+      - main
 
 permissions:
   contents: write
 
 jobs:
   start-stage-10:
+    if: github.head_ref == 'agent/stage-10-implementation'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout implementation branch
         uses: actions/checkout@v4
         with:
+          ref: agent/stage-10-implementation
           fetch-depth: 0
 
       - name: Set up Node
@@ -49,26 +50,13 @@ jobs:
           node docs/implementation-workflow/cli/design-workflow.mjs stage advance
           node docs/implementation-workflow/cli/design-workflow.mjs task start P01-T01
 
-      - name: Mandatory modern web guidance
-        shell: bash
-        run: |
-          set -euo pipefail
-          npx -y modern-web-guidance@latest search "Implement an accessible responsive single-page portfolio with a dependency-free progressively enhanced carousel, keyboard focus retention, polite live-region updates, reduced motion, no-JavaScript fallback, resilient reflow, and efficient image loading" --skill-version 2026_05_16-c5e78707 | tee /tmp/modern-web-guidance-search.json
-          IDS="$(node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/modern-web-guidance-search.json','utf8'));console.log(x.slice(0,3).map(v=>v.id).join(','));")"
-          if [ -z "$IDS" ]; then
-            npx -y modern-web-guidance@latest list
-          else
-            echo "Retrieving guidance: $IDS"
-            npx -y modern-web-guidance@latest retrieve "$IDS"
-          fi
-
       - name: Validate canonical state
         run: |
           node docs/implementation-workflow/cli/design-workflow.mjs sync --check
           node docs/implementation-workflow/cli/design-workflow.mjs validate
           node docs/implementation-workflow/cli/design-workflow.mjs context --json
 
-      - name: Persist workflow state and self-clean
+      - name: Persist canonical state and self-clean
         shell: bash
         run: |
           set -euo pipefail
@@ -80,4 +68,4 @@ jobs:
           git add .workflow
           git add -u .github/workflows/stage-10-start.yml 2>/dev/null || true
           git commit -m "Start Stage 10 implementation"
-          git push
+          git push origin HEAD:agent/stage-10-implementation
