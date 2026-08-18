@@ -79,7 +79,13 @@ Avoid unrelated refactors and premature abstractions.
 
 ## Frontend guidance
 
-Before HTML, CSS, or client-side JavaScript work, follow the installed project skill at `.agents/skills/modern-web-guidance/SKILL.md` and retrieve the relevant modern web guidance before implementation.
+Use the installed project skills according to the task:
+
+- `.agents/skills/modern-web-guidance/SKILL.md` — mandatory first step before HTML, CSS, or client-side JavaScript implementation. Search for and retrieve the relevant current web-platform guidance before coding.
+- `.agents/skills/frontend-design/SKILL.md` — use when creating new UI or making visual-design decisions that are not fully prescribed by the approved design source. It must not override approved Figma; source fidelity wins.
+- `.agents/skills/web-design-guidelines/SKILL.md` — use when reviewing or auditing implemented UI for UX, accessibility, and web-interface best practices. Fetch the latest guidelines as required by the skill before reviewing.
+- `.agents/skills/context7-mcp/SKILL.md` — use the connected Context7 tools for current framework, library, API, configuration, and code-example documentation when available.
+- `.agents/skills/find-docs/SKILL.md` — use the Context7 CLI when the MCP path is unavailable or unsuitable. Do not rely on training data for version-specific framework or library details, and do not query both Context7 paths unless the first is insufficient.
 
 Also follow `frontend/AGENTS.md` for Astro-specific development instructions.
 
