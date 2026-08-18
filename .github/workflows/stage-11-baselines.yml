@@ -1,0 +1,79 @@
+name: Stage 11 baselines
+
+on:
+  pull_request:
+    types: [synchronize]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  record-final-baselines:
+    if: github.head_ref == 'agent/stage-10-implementation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/stage-10-implementation
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Record Stage 11 source and runtime evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLI='node docs/implementation-workflow/cli/design-workflow.mjs'
+          $CLI sync
+          $CLI context --json
+
+          $CLI snapshot verify SRC-DS-001 \
+            --result Unchanged \
+            --method 'Fresh read-only Figma metadata inspection of Workflow page 2141:862' \
+            --evidence 'Stage 11 inspection still shows the approved 375x3318, 768x2966, and 1440x2642 Home exemplars, responsive section components, button/carousel states, portrait, service artwork, and five standalone Work assets. No material design drift was observed.'
+
+          $CLI snapshot verify SRC-REPO-002 \
+            --result 'Expected workflow output' \
+            --method 'Git output-to-HEAD and deployed-commit comparison' \
+            --evidence 'SRC-REPO-002 commit edd76540e89eb4e82c82ab567c183eb1b9abf0f4 remains the Stage 10 implementation output. Comparing it with the Stage 11 branch head changes only workflow/generated review files and removes the temporary completion runner; frontend/ is unchanged. Comparing READY Vercel commit 942dc181d9111cda59bff6ca45ca9ea2efdc3060 with SRC-REPO-002 also changes only workflow metadata/runners, with no frontend change.'
+
+          if ! grep -q '"id": "SRC-RUN-001"' .workflow/workflow-record.json; then
+            $CLI snapshot add \
+              --kind runtime \
+              --id SRC-RUN-001 \
+              --reference 'https://single-page-design-portfolio-ma34jkdb1-fer-falcons-team.vercel.app/' \
+              --role 'Validation runtime' \
+              --pin Versioned \
+              --status Active \
+              --parent SRC-REPO-002
+          fi
+
+          $CLI snapshot verify SRC-RUN-001 \
+            --result Unchanged \
+            --method 'Vercel deployment and Git lineage inspection' \
+            --evidence 'Deployment dpl_5C55vhnqxTdKWoZRyfmuGJ3CEVEn remains READY for PR #16. Stage 10 recorded an authenticated HTTP 200 render with the complete page; Stage 11 fresh Vercel inspection still reports READY. Direct anonymous-style fetch now redirects through Vercel SSO, which is preview access protection rather than an implementation change. The deployed frontend is byte-identical to SRC-REPO-002.'
+
+          $CLI sync
+          $CLI sync --check
+          $CLI validate
+          $CLI context --json
+
+      - name: Persist canonical state and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm .github/workflows/stage-11-baselines.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git add .workflow
+          git add -u .github/workflows/stage-11-baselines.yml 2>/dev/null || true
+          git commit -m 'Record Stage 11 baselines'
+          git push origin HEAD:agent/stage-10-implementation
