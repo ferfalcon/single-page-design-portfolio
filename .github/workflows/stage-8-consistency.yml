@@ -1,0 +1,74 @@
+name: Stage 8 consistency cleanup
+
+on:
+  pull_request:
+    types: [synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.head_ref == 'workflow/stage-8-plan-review'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: workflow/stage-8-plan-review
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Correct stale Stage 7 checkpoint prose
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs artifact reopen ART-IMPLEMENTATION-BRIEF --evidence "Stage 8 final consistency read-back found stale Stage 7 checkpoint prose that must be normalized before owner approval."
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('IMPLEMENTATION-BRIEF.md')
+          t = p.read_text()
+          replacements = [
+            (
+              '### Blocking\n\n- None. Stage 6 is approved through `GATE-007`, `AUD-009` is owner-resolved, and the inspected repository has no structural blocker to Stage 7 planning.',
+              '### Blocking\n\n- None. Stage 7 is approved through `GATE-008`, `AUD-009` remains owner-resolved, and the Stage 8 adversarial review found no unresolved technical decision or profile-upgrade trigger. Project-owner approval of Stage 8 remains a workflow gate rather than a product/technical blocker.'
+            ),
+            (
+              '- No task IDs exist yet. Stage 9 will decompose the approved plan after the separate Stage 8 adversarial review.',
+              '- No task IDs exist yet. Stage 9 task decomposition may begin only after the project owner approves Stage 8 and the canonical Stage 8 gate passes.'
+            ),
+            (
+              '## 14. Readiness\n\n**Stage 7 content complete; ready for canonical Stage 7 preflight and project-owner approval.** Repository inspection, `PLAN-001` through `PLAN-004`, two required review passes, risks, ordering, and validation are documented. The consolidated brief should remain `Reviewed` for the Stage 7 gate.\n\nThe Stage 7 gate is intentionally **not** recorded as passed by this change. Stage 8 — adversarial plan review — must not start until explicit project-owner approval is recorded and the workflow advances.',
+              '## 14. Stage 7 Readiness — Historical Checkpoint\n\nStage 7 planning completed with `PLAN-001` through `PLAN-004`, two required review passes, risks, ordering, and validation documented. The project owner subsequently approved Stage 7 on 2026-08-18 and the canonical workflow recorded `GATE-008` as Passed before advancing to Stage 8.\n\nThis section is retained as the Stage 7 checkpoint record; current readiness is owned by the Stage 8 section below.'
+            ),
+            (
+              '**Ready for task decomposition.** The Stage 7 plan has been adversarially challenged and corrected without uncovering an unresolved technical decision or a reason to upgrade the Lite profile. Canonical Stage 8 preflight must pass and the project owner must explicitly approve the Stage 8 gate before the workflow may advance to Stage 9. Stage 9 task decomposition and Stage 10 implementation remain intentionally unstarted.',
+              '**Ready for task decomposition, pending project-owner approval.** The Stage 7 plan has been adversarially challenged and corrected without uncovering an unresolved technical decision or a reason to upgrade the Lite profile. CLI validation and generated-state checks are clean; Stage 8 preflight reaches the expected approval-only finding that the Stage 8 plan artifact must be Approved. After explicit project-owner approval, rerun Stage 8 preflight, record the passing Stage 8 gate, and only then advance to Stage 9. Stage 9 task decomposition and Stage 10 implementation remain intentionally unstarted.'
+            ),
+          ]
+          for before, after in replacements:
+              if before not in t:
+                  raise SystemExit(f'Expected text not found: {before[:80]!r}')
+              t = t.replace(before, after, 1)
+          p.write_text(t)
+          PY
+          node docs/implementation-workflow/cli/design-workflow.mjs artifact review ART-IMPLEMENTATION-BRIEF --evidence "Stage 8 consistency cleanup completed: stale Stage 7 readiness/risk prose normalized to the canonical GATE-008 state and Stage 8 approval boundary."
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+          node docs/implementation-workflow/cli/design-workflow.mjs validate
+          node docs/implementation-workflow/cli/design-workflow.mjs stage check --json | tee /tmp/check.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const c = JSON.parse(fs.readFileSync('/tmp/check.json', 'utf8'));
+          const expected = '$.gates[8]: Stage 8 plan artifacts must be approved';
+          if (!c.workflow?.valid || c.stage?.number !== 8 || c.decision?.findings?.length !== 1 || c.decision.findings[0] !== expected) {
+            throw new Error(`Unexpected Stage 8 state: ${JSON.stringify(c)}`);
+          }
+          NODE
+          git diff --check
+      - name: Persist cleanup and remove runner
+        run: |
+          rm .github/workflows/stage-8-consistency.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add IMPLEMENTATION-BRIEF.md .workflow .github/workflows/stage-8-consistency.yml
+          git commit -m "Normalize Stage 8 review readiness"
+          git push origin HEAD:workflow/stage-8-plan-review
