@@ -1,3 +1,4 @@
+# Retry trigger after Stage 8 advancement completed.
 name: Stage 8 review
 
 on:
