@@ -1,0 +1,25 @@
+name: Modern web guidance
+
+on:
+  pull_request:
+    types: [synchronize]
+    branches:
+      - main
+
+jobs:
+  guidance:
+    if: github.head_ref == 'agent/stage-10-implementation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: agent/stage-10-implementation
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Search mandatory guidance
+        run: npx -y modern-web-guidance@latest search "Implement an accessible responsive single-page portfolio with a dependency-free progressively enhanced carousel, native keyboard controls, focus retention, polite live-region updates, reduced motion, a no-JavaScript fallback, resilient reflow and efficient image loading" --skill-version 2026_05_16-c5e78707
