@@ -166,8 +166,8 @@
         "SRC-DS-001",
         "SRC-REPO-001"
       ],
-      "statusChangedAt": "2026-08-18T07:57:50.767Z",
-      "statusEvidence": "Stage 7 repository context and PLAN-001 through PLAN-004 completed with two review passes."
+      "statusChangedAt": "2026-08-18T08:34:48.815Z",
+      "statusEvidence": "Stage 8 adversarial review completed: sources/repository rechecked, PLAN-003 fallback geometry assumption corrected, validation/deployment/rollback and traceability challenged, and readiness concluded Ready for task decomposition pending owner approval."
     }
   ],
   "traceItems": [],

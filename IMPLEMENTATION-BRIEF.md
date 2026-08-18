@@ -24,8 +24,8 @@ updated: 2026-08-18
 - Source baseline: `SOURCE-BASELINE.md`
 - Evidence baseline: `DESIGN-AUDIT.md`
 - Repository snapshot: `SRC-REPO-001`
-- Current workflow checkpoint: **Stage 7 — Create the repository-aware implementation plan**
-- Requirements are approved through `GATE-003`, design intent through `GATE-004`, specification through `GATE-005`, documentation review through `GATE-006`, and architecture through `GATE-007`. Stage 7 is active. Architecture remains **Not required** and the project remains Lite; this checkpoint now owns repository inspection, implementation structure, ordering, dependencies, risks, and validation planning. Stage 8 adversarial review, task decomposition, and implementation remain intentionally unstarted.
+- Current workflow checkpoint: **Stage 8 — Challenge and refine the plan**
+- Requirements are approved through `GATE-003`, design intent through `GATE-004`, specification through `GATE-005`, documentation review through `GATE-006`, architecture through `GATE-007`, and the repository-aware implementation plan through `GATE-008`. Architecture remains **Not required** and the project remains Lite. Stage 8 now owns the adversarial plan challenge and corrections; task decomposition and implementation remain intentionally unstarted.
 
 ### Stage 5 source challenge
 
@@ -929,14 +929,14 @@ The following paths are proposed by Stage 7; proposed paths are not described as
 - Files: create proposed `Work.astro`, `frontend/src/scripts/work-carousel.ts`, `frontend/src/styles/work-carousel.css`; modify `index.astro` and portfolio assets.
 - Approach:
   - Server-render logical order 01→05 with item 03 as initial active item and standalone `Asset/Work/05` at slot 05.
-  - Default/no-JavaScript presentation is a horizontally reachable five-item gallery. Keep controls hidden/inert until enhancement succeeds so failed initialization exposes no dead controls.
+  - Default/no-JavaScript presentation must keep all five originals reachable and expose no dead controls. Use a horizontally reachable five-item gallery only if rendered testing proves the fallback remains fully reachable without relying on scripted initial scrolling; otherwise use an equivalent static all-five presentation permitted by `SPEC-BEH-004`. Do not claim item-03 centered fallback geometry unless it is actually demonstrated. The successfully enhanced carousel must still start with item 03 centered/emphasized at the 375px, 768px, and 1440px validation anchors.
   - Enhancement reveals native Previous/Next buttons, keeps focus on the activated button, advances exactly one logical item, wraps 01↔05, never auto-rotates, and serializes rapid activations so state cannot stop between items.
   - Keep the five originals as semantic slides. If cyclic edge animation requires duplicate visual neighbors, create only client-side clones marked assistive-hidden/non-focusable and snap back to the matching original after transition; clones never become semantic slides or links.
   - Label the carousel from “My Work”; expose “Previous project”/“Next project” button names, slide position context 1-of-5 through 5-of-5, and a polite “Project N of 5” update after manual navigation without moving focus.
   - Match the specified 270×180 mobile active anchor and 540×360 tablet/desktop active anchors while preserving visible neighbors. Choose actual CSS transition points from fit/intermediate-width testing.
   - Use the specified short 200ms ease-out movement when motion is allowed; under `prefers-reduced-motion: reduce`, produce the same logical result without non-essential interpolation.
 - Dependencies/order: After `PLAN-001`; may proceed independently of late `PLAN-002` work only when shared file ownership does not conflict.
-- Validation: `pnpm build`; no-JS/failure fallback; Enter/Space, pointer/touch, focus retention; item-03 start; one-step movement; both cyclic edges; rapid-input serialization; live-region/slide-label inspection; reduced motion; 375px/768px/1440px plus intermediate-width visual checks; verify all five assets/alts including Work 05.
+- Validation: `pnpm build`; verify the unenhanced all-five fallback separately from the successfully enhanced item-03-centered initial state; Enter/Space, pointer/touch, focus retention; one-step movement; both cyclic edges; rapid-input serialization; live-region/slide-label inspection; reduced motion; 375px/768px/1440px plus intermediate-width visual checks; verify all five assets/alts including Work 05. Any claim that the no-JavaScript presentation also starts centered on item 03 requires rendered evidence rather than assumption.
 - Risks/assumptions: Visual clones are implementation-only and must not duplicate assistive content. Prefer a simpler equivalent technique if testing proves clones unnecessary; no carousel package is justified by current scope.
 
 ### PLAN-004 — Integrate and run the regression/preview gate
@@ -1072,3 +1072,54 @@ Stage 7 reviewed the repository-aware plan against the actual frontend and all a
 **Stage 7 content complete; ready for canonical Stage 7 preflight and project-owner approval.** Repository inspection, `PLAN-001` through `PLAN-004`, two required review passes, risks, ordering, and validation are documented. The consolidated brief should remain `Reviewed` for the Stage 7 gate.
 
 The Stage 7 gate is intentionally **not** recorded as passed by this change. Stage 8 — adversarial plan review — must not start until explicit project-owner approval is recorded and the workflow advances.
+
+## 15. Stage 8 — Adversarial Plan Review
+
+Stage 8 challenged the approved Stage 7 plan against the current scoped Figma structure, the approved requirements/specification and acceptance criteria, the Stage 6 architecture decision, the current repository, accessibility and responsive behavior, failure states, validation feasibility, deployment/rollback boundaries, and traceability. This review corrects implementation assumptions; it does not introduce Stage 9 tasks or Stage 10 implementation.
+
+### Stage 8 source and repository recheck
+
+- A fresh read-only Figma metadata inspection on 2026-08-18 reconfirmed the scoped `🤖 Workflow` page (`2141:862`), Home / Mobile (`2141:14174`), Home / Tablet (`2141:14238`), Home / Desktop (`2141:14302`), `Section/Work` (`2171:3199`), all five standalone Work assets (`6:376` through `6:380`), and Default/Hover/Focus variants for both carousel controls. No structural evidence requiring an upstream workflow rewind was found.
+- The repository still contains the Astro starter composition: `frontend/src/pages/index.astro` renders `Welcome.astro` through `Layout.astro`; no current frontend implementation has displaced the Stage 7 repository assumptions.
+- `frontend/package.json` still exposes Astro `^7.2.2`, Node `>=22.12.0`, and only the `dev`, `build`, `preview`, and `astro` scripts. The plan therefore continues to treat `pnpm build` as the only repository-confirmed frontend validation command and does not invent lint/test commands or dependencies.
+- Root guidance says to follow `frontend/package.json` for Node while its explanatory parenthetical refers to `24.x`; the package itself currently declares `>=22.12.0`. This is a non-blocking documentation mismatch. Implementation and validation must satisfy the package engine and must not assert an exact Node 24 requirement unless the repository/runtime is explicitly updated to establish one.
+
+### Review pass 1 — Feasibility, completeness, and hidden assumptions
+
+- [x] Scope containment: `PLAN-001`–`PLAN-004` still produce one static Astro page with one bounded client interaction. No route, backend, API, authentication, persistence, modal, Work-detail navigation, autoplay, or invented consultation destination is introduced.
+- [x] Architecture: the Stage 6 **Not required** decision remains valid. No Stage 8 finding introduces a routing, data-flow, persistence, integration, security/privacy, migration, reliability, observability, or deployment-topology concern that warrants reopening architecture or upgrading the Lite profile.
+- [x] Repository assumptions: existing and proposed paths remain distinguishable, the starter files named for replacement still exist, and the proposed components/styles/script remain proposals rather than falsely claimed current files.
+- [x] Commands/dependencies: `pnpm build` maps to the real frontend build script; no test/lint/a11y command or carousel/framework dependency is accepted without repository evidence.
+- [x] Accessibility/responsive/state coverage: semantics, focus, contrast, image alternatives, reflow/zoom, reduced motion, carousel naming/feedback, cyclic navigation, rapid input, and failed-enhancement behavior remain integrated into the plan items that create those behaviors.
+- [x] Deployment/rollback: branch → PR → Vercel preview → verification → merge remains sufficient for this static change; rollback is normal Git/PR rollback because there is no migration, persistence, API contract, or production data change.
+- [x] Asset/font uncertainty remains non-blocking but explicit: implementation must resolve real Figma exports and a permitted Plus Jakarta Sans delivery source before claiming fidelity; it must not fabricate filenames, packages, licenses, or runtime requests.
+- [x] Breakpoints remain failure-driven and are validated at 375px, 768px, 1440px, intermediate widths, 320 CSS px reflow, and 200% zoom rather than being copied blindly from device labels.
+
+### Correction from review pass 1 — Separate enhanced initial geometry from fallback reachability
+
+`PLAN-003` previously named a horizontally reachable no-JavaScript gallery while also inheriting the specification's item-03-centered initial geometry. A normal overflow scroller does not, by itself, prove that its initial scroll position will center the third item when JavaScript is unavailable. Treating both outcomes as automatic would create an unverified implementation assumption.
+
+The plan is corrected as follows:
+
+- The initial HTML still contains semantic Work items 01→05 and standalone Work 05 at logical position 05.
+- Failed/unavailable enhancement must expose all five originals through a non-scripted presentation and must not expose dead Previous/Next controls.
+- A horizontal fallback is acceptable only if rendered testing proves full reachability without depending on scripted initial scrolling; otherwise an equivalent static all-five fallback is explicitly allowed by `SPEC-BEH-004`.
+- The successfully enhanced carousel remains responsible for the exact source-facing initial geometry: item 03 centered/emphasized at 375px, 768px, and 1440px with the specified neighboring-content cues.
+- If implementation later claims that the unenhanced fallback also starts with item 03 centered, that claim requires rendered evidence. Stage 8 does not prescribe a brittle CSS trick merely to manufacture that claim.
+
+This correction preserves `AC-004` for the functioning carousel and `AC-014` for failure recovery while removing an unsupported implementation assumption from their coexistence.
+
+### Review pass 2 — Consistency, traceability, regression risk, and readiness
+
+- [x] `PLAN-001`–`PLAN-004` still cover every approved `AC-001`–`AC-016`; the Stage 8 correction narrows an implementation assumption and does not remove a requirement, source decision, or acceptance check.
+- [x] `AUD-001` remains literal `href="#"`; `AUD-002` remains a conventional manual carousel; `AUD-003`/`AUD-004` remain implementation contrast fixes; `AUD-009` remains standalone `Asset/Work/05` at logical slot 05.
+- [x] The Work semantic order remains 01→05. Any optional visual clones remain implementation-only, assistive-hidden, non-focusable, and unnecessary unless rendered cyclic-edge behavior actually requires them.
+- [x] Progressive enhancement is still failure-safe: non-carousel content never depends on the Work script, all five Work originals remain available without successful initialization, and controls are exposed only after enhancement succeeds.
+- [x] The plan does not defer accessibility, responsive behavior, error/failure states, or reduced motion to `PLAN-004`; that final plan item remains integrated regression verification and correction only.
+- [x] Validation claims are executable with the repository and connected preview/browser tooling available to the implementation workflow. Nonexistent automation is not represented as passing evidence.
+- [x] No migration or production-data rollback plan is needed; no security/privacy-sensitive flow is added; the Vercel preview gate remains the correct deployment verification boundary before merge.
+- [x] Remaining implementation uncertainty—asset export filenames/formats, permitted font delivery, exact failure-driven media queries, and whether cyclic clones are needed—is bounded, testable during implementation, and does not block task decomposition.
+
+### Stage 8 readiness
+
+**Ready for task decomposition.** The Stage 7 plan has been adversarially challenged and corrected without uncovering an unresolved technical decision or a reason to upgrade the Lite profile. Canonical Stage 8 preflight must pass and the project owner must explicitly approve the Stage 8 gate before the workflow may advance to Stage 9. Stage 9 task decomposition and Stage 10 implementation remain intentionally unstarted.
