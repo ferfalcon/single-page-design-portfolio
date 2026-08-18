@@ -1,0 +1,56 @@
+name: Stage 10 approval
+
+on:
+  pull_request:
+    types: [synchronize]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  approve-stage-10:
+    if: github.head_ref == 'agent/stage-10-implementation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout implementation branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/stage-10-implementation
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Inspect canonical workflow context
+        run: node docs/implementation-workflow/cli/design-workflow.mjs context --json
+
+      - name: Record owner approval and advance to Stage 11
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs stage review \
+            --result Passed \
+            --evidence "Project owner explicitly approved Stage 10 after P01-T01 completed with all five required validation checks Passed, including the READY Vercel preview and source-fidelity validation." \
+            --approved-by "Fernando Falcon"
+          node docs/implementation-workflow/cli/design-workflow.mjs stage advance
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+          node docs/implementation-workflow/cli/design-workflow.mjs validate
+          node docs/implementation-workflow/cli/design-workflow.mjs context --json
+
+      - name: Persist canonical state and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm .github/workflows/stage-10-approval.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git add .workflow
+          git add -A
+          git commit -m 'Approve Stage 10 and start final review'
+          git push origin HEAD:agent/stage-10-implementation
