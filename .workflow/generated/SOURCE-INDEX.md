@@ -9,4 +9,4 @@
 | ID | Role | Status | Pin strength | Active input | Latest verification | Reference | Commit | Parent | Task |
 |---|---|---|---|---|---|---|---|---|---|
 | `SRC-DS-001` | Input baseline | Active | Time-bound | Yes | `VER-007` — Unchanged | https://www.figma.com/design/HfvHWLtq8ESeaaVpAU6IlX/single-page-design-portfolio?node-id=2141-862 | — | — | — |
-| `SRC-REPO-001` | Input baseline | Active | Immutable | Yes | `VER-008` — Expected workflow output | https://github.com/ferfalcon/single-page-design-portfolio | `07635a8eafb4323909619a0b62e41a4d8144d764` | — | — | — |
+| `SRC-REPO-001` | Input baseline | Active | Immutable | Yes | `VER-008` — Expected workflow output | https://github.com/ferfalcon/single-page-design-portfolio | `07635a8eafb4323909619a0b62e41a4d8144d764` | — | — |
