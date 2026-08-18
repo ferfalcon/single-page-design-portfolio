@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import graphicDesign from '../assets/portfolio/services/graphic-design.svg';
 import uiUx from '../assets/portfolio/services/ui-ux.svg';
 import apps from '../assets/portfolio/services/apps.svg';
@@ -16,27 +15,27 @@ import motionGraphics from '../assets/portfolio/services/motion-graphics.svg';
 
   <ul class="services" aria-label="Design services">
     <li class="service-card service-card--graphic">
-      <Image class="service-card__art service-card__art--graphic" src={graphicDesign} alt="" />
+      <img class="service-card__art service-card__art--graphic" src={graphicDesign.src} width={graphicDesign.width} height={graphicDesign.height} alt="" />
       <span>Graphic Design</span>
     </li>
     <li class="service-card service-card--ui">
-      <Image class="service-card__art" src={uiUx} alt="" />
+      <img class="service-card__art" src={uiUx.src} width={uiUx.width} height={uiUx.height} alt="" />
       <span>UI/UX</span>
     </li>
     <li class="service-card service-card--apps">
-      <Image class="service-card__art" src={apps} alt="" />
+      <img class="service-card__art" src={apps.src} width={apps.width} height={apps.height} alt="" />
       <span>Apps</span>
     </li>
     <li class="service-card service-card--illustrations">
-      <Image class="service-card__art service-card__art--wide" src={illustrations} alt="" />
+      <img class="service-card__art service-card__art--wide" src={illustrations.src} width={illustrations.width} height={illustrations.height} alt="" />
       <span>Illustrations</span>
     </li>
     <li class="service-card service-card--photography">
-      <Image class="service-card__art service-card__art--photo" src={photography} alt="" />
+      <img class="service-card__art service-card__art--photo" src={photography.src} width={photography.width} height={photography.height} alt="" />
       <span>Photography</span>
     </li>
     <li class="service-card service-card--motion">
-      <Image class="service-card__art service-card__art--wide" src={motionGraphics} alt="" />
+      <img class="service-card__art service-card__art--wide" src={motionGraphics.src} width={motionGraphics.width} height={motionGraphics.height} alt="" />
       <span>Motion Graphics</span>
     </li>
   </ul>

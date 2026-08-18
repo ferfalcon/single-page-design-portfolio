@@ -1,13 +1,14 @@
 ---
-import { Image } from 'astro:assets';
 import portrait from '../assets/portfolio/profile/amy-portrait.png';
 import ConsultationLink from './ConsultationLink.astro';
 ---
 
 <section class="about page-container section-block" aria-labelledby="about-title">
-  <Image
+  <img
     class="about__portrait"
-    src={portrait}
+    src={portrait.src}
+    width={portrait.width}
+    height={portrait.height}
     alt="Portrait of Amy smiling against a colorful geometric background."
     loading="lazy"
   />

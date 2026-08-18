@@ -1,12 +1,11 @@
 ---
-import { Image } from 'astro:assets';
 import logo from '../assets/portfolio/brand/logo.svg';
 import ConsultationLink from './ConsultationLink.astro';
 ---
 
 <header class="site-header page-container">
   <a class="brand-link" href="/" aria-label="Home">
-    <Image class="brand-logo" src={logo} alt="" />
+    <img class="brand-logo" src={logo.src} width={logo.width} height={logo.height} alt="" />
   </a>
   <ConsultationLink variant="dark" />
 </header>

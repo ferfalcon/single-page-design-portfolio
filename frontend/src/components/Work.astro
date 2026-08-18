@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import work01 from '../assets/portfolio/work/work-01.png';
 import work02 from '../assets/portfolio/work/work-02.png';
 import work03 from '../assets/portfolio/work/work-03.png';
@@ -28,9 +27,11 @@ const projects = [
           data-carousel-slide
           data-index={index}
         >
-          <Image
+          <img
             class="work-carousel__image"
-            src={project.src}
+            src={project.src.src}
+            width={project.src.width}
+            height={project.src.height}
             alt={project.alt}
             loading="lazy"
           />
