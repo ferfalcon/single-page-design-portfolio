@@ -1,0 +1,68 @@
+name: Stage 8 approval
+
+on:
+  pull_request:
+    types: [synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  approve:
+    if: github.head_ref == 'workflow/stage-8-plan-review'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Stage 8 branch
+        uses: actions/checkout@v4
+        with:
+          ref: workflow/stage-8-plan-review
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Record project-owner Stage 8 approval
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs context --json
+          node docs/implementation-workflow/cli/design-workflow.mjs artifact approve ART-IMPLEMENTATION-BRIEF --evidence "Project owner explicitly approved Stage 8 on 2026-08-18 and instructed not to start the next stage." --approved-by "Fernando Falcon"
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+          node docs/implementation-workflow/cli/design-workflow.mjs validate
+          node docs/implementation-workflow/cli/design-workflow.mjs stage check --json | tee /tmp/pre-gate.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const check = JSON.parse(fs.readFileSync('/tmp/pre-gate.json', 'utf8'));
+          if (check.stage?.number !== 8) throw new Error(`Expected Stage 8, got ${check.stage?.number}`);
+          if (!check.workflow?.valid) throw new Error(`Workflow invalid: ${(check.workflow?.findings ?? []).join('; ')}`);
+          if (!check.decision?.recordable || check.decision?.recommendedResult !== 'Passed') {
+            throw new Error(`Stage 8 pre-gate is not ready to pass: ${JSON.stringify(check.decision)}`);
+          }
+          NODE
+          node docs/implementation-workflow/cli/design-workflow.mjs stage review --result Passed --evidence "Stage 8 adversarial plan review completed and corrected; project owner explicitly approved Stage 8 and instructed not to start Stage 9." --approved-by "Fernando Falcon"
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+          node docs/implementation-workflow/cli/design-workflow.mjs validate
+          node docs/implementation-workflow/cli/design-workflow.mjs stage check --json | tee /tmp/post-gate.json
+          node docs/implementation-workflow/cli/design-workflow.mjs context --json | tee /tmp/context.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const check = JSON.parse(fs.readFileSync('/tmp/post-gate.json', 'utf8'));
+          const context = JSON.parse(fs.readFileSync('/tmp/context.json', 'utf8'));
+          if (check.stage?.number !== 8 || check.stage?.status !== 'Ready') throw new Error(`Stage 8 was not left Ready: ${JSON.stringify(check.stage)}`);
+          if (!check.decision?.passing || check.decision?.current?.result !== 'Passed') throw new Error(`Stage 8 gate is not passing: ${JSON.stringify(check.decision)}`);
+          if (!check.advance?.allowedNow) throw new Error('Stage 8 should be eligible for later advancement after approval.');
+          if (context.stage?.number !== 8 || context.stage?.status !== 'Ready') throw new Error('Context did not remain at Stage 8 Ready.');
+          if (context.tasks?.current !== null || (context.tasks?.ready ?? []).length !== 0) throw new Error('No Stage 9 task may be started or created.');
+          NODE
+          git diff --check
+
+      - name: Persist approval and remove runner
+        run: |
+          rm .github/workflows/stage-8-approval.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .workflow .github/workflows/stage-8-approval.yml
+          git commit -m "Record Stage 8 approval"
+          git push origin HEAD:workflow/stage-8-plan-review
