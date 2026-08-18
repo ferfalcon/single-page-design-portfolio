@@ -17,7 +17,7 @@ updated: 2026-08-18
 ## 1. Document Information
 
 - Status: Draft
-- Version: 0.1
+- Version: 0.2
 - Last updated: 2026-08-18
 - Auditor: ChatGPT
 - Project: Single-page design portfolio
@@ -33,7 +33,7 @@ updated: 2026-08-18
 
 This audit establishes the observed design evidence for the scoped Single-page design portfolio before requirements, design intent, specification, and planning are derived. It records what the active Figma snapshot demonstrates, where that evidence appears, and what remains unresolved.
 
-The audit does not choose implementation breakpoints, HTML semantics, JavaScript behavior, CTA destinations, carousel logic, or other product and technical rules that the design source does not establish.
+The audit does not choose implementation breakpoints, HTML semantics, JavaScript behavior, CTA destinations, carousel logic, or other product and technical rules that the design source does not establish. Project-owner decisions made after inspection are recorded separately as Confirmed downstream direction and do not alter what was or was not observed in Figma.
 
 ## 3. Scope
 
@@ -183,6 +183,8 @@ The page contains 164 instances. All inspected instances resolve to a main compo
 
 No click/tap destination for the consultation CTAs and no click/tap gallery transition for the carousel controls was observed. Focus variants are present visually, but prototype reactions do not establish keyboard focus behavior or focus management. Reduced-motion behavior is not demonstrated.
 
+Confirmed owner direction for downstream specification does not change that source observation: consultation links will temporarily use `href="#"`, and the Work interaction will be treated as a standard previous/next carousel.
+
 ## 13. Content and Data Patterns
 
 - The same “Free Consultation” label is reused in header, About, Contact, and footer contexts.
@@ -215,25 +217,32 @@ Component descriptions explicitly classify service illustrations as decorative, 
 
 | Finding ID | Category | Finding | Snapshot and source reference | Impact | Classification |
 |---|---|---|---|---|---|
-| `AUD-001` | Flow | “Free Consultation” is repeatedly presented as an action, but no click/tap destination or resulting state is demonstrated | `SRC-DS-001` → Button sets and CTA instances | Later requirements/specification cannot safely define the action target without a decision | Observed / Open question |
-| `AUD-002` | Flow / State | Previous/Next controls have visual and hover/focus states, but no click/tap transition, item order, looping rule, or boundary behavior is demonstrated | `SRC-DS-001` → `7:1784`, `7:1791`, `2171:3199` | Carousel behavior cannot be specified from source alone | Observed / Open question |
-| `AUD-003` | Accessibility / Visual | Accent CTA text contrast is ~3.07:1 in Default and ~2.01:1 in Hover for a 16px label | `SRC-DS-001` → `Button/Accent` `4:684`; semantic color variables | Source treatment does not meet the 4.5:1 AA normal-text contrast target | Observed |
-| `AUD-004` | Accessibility / Visual | UI/UX, Apps, and Photography service labels are ~2.01:1, ~2.06:1, and ~2.08:1 respectively at 24px Bold | `SRC-DS-001` → desktop Hero `2171:2050`; service-card fills | Source treatment does not meet the 3:1 AA large-text contrast target | Observed |
+| `AUD-001` | Flow | “Free Consultation” is repeatedly presented as an action, but no click/tap destination or resulting state is demonstrated | `SRC-DS-001` → Button sets and CTA instances | Source gap is resolved for the current implementation scope by the owner decision to use a placeholder link with `href="#"` until a real destination exists | Observed; owner-resolved downstream |
+| `AUD-002` | Flow / State | Previous/Next controls have visual and hover/focus states, but no click/tap transition, item order, looping rule, or boundary behavior is demonstrated | `SRC-DS-001` → `7:1784`, `7:1791`, `2171:3199` | Product direction is resolved by the owner decision to implement a standard carousel; exact observable edge/wrap mechanics remain a later specification responsibility | Observed; owner-resolved downstream |
+| `AUD-003` | Accessibility / Visual | Accent CTA text contrast is ~3.07:1 in Default and ~2.01:1 in Hover for a 16px label | `SRC-DS-001` → `Button/Accent` `4:684`; semantic color variables | Owner decision: carry forward as an implementation accessibility requirement; exact compliant visual treatment is deferred to later design/spec/planning | Observed; implementation note confirmed |
+| `AUD-004` | Accessibility / Visual | UI/UX, Apps, and Photography service labels are ~2.01:1, ~2.06:1, and ~2.08:1 respectively at 24px Bold | `SRC-DS-001` → desktop Hero `2171:2050`; service-card fills | Owner decision: carry forward as an implementation accessibility requirement; exact compliant visual treatment is deferred to later design/spec/planning | Observed; implementation note confirmed |
 | `AUD-005` | Responsive | Only 375, 768, and 1440px compositions are supplied | `SRC-DS-001` → Home frames | Intermediate failure points and breakpoint placement remain unproven | Observed |
 | `AUD-006` | Accessibility / Motion | 200ms dissolve hover transitions are demonstrated; reduced-motion behavior is not | `SRC-DS-001` → interactive component variants | Implementation must not treat the prototype as complete reduced-motion guidance | Observed |
 | `AUD-007` | Accessibility / Content | Profile and Work imagery are marked meaningful, but final alternative-text copy is not provided | `SRC-DS-001` → asset component descriptions | Final accessible text requires content/implementation resolution | Observed |
 | `AUD-008` | Accessibility / State | Focus variants exist, but the design source cannot establish keyboard triggering, focus order, or focus management | `SRC-DS-001` → interactive component sets | Implementation accessibility behavior remains to be specified and validated | Observed |
 
-## 17. Questions
+## 17. Questions and Owner Resolutions
+
+### Confirmed owner decisions
+
+- **`AUD-001`:** The real consultation destination does not exist yet. For the current implementation, render each “Free Consultation” action as a link using `href="#"`. Replace the placeholder when a real destination is supplied.
+- **`AUD-002`:** Treat the Work interaction as a standard previous/next carousel. The later specification should define its observable mechanics without claiming those mechanics were demonstrated by Figma.
+- **`AUD-003`:** Do not alter the Figma source during this audit. Carry the Accent CTA contrast finding into implementation and ensure the implemented treatment meets the applicable accessibility requirement.
+- **`AUD-004`:** Do not alter the Figma source during this audit. Carry the affected service-label contrast findings into implementation and ensure the implemented treatments meet the applicable accessibility requirement.
 
 ### Product questions
 
-- What destination or action should every “Free Consultation” CTA invoke: an on-page anchor, external booking service, email/contact channel, or something else? This blocks precise behavior specification but does not block completion of the design audit.
-- Do Work images represent a carousel only, clickable project links, or both? What is the item sequence, and should Previous/Next wrap at the ends? This blocks precise Work interaction specification.
+- No blocking product question remains from `AUD-001` or `AUD-002`. Exact carousel boundary/wrap behavior is a downstream specification detail under the confirmed “standard carousel” direction.
+- Whether Work images are also clickable project links is not demonstrated and has not been requested; do not add project-link behavior unless later evidence or owner direction introduces it.
 
 ### Design questions
 
-- What approved visual treatment should resolve `AUD-003` and `AUD-004`: darker surfaces, darker text, different tokens, or another source-authorized adjustment? No design change is assumed by this audit.
+- The exact compliant visual treatment for `AUD-003` and `AUD-004` is intentionally deferred. The owner has confirmed that these findings must be addressed in implementation rather than changing Figma during Stage 1.
 - Should the supplied hover dissolves remain motion-enabled for users who request reduced motion, or should the implementation remove/reduce them? The Figma source does not decide this.
 
 ### Content questions
@@ -243,19 +252,24 @@ Component descriptions explicitly classify service illustrations as decorative, 
 
 ### Technical questions
 
-- None are resolved at Stage 1. Implementation breakpoints and carousel mechanics must be derived later from approved design intent/specification rather than invented in this audit.
+- Implementation breakpoints, exact carousel edge behavior, accessible carousel semantics, and reduced-motion handling must be made precise in later approved design/specification work. The Stage 1 audit does not invent them.
 
 ## 18. Assumptions and Recommendations
 
+### Confirmed owner decisions
+
+- Consultation CTAs use `href="#"` as the current placeholder destination.
+- Work is implemented as a standard previous/next carousel.
+- `AUD-003` and `AUD-004` are implementation accessibility obligations; no Stage 1 Figma change is requested.
+
 ### Inferred
 
-- Because the same CTA component and label recur throughout the page, the consultation actions likely share one destination. This is not confirmed.
-- The Work controls visually suggest a carousel or horizontally advancing gallery. The exact interaction model is not demonstrated.
+- No material inference remains for the CTA destination or whether Work should behave as a carousel; both now have owner direction. The Figma source itself still does not demonstrate the resulting activation behavior.
 
 ### Recommended
 
-- Resolve the CTA destination and Work interaction model before behavior specification is approved.
-- Resolve contrast findings through an approved design decision rather than changing implementation colors independently from the design authority.
+- Translate `href="#"` and the standard-carousel direction into precise requirements/specification without misrepresenting them as Figma evidence.
+- Carry `AUD-003` and `AUD-004` into later design/spec/planning and implementation validation, selecting a compliant treatment that preserves the approved visual intent as closely as practical.
 - Treat 375, 768, and 1440px as supplied evidence points; choose actual implementation breakpoints later from observed transformation/failure behavior and repository constraints.
 - Preserve visible focus and accessible names in implementation, while defining semantic and keyboard behavior independently of Figma’s visual states.
 - Provide final contextual alternative text for meaningful imagery before implementation acceptance.
@@ -275,8 +289,8 @@ Component descriptions explicitly classify service illustrations as decorative, 
 | `EVD-009` | `SRC-DS-001` | `4:680`, `4:684`, `7:1784`, `7:1791` | Visible Focus variants | Later accessibility specification |
 | `EVD-010` | `SRC-DS-001` | Component descriptions in `2141:14881` | Accessible-name and image-alt intent | Later accessibility specification |
 | `EVD-011` | `SRC-DS-001` | Interactive component sets | Observed control dimensions | Later accessibility/design |
-| `EVD-012` | `SRC-DS-001` | `Button/Accent` `4:684` + variables | Confirmed accent CTA contrast gap | Design resolution / acceptance |
-| `EVD-013` | `SRC-DS-001` | Desktop Hero `2171:2050` + variables | Confirmed service-label contrast results | Design resolution / acceptance |
+| `EVD-012` | `SRC-DS-001` | `Button/Accent` `4:684` + variables | Confirmed accent CTA contrast gap | Implementation accessibility constraint / acceptance |
+| `EVD-013` | `SRC-DS-001` | Desktop Hero `2171:2050` + variables | Confirmed service-label contrast results | Implementation accessibility constraint / acceptance |
 | `EVD-014` | `SRC-DS-001` | Local variables and text styles | Primitive/semantic visual system | Later design/implementation plan |
 | `EVD-015` | `SRC-DS-001` | Asset components `4:2275`–`6:380` | Exportable service/profile/work assets | Later implementation plan |
 | `EVD-016` | `SRC-DS-001` | Prototype reactions on button/carousel components | Hover-only interaction evidence, 200ms dissolve | Later behavior specification |
@@ -303,7 +317,7 @@ Component descriptions explicitly classify service illustrations as decorative, 
 - [x] Snapshot IDs exist and match `SOURCE-BASELINE.md`.
 - [x] No evidence silently uses a different source under `SRC-DS-001`.
 - [x] Confirmed, observed, inferred, recommended, and open information remain distinct.
-- [x] No product rule or implementation decision was invented.
+- [x] No product rule or implementation decision was invented; owner decisions are labeled Confirmed and separate from observed source evidence.
 - [x] Evidence identifiers and source references are internally consistent.
 - [x] Questions are categorized and blocking status is clear.
 
@@ -312,8 +326,8 @@ Component descriptions explicitly classify service illustrations as decorative, 
 - Files created or modified: `DESIGN-AUDIT.md`.
 - Snapshot IDs used: `SRC-DS-001`.
 - Source verification performed: Yes — Figma metadata, Plugin API inspection, and screenshots.
-- Important findings: CTA destination is unspecified; Work control activation behavior is unspecified; Accent CTA and three service-label combinations have confirmed contrast gaps; intermediate responsive behavior, reduced-motion handling, keyboard behavior, and final image alt copy are not proven by Figma.
-- Assumptions introduced: Reused consultation CTAs likely share one destination; Work controls likely advance a carousel. Both remain explicitly inferred.
-- Open questions or blockers: `AUD-001` and `AUD-002` require later owner/design decisions; `AUD-003` and `AUD-004` require an approved contrast resolution before implementation acceptance.
+- Important findings: Figma does not demonstrate CTA activation or Work carousel activation mechanics; the owner has resolved current implementation direction as `href="#"` for consultation links and a standard previous/next carousel for Work. Accent CTA and three service-label combinations have confirmed contrast gaps that must be addressed in implementation. Intermediate responsive behavior, reduced-motion handling, keyboard behavior, and final image alt copy are not proven by Figma.
+- Assumptions introduced: No material assumption remains for `AUD-001` or `AUD-002`; those items now have explicit owner direction. Exact carousel edge/wrap behavior remains a downstream specification detail rather than a Stage 1 assumption.
+- Open questions or blockers: `AUD-001` and `AUD-002` are owner-resolved for downstream work. `AUD-003` and `AUD-004` are confirmed implementation notes rather than Stage 1 blockers. Remaining non-blocking gaps include exact contrast treatment, reduced-motion behavior, carousel edge semantics, and final alternative text. Formal Stage 1 closure is still blocked only by the unexecuted stage preflight and explicit Stage 1 approval.
 - Stage preflight: Not executed in this runtime because no local repository checkout/`design-workflow` CLI is available. This prevents formal Stage 1 gate closure here.
 - Ready for requirements: No — pending Stage 1 preflight and explicit project-owner approval of the Stage 1 audit.
