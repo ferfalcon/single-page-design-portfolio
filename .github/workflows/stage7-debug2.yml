@@ -1,0 +1,52 @@
+name: Stage 7 transition diagnostic
+
+on:
+  push:
+    branches:
+      - workflow/stage-7-plan
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: workflow/stage-7-plan
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Diagnose
+        shell: bash
+        run: |
+          set +e
+          LOG=/tmp/stage7-debug2.log
+          {
+            echo '=== sync check ==='
+            node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+            echo "sync_exit=$?"
+            echo '=== context ==='
+            node docs/implementation-workflow/cli/design-workflow.mjs context --json
+            echo "context_exit=$?"
+            echo '=== advance ==='
+            node docs/implementation-workflow/cli/design-workflow.mjs stage advance
+            echo "advance_exit=$?"
+            echo '=== reopen ==='
+            node docs/implementation-workflow/cli/design-workflow.mjs artifact reopen ART-IMPLEMENTATION-BRIEF --evidence "Stage 7 adds repository context and the repository-aware implementation plan to the Lite implementation brief."
+            echo "reopen_exit=$?"
+            echo '=== context after ==='
+            node docs/implementation-workflow/cli/design-workflow.mjs context --json
+            echo "after_exit=$?"
+          } > "$LOG" 2>&1
+          git reset --hard HEAD
+          cp "$LOG" .workflow/stage7-debug2.log
+          rm -f .github/workflows/stage7-debug2.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A .workflow/stage7-debug2.log .github/workflows/stage7-debug2.yml
+          git commit -m "Capture Stage 7 transition diagnostic"
+          git push origin HEAD:workflow/stage-7-plan
