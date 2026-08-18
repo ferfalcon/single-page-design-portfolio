@@ -30,6 +30,11 @@ jobs:
           node docs/implementation-workflow/cli/design-workflow.mjs sync
           node docs/implementation-workflow/cli/design-workflow.mjs context --json
 
+      - name: Advance through approved Stage 9 gate
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs stage advance
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+
       - name: Verify task-start repository baseline
         shell: bash
         run: |
@@ -45,13 +50,11 @@ jobs:
           node docs/implementation-workflow/cli/design-workflow.mjs snapshot verify SRC-DS-001 \
             --result Unchanged \
             --method "Fresh read-only Figma MCP inspection of Workflow page and 375/768/1440 Home exemplars" \
-            --evidence "Immediately before Stage 10, the Workflow page still contained the recorded Mobile, Tablet, and Desktop Home frames, responsive section/component structure, carousel controls, profile portrait, service artwork, and five standalone Work assets; no material design drift was observed."
+            --evidence "Immediately before Stage 10 task start, the Workflow page still contained the recorded Mobile, Tablet, and Desktop Home frames, responsive section/component structure, carousel controls, profile portrait, service artwork, and five standalone Work assets; no material design drift was observed."
           node docs/implementation-workflow/cli/design-workflow.mjs sync
 
-      - name: Advance to Stage 10 and start task
+      - name: Start implementation task
         run: |
-          node docs/implementation-workflow/cli/design-workflow.mjs stage advance
-          node docs/implementation-workflow/cli/design-workflow.mjs sync
           node docs/implementation-workflow/cli/design-workflow.mjs task start P01-T01
           node docs/implementation-workflow/cli/design-workflow.mjs sync
 
