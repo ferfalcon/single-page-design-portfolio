@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "(test -f /vercel/path0/.workflow/workflow-record.json && echo ROOT_WORKFLOW_FOUND || echo ROOT_WORKFLOW_NOT_FOUND) && (test -f /vercel/path0/docs/implementation-workflow/cli/design-workflow.mjs && echo ROOT_CLI_FOUND || echo ROOT_CLI_NOT_FOUND) && ls -la /vercel/path0 | head -40 && astro build",
+    "build": "node stage1-gate.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
