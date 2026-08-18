@@ -263,4 +263,60 @@ const noFinalGate = structuredClone(accepted);
 noFinalGate.gates.find((gate) => gate.stage === 11).status = 'Superseded';
 expectInvalid(noFinalGate.project.name, noFinalGate, 'requires an active passing Stage 11 gate');
 
+const correctionStageNine = buildRecord('Lite', 9);
+const completedPriorTask = correctionStageNine.tasks[0];
+completedPriorTask.status = 'Complete';
+completedPriorTask.output = 'SRC-REPO-002';
+completedPriorTask.validation = [{
+  name: 'Prior implementation validation',
+  kind: 'Test',
+  required: true,
+  status: 'Passed',
+  expected: 'The prior implementation remains valid',
+  actual: 'The prior implementation validation passed',
+  command: 'node scripts/test-stage-gates.mjs',
+  environment: 'Node.js 22+',
+  executedAt: timestamp,
+  evidence: ['Synthetic prior-task validation'],
+  references: ['PLAN-001'],
+}];
+correctionStageNine.snapshots.push({
+  id: 'SRC-REPO-002',
+  role: 'Implementation output',
+  pinStrength: 'Immutable',
+  status: 'Active',
+  reference: '/tmp/workflow-gate-matrix',
+  commit: outputCommit,
+  parent: 'SRC-REPO-001',
+  task: 'P01-T01',
+});
+correctionStageNine.state.latestOutput = 'SRC-REPO-002';
+correctionStageNine.artifacts.push({
+  id: 'ART-TASK-P01-T02',
+  type: 'TASK',
+  path: 'Phase-01--Task-02.md',
+  status: 'Approved',
+  baseline: ['SRC-REPO-001', 'SRC-REPO-002'],
+});
+correctionStageNine.tasks.push({
+  id: 'P01-T02',
+  status: 'Ready',
+  baseline: 'SRC-REPO-002',
+  prerequisites: [],
+  references: ['PLAN-001'],
+  output: null,
+  blocker: null,
+  validation: [],
+});
+correctionStageNine.gates.find((gate) => gate.stage === 9).artifacts = correctionStageNine.artifacts.map((artifact) => artifact.id);
+expectValid('Stage 9 correction cycle preserves completed tasks and accepts ready correction tasks', correctionStageNine);
+
+const invalidCorrectionStageNine = structuredClone(correctionStageNine);
+invalidCorrectionStageNine.tasks.find((task) => task.id === 'P01-T02').status = 'In progress';
+expectInvalid(
+  'Stage 9 correction cycle rejects in-progress tasks',
+  invalidCorrectionStageNine,
+  'Stage 9 requires every task to be Ready or already Complete',
+);
+
 console.log('All 48 profile/stage gate combinations, conditional gates, and execution-mode boundaries passed.');

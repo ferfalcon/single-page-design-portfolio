@@ -1,0 +1,22 @@
+---
+import portrait from '../assets/portfolio/profile/amy-portrait.png';
+import ConsultationLink from './ConsultationLink.astro';
+---
+
+<section class="about page-container section-block" aria-labelledby="about-title">
+  <img
+    class="about__portrait"
+    src={portrait.src}
+    width={portrait.width}
+    height={portrait.height}
+    alt="Portrait of Amy smiling against a colorful geometric background."
+    loading="lazy"
+  />
+  <div class="about__content">
+    <div class="about__copy">
+      <h2 id="about-title">I’m Amy, and I’d love to work on your next project</h2>
+      <p>I love working with others to create beautiful design solutions. I’ve designed everything from brand illustrations to complete mobile apps. I’m also handy with a camera!</p>
+    </div>
+    <ConsultationLink variant="accent" />
+  </div>
+</section>

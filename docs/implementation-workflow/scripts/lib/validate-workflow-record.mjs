@@ -494,7 +494,7 @@ function validateStageExit(errors, record, stage, gate, maps) {
       )));
       requireCondition(!unapprovedTask, unapprovedTask ? `Stage 9 requires an approved TASK artifact for ${unapprovedTask.id}` : 'Task artifacts are approved');
     }
-    requireCondition(record.tasks.length > 0 && record.tasks.every((task) => task.status === 'Ready'), 'Stage 9 requires every task to be Ready');
+    requireCondition(record.tasks.length > 0 && record.tasks.every((task) => ['Ready', 'Complete'].includes(task.status)), 'Stage 9 requires every task to be Ready or already Complete');
   }
   if (stage === 10) {
     requireCondition(record.tasks.length > 0 && record.tasks.every((task) => task.status === 'Complete'), 'Stage 10 requires every task to be Complete');
