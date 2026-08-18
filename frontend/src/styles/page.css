@@ -415,6 +415,14 @@
     margin-top: 5rem;
   }
 
+  .hero h1 {
+    max-width: 47rem;
+  }
+
+  .hero__copy p {
+    max-width: 35.5rem;
+  }
+
   .service-card--graphic {
     padding: 1.5rem;
   }
