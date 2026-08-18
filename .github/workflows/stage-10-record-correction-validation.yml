@@ -1,0 +1,124 @@
+name: Record correction validation
+
+on:
+  pull_request:
+    types: [synchronize]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  record-validation:
+    if: github.head_ref == 'agent/stage-10-implementation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout correction branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/stage-10-implementation
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Record executed validation and Vercel blocker
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLI='node docs/implementation-workflow/cli/design-workflow.mjs'
+          NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          $CLI sync
+          $CLI context --json
+
+          $CLI task validation set P01-T02 \
+            --name Build \
+            --kind Build \
+            --required true \
+            --status Passed \
+            --expected 'The corrected Astro production build succeeds with pnpm build.' \
+            --actual 'pnpm --dir frontend build completed successfully for the correction branch.' \
+            --command 'pnpm --dir frontend install --frozen-lockfile && pnpm --dir frontend build' \
+            --environment 'GitHub Actions ubuntu-24.04, Node 24, pnpm 10; correction validation run 32153550300' \
+            --executed-at "$NOW" \
+            --evidence 'GitHub Actions run 32153550300: correction scope contained only frontend/src/components/Work.astro and the Astro static production build passed.' \
+            --references PLAN-004
+
+          $CLI task validation set P01-T02 \
+            --name 'Accessibility semantics' \
+            --kind Accessibility \
+            --required true \
+            --status Passed \
+            --expected 'Axe-core reports no critical or serious violations at 375px, 768px, and 1440px; the carousel retains list semantics, position context, accessible controls, focus retention, and polite announcements.' \
+            --actual 'Axe-core reported no critical or serious violations at all three design widths. Work exposes an explicit list with five native listitems and five inner named slide groups; keyboard focus retention and polite announcements passed.' \
+            --command 'pnpm --dir frontend exec playwright test tests/stage-10-correction.spec.ts --reporter=line' \
+            --environment 'Chromium 151 / Playwright 1.62.1 / axe-core 4.13.0 on GitHub Actions ubuntu-24.04' \
+            --executed-at "$NOW" \
+            --evidence 'GitHub Actions run 32153550300 passed all 11 tests after the assertion was correctly scoped to the Work list; the previous failed run 32153321918 had already shown axe itself passing before an unrelated page-wide listitem-count assertion failed.' \
+            --references IMPL-001,PLAN-003,PLAN-004
+
+          $CLI task validation set P01-T02 \
+            --name 'Carousel regression' \
+            --kind Test \
+            --required true \
+            --status Passed \
+            --expected 'Initial Work 03, cyclic one-step navigation, Enter/Space and touch activation, rapid-input serialization, reduced motion, and no-JavaScript fallback remain unchanged.' \
+            --actual 'All specified carousel behaviors passed in Chromium, including initial Work 03, 01↔05 wrap, rapid queued input, Enter/Space, touch, focus retention, reduced motion, and no-JavaScript reachability with controls hidden.' \
+            --command 'pnpm --dir frontend exec playwright test tests/stage-10-correction.spec.ts --reporter=line' \
+            --environment 'Chromium 151 / Playwright 1.62.1 on GitHub Actions ubuntu-24.04' \
+            --executed-at "$NOW" \
+            --evidence 'GitHub Actions run 32153550300 passed keyboard, cyclic/rapid-input, reduced-motion, touch, and no-JavaScript regression cases.' \
+            --references PLAN-003,PLAN-004
+
+          $CLI task validation set P01-T02 \
+            --name 'Responsive and visual regression' \
+            --kind Responsive \
+            --required true \
+            --status Passed \
+            --expected 'The semantic correction introduces no layout or visual regression at the 375px, 768px, and 1440px Figma exemplars or 320px reflow.' \
+            --actual 'No page-level horizontal overflow at 320, 375, 640, 768, 1024, or 1440 CSS px. Full-page exemplar heights remained exactly 3318, 2966, and 2642 px at 375, 768, and 1440 respectively. Captured renders were visually inspected with no layout change.' \
+            --command 'Playwright responsive geometry checks and full-page screenshots in run 32153550300' \
+            --environment 'Chromium 151 on GitHub Actions ubuntu-24.04' \
+            --executed-at "$NOW" \
+            --evidence 'GitHub Actions artifact stage-10-correction-screenshots (artifact 9330748101) contains inspected 375px, 768px, and 1440px full-page renders; geometry matches the approved Figma exemplar dimensions.' \
+            --references PLAN-004
+
+          $CLI task validation set P01-T02 \
+            --name 'Vercel preview' \
+            --kind Manual \
+            --required true \
+            --status Blocked \
+            --expected 'A Vercel preview for the corrected implementation is READY and renders the corrected carousel markup before final review.' \
+            --actual 'No corrected preview was created because Vercel rejected the correction commit and current PR head at its Hobby build-rate limit.' \
+            --environment 'Vercel project prj_3c1ua9vnmyquC4ryMKNqmxwbcpOG, branch agent/stage-10-implementation, PR #16' \
+            --executed-at "$NOW" \
+            --evidence 'GitHub combined status for correction commit 828500b8acb90cda46c01cff06abd87f5e92f72e and current branch head reports Vercel failure targeting upgradeToPro=build-rate-limit. Vercel project latest READY deployment remains dpl_9R8vcDcR2X3JFaGMeJFN4oNto15q from pre-correction commit 8c83b01c3aeb12a8ed89ad277cdebef11e16ff37, so it cannot satisfy corrected-preview evidence.' \
+            --reason 'External Vercel Hobby build-rate limit; corrected deployment evidence is unavailable until the rate window permits another build.' \
+            --references PLAN-004
+
+          $CLI sync
+          $CLI task block P01-T02 \
+            --reason 'Required corrected Vercel preview is blocked by Vercel Hobby build-rate limit. Four local/build/browser validations passed; do not complete the task until a READY preview of the correction is verified.'
+          $CLI sync
+          $CLI sync --check
+          $CLI validate
+          $CLI context --json
+
+      - name: Persist canonical blocker and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .workflow Phase-01--Task-02.md
+          git commit -m 'Record correction validation blocker'
+          git push origin HEAD:agent/stage-10-implementation
+          rm .github/workflows/stage-10-record-correction-validation.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git add -u .github/workflows/stage-10-record-correction-validation.yml 2>/dev/null || true
+          git commit -m 'Remove correction validation recorder'
+          git push origin HEAD:agent/stage-10-implementation
