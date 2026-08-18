@@ -1,16 +1,17 @@
-# Trigger after explicit project-owner approval.
 name: Stage 8 approval
 
 on:
-  pull_request:
-    types: [synchronize]
+  push:
+    branches:
+      - workflow/stage-8-plan-review
+    paths:
+      - .github/workflows/stage-8-approval.yml
 
 permissions:
   contents: write
 
 jobs:
   approve:
-    if: github.head_ref == 'workflow/stage-8-plan-review'
     runs-on: ubuntu-latest
     steps:
       - name: Check out Stage 8 branch
