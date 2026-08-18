@@ -21,5 +21,5 @@ jobs:
         with:
           node-version: 24
 
-      - name: Search mandatory guidance
-        run: npx -y modern-web-guidance@latest search "Implement an accessible responsive single-page portfolio with a dependency-free progressively enhanced carousel, native keyboard controls, focus retention, polite live-region updates, reduced motion, a no-JavaScript fallback, resilient reflow and efficient image loading" --skill-version 2026_05_16-c5e78707
+      - name: Retrieve mandatory guidance
+        run: npx -y modern-web-guidance@latest retrieve "accessibility,performance,carousel-snap-highlights,carousel-slide-effects"
