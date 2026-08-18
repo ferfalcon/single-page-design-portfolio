@@ -1,0 +1,92 @@
+name: Stage 10 validate
+
+on:
+  pull_request:
+    types: [synchronize]
+    branches:
+      - main
+
+jobs:
+  validate:
+    if: github.head_ref == 'agent/stage-10-implementation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout implementation branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/stage-10-implementation
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm --dir frontend install --frozen-lockfile
+
+      - name: Build production site
+        run: pnpm --dir frontend build
+
+      - name: Verify implementation contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const read = (path) => fs.readFileSync(path, 'utf8');
+          const index = read('frontend/src/pages/index.astro');
+          const consultation = read('frontend/src/components/ConsultationLink.astro');
+          const hero = read('frontend/src/components/Hero.astro');
+          const about = read('frontend/src/components/About.astro');
+          const work = read('frontend/src/components/Work.astro');
+          const contact = read('frontend/src/components/Contact.astro');
+          const script = read('frontend/src/scripts/work-carousel.ts');
+          const globalCss = read('frontend/src/styles/global.css');
+          const pageCss = read('frontend/src/styles/page.css');
+          const carouselCss = read('frontend/src/styles/work-carousel.css');
+
+          const requireText = (haystack, needle, label) => {
+            if (!haystack.includes(needle)) throw new Error(`Missing ${label}: ${needle}`);
+          };
+
+          requireText(consultation, 'href="#"', 'approved CTA placeholder');
+          requireText(hero, 'Design solutions made easy', 'hero heading');
+          requireText(about, 'Portrait of Amy smiling against a colorful geometric background.', 'profile alt text');
+          requireText(work, "work-05.png", 'standalone Work 05 asset');
+          requireText(work, 'aria-label="Previous project"', 'previous accessible name');
+          requireText(work, 'aria-label="Next project"', 'next accessible name');
+          requireText(work, 'aria-roledescription="carousel"', 'carousel semantics');
+          requireText(work, 'aria-live="polite"', 'carousel live region');
+          requireText(script, 'activeIndex = Math.min(2, slides.length - 1)', 'initial project 03');
+          requireText(script, 'inputQueue', 'serialized carousel input');
+          requireText(script, "window.matchMedia('(prefers-reduced-motion: reduce)')", 'reduced-motion behavior');
+          requireText(carouselCss, 'transition: transform 200ms ease-out', 'approved carousel timing');
+          requireText(carouselCss, 'overflow-x: auto', 'no-JS scroll fallback');
+          requireText(globalCss, ':focus-visible', 'visible focus styling');
+          requireText(pageCss, '.consultation-link--accent', 'accent CTA styling');
+          requireText(pageCss, 'color: var(--ink);', 'dark text accessibility override');
+          requireText(contact, 'Book a call with me', 'contact heading');
+          requireText(index, '<main id="main-content">', 'main landmark');
+
+          const workImports = [...work.matchAll(/work-0[1-5]\.png/g)].map((match) => match[0]);
+          if (new Set(workImports).size !== 5) throw new Error('Expected five distinct Work asset imports.');
+          if ((work.match(/data-carousel-slide/g) || []).length !== 1) throw new Error('Work slides must be generated from the five-item project array.');
+
+          console.log('Static implementation contract checks passed.');
+          NODE
+
+      - name: Verify generated page contains one route
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f frontend/dist/index.html
+          test "$(find frontend/dist -name index.html -type f | wc -l)" -eq 1
+          grep -q 'Design solutions made easy' frontend/dist/index.html
+          grep -q 'work-05' frontend/dist/index.html
