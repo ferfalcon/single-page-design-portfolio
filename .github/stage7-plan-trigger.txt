@@ -1,1 +1,1 @@
-repair Stage 7 workflow projections
+run Stage 7 planning after workflow repair
