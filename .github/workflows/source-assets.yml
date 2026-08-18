@@ -1,0 +1,72 @@
+name: Pin source assets
+
+on:
+  pull_request:
+    types: [synchronize]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  pin-assets:
+    if: github.head_ref == 'agent/stage-10-implementation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout implementation branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/stage-10-implementation
+          fetch-depth: 0
+
+      - name: Download approved source assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p \
+            frontend/src/assets/portfolio/profile \
+            frontend/src/assets/portfolio/work \
+            frontend/src/assets/portfolio/fonts
+
+          curl --fail --location --retry 3 'https://www.figma.com/api/mcp/asset/6261d9b1-3600-446b-99e8-daa867c8a9eb.png' -o frontend/src/assets/portfolio/profile/amy-portrait.png
+          curl --fail --location --retry 3 'https://www.figma.com/api/mcp/asset/e36ab74a-d271-414b-980b-5ffc701935a0.png' -o frontend/src/assets/portfolio/work/work-01.png
+          curl --fail --location --retry 3 'https://www.figma.com/api/mcp/asset/c9877aa0-fc97-4961-a9a7-b44e4d7daae9.png' -o frontend/src/assets/portfolio/work/work-02.png
+          curl --fail --location --retry 3 'https://www.figma.com/api/mcp/asset/c44ba520-7b56-4600-a8ed-ad937fd6ccdd.png' -o frontend/src/assets/portfolio/work/work-03.png
+          curl --fail --location --retry 3 'https://www.figma.com/api/mcp/asset/5aff85fa-ebe3-43a9-9055-0753abb5a482.png' -o frontend/src/assets/portfolio/work/work-04.png
+          curl --fail --location --retry 3 'https://www.figma.com/api/mcp/asset/72c70672-4a3f-413a-b064-19ffb04d8c1c.png' -o frontend/src/assets/portfolio/work/work-05.png
+
+          curl --fail --location --retry 3 'https://raw.githubusercontent.com/tokotype/PlusJakartaSans/master/fonts/webfonts/PlusJakartaSans-Medium.woff2' -o frontend/src/assets/portfolio/fonts/plus-jakarta-sans-medium.woff2
+          curl --fail --location --retry 3 'https://raw.githubusercontent.com/tokotype/PlusJakartaSans/master/fonts/webfonts/PlusJakartaSans-Bold.woff2' -o frontend/src/assets/portfolio/fonts/plus-jakarta-sans-bold.woff2
+          curl --fail --location --retry 3 'https://raw.githubusercontent.com/tokotype/PlusJakartaSans/master/OFL.txt' -o frontend/src/assets/portfolio/fonts/OFL.txt
+
+          for file in \
+            frontend/src/assets/portfolio/profile/amy-portrait.png \
+            frontend/src/assets/portfolio/work/work-01.png \
+            frontend/src/assets/portfolio/work/work-02.png \
+            frontend/src/assets/portfolio/work/work-03.png \
+            frontend/src/assets/portfolio/work/work-04.png \
+            frontend/src/assets/portfolio/work/work-05.png \
+            frontend/src/assets/portfolio/fonts/plus-jakarta-sans-medium.woff2 \
+            frontend/src/assets/portfolio/fonts/plus-jakarta-sans-bold.woff2 \
+            frontend/src/assets/portfolio/fonts/OFL.txt; do
+            test -s "$file"
+          done
+
+          file frontend/src/assets/portfolio/profile/amy-portrait.png
+          file frontend/src/assets/portfolio/work/work-*.png
+          file frontend/src/assets/portfolio/fonts/*.woff2
+
+      - name: Commit pinned assets and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm .github/workflows/source-assets.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git add frontend/src/assets/portfolio
+          git add -u .github/workflows/source-assets.yml 2>/dev/null || true
+          git commit -m 'Add source-faithful portfolio assets'
+          git push origin HEAD:agent/stage-10-implementation
