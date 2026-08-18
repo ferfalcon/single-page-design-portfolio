@@ -6,8 +6,8 @@
     "executionMode": "Gated"
   },
   "state": {
-    "stage": 5,
-    "status": "Ready",
+    "stage": 6,
+    "status": "In progress",
     "activeInputs": [
       "SRC-DS-001",
       "SRC-REPO-001"
@@ -15,7 +15,11 @@
     "currentTask": null,
     "latestOutput": null,
     "latestValidationRuntime": null,
-    "architectureDecision": null
+    "architectureDecision": {
+      "result": "Not required",
+      "reason": "Architecture is not required because the approved scope is a single static Astro page with no additional routes, shared application state, persistence, backend or external API integration, authentication, migration, security/privacy-sensitive data flow, or cross-service reliability/observability concerns. The only client-side state is the bounded Work carousel, already specified as isolated progressive enhancement, so a separate architecture artifact or Lite profile upgrade would add process without reducing material implementation risk.",
+      "recordedAt": "2026-08-18T06:54:33.010Z"
+    }
   },
   "snapshots": [
     {
@@ -162,8 +166,8 @@
         "SRC-DS-001",
         "SRC-REPO-001"
       ],
-      "statusChangedAt": "2026-08-18T06:23:38.453Z",
-      "statusEvidence": "Stage 5 documentation consistency review completed after the AUD-009 owner resolution."
+      "statusChangedAt": "2026-08-18T06:54:33.101Z",
+      "statusEvidence": "Stage 6 architecture decision documented and challenged in two review passes; separate architecture is not required and the Lite profile remains appropriate."
     }
   ],
   "traceItems": [],
@@ -231,7 +235,7 @@
         "ART-PROJECT-CONTEXT",
         "ART-WORKFLOW-STATE",
         "ART-DESIGN-AUDIT",
-        "ART-IMPLEMENTATION-BRIEF"
+        "ART-IMPLEENTATION-BRIEF"
       ],
       "evidence": "Project owner approved the Stage 2 requirements on 2026-08-18; the requirements checkpoint has no blocking product decision and the approved audit resolutions are carried forward.",
       "recordedAt": "2026-08-18T03:39:16.078Z",
