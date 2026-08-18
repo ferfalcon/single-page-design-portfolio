@@ -65,9 +65,13 @@ pnpm dlx skills add https://github.com/upstash/context7 context7-mcp
 
 - [Web Interface Guidelines](https://www.skills.sh/vercel-labs/agent-skills/web-design-guidelines) - Review files for compliance with Web Interface Guidelines.
 ```bash
-pnpm dlx skills add https://github.com/vercel-labs/agent-skills web-design-guidelines
+pnpm dlx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines
 ```
 
+- Frontend Design
+```bash
+pnpm dlx skills add https://github.com/anthropics/skills --skill frontend-design
+```
 ## Author
 
 - Website — [ferfalcon.com](http://ferfalcon.com/)
