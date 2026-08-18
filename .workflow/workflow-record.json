@@ -1,1 +1,563 @@
-{"schemaVersion":2,"project":{"name":"Single-page design portfolio","profile":"Lite","executionMode":"Gated"},"state":{"stage":9,"status":"Ready","activeInputs":["SRC-DS-001","SRC-REPO-001"],"currentTask":null,"latestOutput":null,"latestValidationRuntime":null,"architectureDecision":{"result":"Not required","reason":"Architecture is not required because the approved scope is a single static Astro page with no additional routes, shared application state, persistence, backend or external API integration, authentication, migration, security/privacy-sensitive data flow, or cross-service reliability/observability concerns. The only client-side state is the bounded Work carousel, already specified as isolated progressive enhancement, so a separate architecture artifact or Lite profile upgrade would add process without reducing material implementation risk.","recordedAt":"2026-08-18T06:54:33.010Z"}},"snapshots":[{"id":"SRC-DS-001","role":"Input baseline","pinStrength":"Time-bound","status":"Active","reference":"https://www.figma.com/design/HfvHWLtq8ESeaaVpAU6IlX/single-page-design-portfolio?node-id=2141-862"},{"id":"SRC-REPO-001","role":"Input baseline","pinStrength":"Immutable","status":"Active","reference":"https://github.com/ferfalcon/single-page-design-portfolio","commit":"07635a8eafb4323909619a0b62e41a4d8144d764"}],"verifications":[{"id":"VER-001","snapshot":"SRC-DS-001","result":"Unchanged","method":"Direct Figma metadata inspection of page `🤖 Workflow` (2141:862)","evidence":"The scoped page still exposes the recorded mobile, tablet, and desktop Home frames, section/navigation components, interaction states, design-system documentation, and assets; no material upstream change was observed.","checkedAt":"2026-08-18T02:20:31.219Z"},{"id":"VER-002","snapshot":"SRC-REPO-001","result":"Expected workflow output","method":"GitHub branch and immutable commit inspection","evidence":"The pinned implementation baseline commit 07635a8eafb4323909619a0b62e41a4d8144d764 remains available and unchanged. `main` has advanced only through the approved workflow-initialization merge 3c89f7b239d8d91da1bbb830b94f76f3a66b453a, which added workflow metadata and no frontend implementation changes.","checkedAt":"2026-08-18T02:20:32.219Z"},{"id":"VER-003","snapshot":"SRC-DS-001","result":"Unchanged","method":"Fresh Figma metadata inspection of Workflow page 2141:862","evidence":"The scoped Workflow page, mobile/tablet/desktop Home frames, responsive section and navigation components, carousel controls, and five Work assets remained present before Stage 2 approval.","checkedAt":"2026-08-18T03:39:15.982Z"},{"id":"VER-004","snapshot":"SRC-REPO-001","result":"Expected workflow output","method":"Git baseline and workflow-output inspection","evidence":"The immutable implementation baseline remains unchanged; subsequent main-branch changes through the approved Stage 2 merge contain workflow documentation only and no frontend implementation changes.","checkedAt":"2026-08-18T03:39:16.030Z"},{"id":"VER-005","snapshot":"SRC-DS-001","result":"Unchanged","method":"Fresh Figma metadata inspection of Workflow page 2141:862","evidence":"The scoped Workflow page, mobile/tablet/desktop Home frames, responsive section and navigation components, interaction states, profile portrait, and five Work assets remained present before Stage 3 approval.","checkedAt":"2026-08-18T04:10:35.556Z"},{"id":"VER-006","snapshot":"SRC-REPO-001","result":"Expected workflow output","method":"Git baseline and workflow-output inspection","evidence":"The immutable implementation baseline remains unchanged; approved workflow changes through Stage 3 are documentation and workflow state only, with no frontend implementation changes.","checkedAt":"2026-08-18T04:10:35.616Z"},{"id":"VER-007","snapshot":"SRC-DS-001","result":"Unchanged","method":"Fresh Figma metadata inspection of Workflow page 2141:862","evidence":"The scoped Workflow page still exposes the mobile, tablet, and desktop Home frames, responsive Header/Footer/Hero/About/Work/Contact components, carousel Default/Hover/Focus states, profile portrait, and five Work assets after completion of the Stage 4 specification; no material upstream design change was observed before Stage 4 approval.","checkedAt":"2026-08-18T05:16:57.289Z"},{"id":"VER-008","snapshot":"SRC-REPO-001","result":"Expected workflow output","method":"Git baseline and workflow-output inspection","evidence":"The immutable implementation baseline remains unchanged. Comparing SRC-REPO-001 to main through the approved Stage 4 specification shows only workflow state and documentation artifacts; frontend implementation files remain unchanged.","checkedAt":"2026-08-18T05:16:57.345Z"}],"artifacts":[{"id":"ART-SOURCE-BASELINE","type":"SOURCE-BASELINE","path":"SOURCE-BASELINE.md","status":"Approved","baseline":["SRC-DS-001","SRC-REPO-001"],"statusChangedAt":"2026-08-18T02:20:34.219Z","statusEvidence":"Stage 0 source baseline reviewed against the current Figma scope and pinned repository commit; source identities, pin strengths, scope boundaries, and verification requirements are complete.","statusBy":"Fernando Falcon"},{"id":"ART-PROJECT-CONTEXT","type":"PROJECT-CONTEXT","path":"PROJECT-CONTEXT.md","status":"Approved","baseline":["SRC-DS-001","SRC-REPO-001"],"statusChangedAt":"2026-08-18T02:20:36.219Z","statusEvidence":"Stage 0 project context reviewed and approved: Lite + Gated remains appropriate, scope and exclusions are explicit, and quality/repository constraints are recorded.","statusBy":"Fernando Falcon"},{"id":"ART-WORKFLOW-STATE","type":"WORKFLOW-STATE","path":"WORKFLOW-STATE.md","status":"Approved","baseline":["SRC-DS-001","SRC-REPO-001"],"statusChangedAt":"2026-08-18T02:20:38.219Z","statusEvidence":"Stage 0 workflow control state reviewed and approved; the Stage 0 approval is resolved and advancement to Stage 1 is intentionally deferred.","statusBy":"Fernando Falcon"},{"id":"ART-DESIGN-AUDIT","type":"DESIGN-AUDIT","path":"DESIGN-AUDIT.md","status":"Approved","baseline":["SRC-DS-001","SRC-REPO-001"],"statusChangedAt":"2026-08-18T03:20:40.758Z","statusEvidence":"Project owner approved the Stage 1 design audit and its recorded owner resolutions.","statusBy":"Fernando Falcon"},{"id":"ART-IMPLEMENTATION-BRIEF","type":"IMPLEMENTATION-BRIEF","path":"IMPLEMENTATION-BRIEF.md","status":"Approved","baseline":["SRC-DS-001","SRC-REPO-001"],"statusChangedAt":"2026-08-18T08:39:59.241Z","statusEvidence":"Project owner explicitly approved Stage 8 on 2026-08-18 and instructed not to start the next stage.","statusBy":"Fernando Falcon"},{"id":"ART-TASK-P01-T01","type":"TASK","path":"Phase-01--Task-01.md","status":"Approved","baseline":["SRC-DS-001","SRC-REPO-001"],"statusChangedAt":"2026-08-18T08:54:45.999Z","statusEvidence":"Project owner approved the Stage 9 task decomposition; P01-T01 covers PLAN-001 through PLAN-004 as one coherent implementation result.","statusBy":"Fernando Falcon"}],"traceItems":[{"id":"PLAN-001","owner":"ART-IMPLEMENTATION-BRIEF","status":"Active","required":false,"references":[]},{"id":"PLAN-002","owner":"ART-IMPLEMENTATION-BRIEF","status":"Active","required":false,"references":[]},{"id":"PLAN-003","owner":"ART-IMPLEMENTATION-BRIEF","status":"Active","required":false,"references":[]},{"id":"PLAN-004","owner":"ART-IMPLEMENTATION-BRIEF","status":"Active","required":false,"references":[]}],"gates":[{"id":"GATE-001","stage":0,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-001","VER-002"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE"],"evidence":"Project owner approved Stage 0. Both active inputs have passing verification, the Stage 0 control artifacts are reviewed and approved, and Stage 1 advancement is intentionally deferred per owner instruction.","recordedAt":"2026-08-18T02:20:39.219Z","approvedBy":"Fernando Falcon"},{"id":"GATE-002","stage":1,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-001","VER-002"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT"],"evidence":"Stage 1 design audit passed CLI preflight; the project owner approved Stage 1 and explicitly deferred Stage 2 advancement.","recordedAt":"2026-08-18T03:20:40.876Z","approvedBy":"Fernando Falcon"},{"id":"GATE-003","stage":2,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-003","VER-004"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT","ART-IMPLEMENTATION-BRIEF"],"evidence":"Project owner approved the Stage 2 requirements on 2026-08-18; the requirements checkpoint has no blocking product decision and the approved audit resolutions are carried forward.","recordedAt":"2026-08-18T03:39:16.078Z","approvedBy":"Fernando Falcon"},{"id":"GATE-004","stage":3,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-005","VER-006"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT","ART-IMPLEMENTATION-BRIEF"],"evidence":"Project owner approved the Stage 3 Design Intent on 2026-08-18. The checkpoint has completed both required review passes, preserves the approved AUD-001 through AUD-004 resolutions, and has no blocking design-intent decision.","recordedAt":"2026-08-18T04:10:35.675Z","approvedBy":"Fernando Falcon"},{"id":"GATE-005","stage":4,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-007","VER-008"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT","ART-IMPLEMENTATION-BRIEF"],"evidence":"Project owner approved the Stage 4 Specification on 2026-08-18. The specification completes both required review passes, makes the approved requirements and design intent testable with SPEC and AC traceability, and has no blocking specification decision. Stage 5 Document Review content is intentionally not started by this approval action.","recordedAt":"2026-08-18T05:16:57.400Z","approvedBy":"Fernando Falcon"},{"id":"GATE-006","stage":5,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-007","VER-008"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT","ART-IMPLEMENTATION-BRIEF"],"evidence":"Project owner approved Stage 5 on 2026-08-18 after resolving AUD-009 to use standalone Asset/Work/05 for logical Work position 05. The documentation review completed both required passes, the consolidated brief is Reviewed, and Stage 5 preflight recommends Passed.","recordedAt":"2026-08-18T06:23:38.560Z","approvedBy":"Fernando Falcon"},{"id":"GATE-007","stage":6,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-007","VER-008"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT","ART-IMPLEMENTATION-BRIEF"],"evidence":"Project owner explicitly approved Stage 6 on 2026-08-18 after the architecture checkpoint completed both review passes and preflight recommended Passed; architecture remains Not required and the Lite profile remains appropriate.","recordedAt":"2026-08-18T07:25:56.327Z","approvedBy":"Fernando Falcon"},{"id":"GATE-008","stage":7,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-007","VER-008"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT","ART-IMPLEMENTATION-BRIEF"],"evidence":"Project owner explicitly approved Stage 7 on 2026-08-18 after PLAN-001 through PLAN-004, both required Stage 7 review passes, repository inspection, traceability, risks, ordering, and validation planning were completed; Stage 7 preflight recommended Passed.","recordedAt":"2026-08-18T08:11:35.286Z","approvedBy":"Fernando Falcon"},{"id":"GATE-009","stage":8,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-007","VER-008"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT","ART-IMPLEMENTATION-BRIEF"],"evidence":"Stage 8 adversarial plan review completed and corrected; project owner explicitly approved Stage 8 and instructed not to start Stage 9.","recordedAt":"2026-08-18T08:39:59.521Z","approvedBy":"Fernando Falcon"},{"id":"GATE-010","stage":9,"status":"Active","result":"Passed","baseline":["SRC-DS-001","SRC-REPO-001"],"verifications":["VER-007","VER-008"],"artifacts":["ART-SOURCE-BASELINE","ART-PROJECT-CONTEXT","ART-WORKFLOW-STATE","ART-DESIGN-AUDIT","ART-IMPLEMENTATION-BRIEF","ART-TASK-P01-T01"],"evidence":"Project owner approved Stage 9 on 2026-08-18 after reviewing P01-T01. The Lite task set remains one coherent task, its required validation definitions are recorded, and P01-T01 is Ready. Stage 10 implementation is intentionally not started.","recordedAt":"2026-08-18T08:54:45.999Z","approvedBy":"Fernando Falcon"}],"tasks":[{"id":"P01-T01","status":"Ready","baseline":"SRC-REPO-001","prerequisites":[],"references":["PLAN-001","PLAN-002","PLAN-003","PLAN-004"],"output":null,"blocker":null,"validation":[{"name":"Build","kind":"Build","required":true,"status":"Not executed","expected":"The Astro production build succeeds with pnpm build.","command":"pnpm build","environment":"frontend/","evidence":[],"reason":"Pending Stage 10 implementation.","references":["PLAN-001","PLAN-002","PLAN-003","PLAN-004"]},{"name":"Accessibility","kind":"Accessibility","required":true,"status":"Not executed","expected":"Semantic structure, keyboard and focus behavior, image alternatives, contrast, reflow/zoom, and reduced-motion checks pass.","evidence":[],"reason":"Pending Stage 10 implementation and rendered validation.","references":["PLAN-002","PLAN-003","PLAN-004"]},{"name":"Responsive and visual fidelity","kind":"Responsive","required":true,"status":"Not executed","expected":"The page remains usable and source-faithful at 375px, 768px, 1440px, 320 CSS px reflow, 200% zoom, and relevant intermediate widths.","evidence":[],"reason":"Pending Stage 10 rendered validation.","references":["PLAN-002","PLAN-003","PLAN-004"]},{"name":"Work carousel behavior","kind":"Manual","required":true,"status":"Not executed","expected":"The five-item Work carousel satisfies the approved start state, cyclic one-step controls, keyboard/focus behavior, reduced motion, rapid input handling, and no-JavaScript fallback.","evidence":[],"reason":"Pending Stage 10 implementation and interaction validation.","references":["PLAN-003","PLAN-004"]},{"name":"Vercel preview","kind":"Manual","required":true,"status":"Not executed","expected":"The implementation branch Vercel preview renders the approved page without material regression before merge.","evidence":[],"reason":"Pending the Stage 10 implementation pull request and preview deployment.","references":["PLAN-004"]}]}],"profileTransitions":[],"implementationReviews":[]}
+{
+  "schemaVersion": 2,
+  "project": {
+    "name": "Single-page design portfolio",
+    "profile": "Lite",
+    "executionMode": "Gated"
+  },
+  "state": {
+    "stage": 10,
+    "status": "In progress",
+    "activeInputs": [
+      "SRC-DS-001",
+      "SRC-REPO-001"
+    ],
+    "currentTask": "P01-T01",
+    "latestOutput": null,
+    "latestValidationRuntime": null,
+    "architectureDecision": {
+      "result": "Not required",
+      "reason": "Architecture is not required because the approved scope is a single static Astro page with no additional routes, shared application state, persistence, backend or external API integration, authentication, migration, security/privacy-sensitive data flow, or cross-service reliability/observability concerns. The only client-side state is the bounded Work carousel, already specified as isolated progressive enhancement, so a separate architecture artifact or Lite profile upgrade would add process without reducing material implementation risk.",
+      "recordedAt": "2026-08-18T06:54:33.010Z"
+    }
+  },
+  "snapshots": [
+    {
+      "id": "SRC-DS-001",
+      "role": "Input baseline",
+      "pinStrength": "Time-bound",
+      "status": "Active",
+      "reference": "https://www.figma.com/design/HfvHWLtq8ESeaaVpAU6IlX/single-page-design-portfolio?node-id=2141-862"
+    },
+    {
+      "id": "SRC-REPO-001",
+      "role": "Input baseline",
+      "pinStrength": "Immutable",
+      "status": "Active",
+      "reference": "https://github.com/ferfalcon/single-page-design-portfolio",
+      "commit": "07635a8eafb4323909619a0b62e41a4d8144d764"
+    }
+  ],
+  "verifications": [
+    {
+      "id": "VER-001",
+      "snapshot": "SRC-DS-001",
+      "result": "Unchanged",
+      "method": "Direct Figma metadata inspection of page `🤖 Workflow` (2141:862)",
+      "evidence": "The scoped page still exposes the recorded mobile, tablet, and desktop Home frames, section/navigation components, interaction states, design-system documentation, and assets; no material upstream change was observed.",
+      "checkedAt": "2026-08-18T02:20:31.219Z"
+    },
+    {
+      "id": "VER-002",
+      "snapshot": "SRC-REPO-001",
+      "result": "Expected workflow output",
+      "method": "GitHub branch and immutable commit inspection",
+      "evidence": "The pinned implementation baseline commit 07635a8eafb4323909619a0b62e41a4d8144d764 remains available and unchanged. `main` has advanced only through the approved workflow-initialization merge 3c89f7b239d8d91da1bbb830b94f76f3a66b453a, which added workflow metadata and no frontend implementation changes.",
+      "checkedAt": "2026-08-18T02:20:32.219Z"
+    },
+    {
+      "id": "VER-003",
+      "snapshot": "SRC-DS-001",
+      "result": "Unchanged",
+      "method": "Fresh Figma metadata inspection of Workflow page 2141:862",
+      "evidence": "The scoped Workflow page, mobile/tablet/desktop Home frames, responsive section and navigation components, carousel controls, and five Work assets remained present before Stage 2 approval.",
+      "checkedAt": "2026-08-18T03:39:15.982Z"
+    },
+    {
+      "id": "VER-004",
+      "snapshot": "SRC-REPO-001",
+      "result": "Expected workflow output",
+      "method": "Git baseline and workflow-output inspection",
+      "evidence": "The immutable implementation baseline remains unchanged; subsequent main-branch changes through the approved Stage 2 merge contain workflow documentation only and no frontend implementation changes.",
+      "checkedAt": "2026-08-18T03:39:16.030Z"
+    },
+    {
+      "id": "VER-005",
+      "snapshot": "SRC-DS-001",
+      "result": "Unchanged",
+      "method": "Fresh Figma metadata inspection of Workflow page 2141:862",
+      "evidence": "The scoped Workflow page, mobile/tablet/desktop Home frames, responsive section and navigation components, interaction states, profile portrait, and five Work assets remained present before Stage 3 approval.",
+      "checkedAt": "2026-08-18T04:10:35.556Z"
+    },
+    {
+      "id": "VER-006",
+      "snapshot": "SRC-REPO-001",
+      "result": "Expected workflow output",
+      "method": "Git baseline and workflow-output inspection",
+      "evidence": "The immutable implementation baseline remains unchanged; approved workflow changes through Stage 3 are documentation and workflow state only, with no frontend implementation changes.",
+      "checkedAt": "2026-08-18T04:10:35.616Z"
+    },
+    {
+      "id": "VER-007",
+      "snapshot": "SRC-DS-001",
+      "result": "Unchanged",
+      "method": "Fresh Figma metadata inspection of Workflow page 2141:862",
+      "evidence": "The scoped Workflow page still exposes the mobile, tablet, and desktop Home frames, responsive Header/Footer/Hero/About/Work/Contact components, carousel Default/Hover/Focus states, profile portrait, and five Work assets after completion of the Stage 4 specification; no material upstream design change was observed before Stage 4 approval.",
+      "checkedAt": "2026-08-18T05:16:57.289Z"
+    },
+    {
+      "id": "VER-008",
+      "snapshot": "SRC-REPO-001",
+      "result": "Expected workflow output",
+      "method": "Git baseline and workflow-output inspection",
+      "evidence": "The immutable implementation baseline remains unchanged. Comparing SRC-REPO-001 to main through the approved Stage 4 specification shows only workflow state and documentation artifacts; frontend implementation files remain unchanged.",
+      "checkedAt": "2026-08-18T05:16:57.345Z"
+    },
+    {
+      "id": "VER-009",
+      "snapshot": "SRC-REPO-001",
+      "result": "Expected workflow output",
+      "method": "Immutable baseline and task-start branch comparison",
+      "evidence": "The Stage 10 branch descends from approved main 6e562dcb53de6aa122d8c309f66b83820f0bce6e, and frontend/ is byte-unchanged from SRC-REPO-001; intervening changes are workflow/documentation only.",
+      "checkedAt": "2026-08-18T09:27:15.178Z"
+    },
+    {
+      "id": "VER-010",
+      "snapshot": "SRC-DS-001",
+      "result": "Unchanged",
+      "method": "Fresh read-only Figma MCP inspection of Workflow page and 375/768/1440 Home exemplars",
+      "evidence": "Immediately before Stage 10 task start, the Workflow page still contained the recorded Mobile, Tablet, and Desktop Home frames, responsive section/component structure, carousel controls, profile portrait, service artwork, and five standalone Work assets; no material design drift was observed.",
+      "checkedAt": "2026-08-18T09:27:15.236Z"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "ART-SOURCE-BASELINE",
+      "type": "SOURCE-BASELINE",
+      "path": "SOURCE-BASELINE.md",
+      "status": "Approved",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "statusChangedAt": "2026-08-18T02:20:34.219Z",
+      "statusEvidence": "Stage 0 source baseline reviewed against the current Figma scope and pinned repository commit; source identities, pin strengths, scope boundaries, and verification requirements are complete.",
+      "statusBy": "Fernando Falcon"
+    },
+    {
+      "id": "ART-PROJECT-CONTEXT",
+      "type": "PROJECT-CONTEXT",
+      "path": "PROJECT-CONTEXT.md",
+      "status": "Approved",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "statusChangedAt": "2026-08-18T02:20:36.219Z",
+      "statusEvidence": "Stage 0 project context reviewed and approved: Lite + Gated remains appropriate, scope and exclusions are explicit, and quality/repository constraints are recorded.",
+      "statusBy": "Fernando Falcon"
+    },
+    {
+      "id": "ART-WORKFLOW-STATE",
+      "type": "WORKFLOW-STATE",
+      "path": "WORKFLOW-STATE.md",
+      "status": "Approved",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "statusChangedAt": "2026-08-18T02:20:38.219Z",
+      "statusEvidence": "Stage 0 workflow control state reviewed and approved; the Stage 0 approval is resolved and advancement to Stage 1 is intentionally deferred.",
+      "statusBy": "Fernando Falcon"
+    },
+    {
+      "id": "ART-DESIGN-AUDIT",
+      "type": "DESIGN-AUDIT",
+      "path": "DESIGN-AUDIT.md",
+      "status": "Approved",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "statusChangedAt": "2026-08-18T03:20:40.758Z",
+      "statusEvidence": "Project owner approved the Stage 1 design audit and its recorded owner resolutions.",
+      "statusBy": "Fernando Falcon"
+    },
+    {
+      "id": "ART-IMPLEMENTATION-BRIEF",
+      "type": "IMPLEMENTATION-BRIEF",
+      "path": "IMPLEMENTATION-BRIEF.md",
+      "status": "Approved",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "statusChangedAt": "2026-08-18T08:39:59.241Z",
+      "statusEvidence": "Project owner explicitly approved Stage 8 on 2026-08-18 and instructed not to start the next stage.",
+      "statusBy": "Fernando Falcon"
+    },
+    {
+      "id": "ART-TASK-P01-T01",
+      "type": "TASK",
+      "path": "Phase-01--Task-01.md",
+      "status": "Approved",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "statusChangedAt": "2026-08-18T08:54:45.999Z",
+      "statusEvidence": "Project owner approved the Stage 9 task decomposition; P01-T01 covers PLAN-001 through PLAN-004 as one coherent implementation result.",
+      "statusBy": "Fernando Falcon"
+    }
+  ],
+  "traceItems": [
+    {
+      "id": "PLAN-001",
+      "owner": "ART-IMPLEMENTATION-BRIEF",
+      "status": "Active",
+      "required": false,
+      "references": []
+    },
+    {
+      "id": "PLAN-002",
+      "owner": "ART-IMPLEMENTATION-BRIEF",
+      "status": "Active",
+      "required": false,
+      "references": []
+    },
+    {
+      "id": "PLAN-003",
+      "owner": "ART-IMPLEMENTATION-BRIEF",
+      "status": "Active",
+      "required": false,
+      "references": []
+    },
+    {
+      "id": "PLAN-004",
+      "owner": "ART-IMPLEMENTATION-BRIEF",
+      "status": "Active",
+      "required": false,
+      "references": []
+    }
+  ],
+  "gates": [
+    {
+      "id": "GATE-001",
+      "stage": 0,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-001",
+        "VER-002"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE"
+      ],
+      "evidence": "Project owner approved Stage 0. Both active inputs have passing verification, the Stage 0 control artifacts are reviewed and approved, and Stage 1 advancement is intentionally deferred per owner instruction.",
+      "recordedAt": "2026-08-18T02:20:39.219Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-002",
+      "stage": 1,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-001",
+        "VER-002"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT"
+      ],
+      "evidence": "Stage 1 design audit passed CLI preflight; the project owner approved Stage 1 and explicitly deferred Stage 2 advancement.",
+      "recordedAt": "2026-08-18T03:20:40.876Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-003",
+      "stage": 2,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-003",
+        "VER-004"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF"
+      ],
+      "evidence": "Project owner approved the Stage 2 requirements on 2026-08-18; the requirements checkpoint has no blocking product decision and the approved audit resolutions are carried forward.",
+      "recordedAt": "2026-08-18T03:39:16.078Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-004",
+      "stage": 3,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-005",
+        "VER-006"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF"
+      ],
+      "evidence": "Project owner approved the Stage 3 Design Intent on 2026-08-18. The checkpoint has completed both required review passes, preserves the approved AUD-001 through AUD-004 resolutions, and has no blocking design-intent decision.",
+      "recordedAt": "2026-08-18T04:10:35.675Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-005",
+      "stage": 4,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-007",
+        "VER-008"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF"
+      ],
+      "evidence": "Project owner approved the Stage 4 Specification on 2026-08-18. The specification completes both required review passes, makes the approved requirements and design intent testable with SPEC and AC traceability, and has no blocking specification decision. Stage 5 Document Review content is intentionally not started by this approval action.",
+      "recordedAt": "2026-08-18T05:16:57.400Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-006",
+      "stage": 5,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-007",
+        "VER-008"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF"
+      ],
+      "evidence": "Project owner approved Stage 5 on 2026-08-18 after resolving AUD-009 to use standalone Asset/Work/05 for logical Work position 05. The documentation review completed both required passes, the consolidated brief is Reviewed, and Stage 5 preflight recommends Passed.",
+      "recordedAt": "2026-08-18T06:23:38.560Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-007",
+      "stage": 6,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-007",
+        "VER-008"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF"
+      ],
+      "evidence": "Project owner explicitly approved Stage 6 on 2026-08-18 after the architecture checkpoint completed both review passes and preflight recommended Passed; architecture remains Not required and the Lite profile remains appropriate.",
+      "recordedAt": "2026-08-18T07:25:56.327Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-008",
+      "stage": 7,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-007",
+        "VER-008"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF"
+      ],
+      "evidence": "Project owner explicitly approved Stage 7 on 2026-08-18 after PLAN-001 through PLAN-004, both required Stage 7 review passes, repository inspection, traceability, risks, ordering, and validation planning were completed; Stage 7 preflight recommended Passed.",
+      "recordedAt": "2026-08-18T08:11:35.286Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-009",
+      "stage": 8,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-007",
+        "VER-008"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF"
+      ],
+      "evidence": "Stage 8 adversarial plan review completed and corrected; project owner explicitly approved Stage 8 and instructed not to start Stage 9.",
+      "recordedAt": "2026-08-18T08:39:59.521Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-010",
+      "stage": 9,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-007",
+        "VER-008"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF",
+        "ART-TASK-P01-T01"
+      ],
+      "evidence": "Project owner approved Stage 9 on 2026-08-18 after reviewing P01-T01. The Lite task set remains one coherent task, its required validation definitions are recorded, and P01-T01 is Ready. Stage 10 implementation is intentionally not started.",
+      "recordedAt": "2026-08-18T08:54:45.999Z",
+      "approvedBy": "Fernando Falcon"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "P01-T01",
+      "status": "In progress",
+      "baseline": "SRC-REPO-001",
+      "prerequisites": [],
+      "references": [
+        "PLAN-001",
+        "PLAN-002",
+        "PLAN-003",
+        "PLAN-004"
+      ],
+      "output": null,
+      "blocker": null,
+      "validation": [
+        {
+          "name": "Build",
+          "kind": "Build",
+          "required": true,
+          "status": "Not executed",
+          "expected": "The Astro production build succeeds with pnpm build.",
+          "command": "pnpm build",
+          "environment": "frontend/",
+          "evidence": [],
+          "reason": "Pending Stage 10 implementation.",
+          "references": [
+            "PLAN-001",
+            "PLAN-002",
+            "PLAN-003",
+            "PLAN-004"
+          ]
+        },
+        {
+          "name": "Accessibility",
+          "kind": "Accessibility",
+          "required": true,
+          "status": "Not executed",
+          "expected": "Semantic structure, keyboard and focus behavior, image alternatives, contrast, reflow/zoom, and reduced-motion checks pass.",
+          "evidence": [],
+          "reason": "Pending Stage 10 implementation and rendered validation.",
+          "references": [
+            "PLAN-002",
+            "PLAN-003",
+            "PLAN-004"
+          ]
+        },
+        {
+          "name": "Responsive and visual fidelity",
+          "kind": "Responsive",
+          "required": true,
+          "status": "Not executed",
+          "expected": "The page remains usable and source-faithful at 375px, 768px, 1440px, 320 CSS px reflow, 200% zoom, and relevant intermediate widths.",
+          "evidence": [],
+          "reason": "Pending Stage 10 rendered validation.",
+          "references": [
+            "PLAN-002",
+            "PLAN-003",
+            "PLAN-004"
+          ]
+        },
+        {
+          "name": "Work carousel behavior",
+          "kind": "Manual",
+          "required": true,
+          "status": "Not executed",
+          "expected": "The five-item Work carousel satisfies the approved start state, cyclic one-step controls, keyboard/focus behavior, reduced motion, rapid input handling, and no-JavaScript fallback.",
+          "evidence": [],
+          "reason": "Pending Stage 10 implementation and interaction validation.",
+          "references": [
+            "PLAN-003",
+            "PLAN-004"
+          ]
+        },
+        {
+          "name": "Vercel preview",
+          "kind": "Manual",
+          "required": true,
+          "status": "Not executed",
+          "expected": "The implementation branch Vercel preview renders the approved page without material regression before merge.",
+          "evidence": [],
+          "reason": "Pending the Stage 10 implementation pull request and preview deployment.",
+          "references": [
+            "PLAN-004"
+          ]
+        }
+      ]
+    }
+  ],
+  "profileTransitions": [],
+  "implementationReviews": []
+}
