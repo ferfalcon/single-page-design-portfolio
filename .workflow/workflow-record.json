@@ -6,7 +6,7 @@
     "executionMode": "Gated"
   },
   "state": {
-    "stage": 3,
+    "stage": 4,
     "status": "In progress",
     "activeInputs": [
       "SRC-DS-001",
@@ -66,6 +66,22 @@
       "method": "Git baseline and workflow-output inspection",
       "evidence": "The immutable implementation baseline remains unchanged; subsequent main-branch changes through the approved Stage 2 merge contain workflow documentation only and no frontend implementation changes.",
       "checkedAt": "2026-08-18T03:39:16.030Z"
+    },
+    {
+      "id": "VER-005",
+      "snapshot": "SRC-DS-001",
+      "result": "Unchanged",
+      "method": "Fresh Figma metadata inspection of Workflow page 2141:862",
+      "evidence": "The scoped Workflow page, mobile/tablet/desktop Home frames, responsive section and navigation components, interaction states, profile portrait, and five Work assets remained present before Stage 3 approval.",
+      "checkedAt": "2026-08-18T04:10:35.556Z"
+    },
+    {
+      "id": "VER-006",
+      "snapshot": "SRC-REPO-001",
+      "result": "Expected workflow output",
+      "method": "Git baseline and workflow-output inspection",
+      "evidence": "The immutable implementation baseline remains unchanged; approved workflow changes through Stage 3 are documentation and workflow state only, with no frontend implementation changes.",
+      "checkedAt": "2026-08-18T04:10:35.616Z"
     }
   ],
   "artifacts": [
@@ -201,6 +217,30 @@
       ],
       "evidence": "Project owner approved the Stage 2 requirements on 2026-08-18; the requirements checkpoint has no blocking product decision and the approved audit resolutions are carried forward.",
       "recordedAt": "2026-08-18T03:39:16.078Z",
+      "approvedBy": "Fernando Falcon"
+    },
+    {
+      "id": "GATE-004",
+      "stage": 3,
+      "status": "Active",
+      "result": "Passed",
+      "baseline": [
+        "SRC-DS-001",
+        "SRC-REPO-001"
+      ],
+      "verifications": [
+        "VER-005",
+        "VER-006"
+      ],
+      "artifacts": [
+        "ART-SOURCE-BASELINE",
+        "ART-PROJECT-CONTEXT",
+        "ART-WORKFLOW-STATE",
+        "ART-DESIGN-AUDIT",
+        "ART-IMPLEMENTATION-BRIEF"
+      ],
+      "evidence": "Project owner approved the Stage 3 Design Intent on 2026-08-18. The checkpoint has completed both required review passes, preserves the approved AUD-001 through AUD-004 resolutions, and has no blocking design-intent decision.",
+      "recordedAt": "2026-08-18T04:10:35.675Z",
       "approvedBy": "Fernando Falcon"
     }
   ],
