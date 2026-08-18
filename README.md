@@ -63,6 +63,11 @@ pnpm dlx skills add GoogleChrome/modern-web-guidance
 pnpm dlx skills add https://github.com/upstash/context7 context7-mcp
 ```
 
+- [Web Interface Guidelines](https://www.skills.sh/vercel-labs/agent-skills/web-design-guidelines) - Review files for compliance with Web Interface Guidelines.
+```bash
+pnpm dlx skills add https://github.com/vercel-labs/agent-skills web-design-guidelines
+```
+
 ## Author
 
 - Website — [ferfalcon.com](http://ferfalcon.com/)
