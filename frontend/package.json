@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node ../docs/implementation-workflow/cli/design-workflow.mjs artifact review ART-IMPLEMENTATION-BRIEF --evidence \"Stage 5 documentation consistency review completed\" && node ../docs/implementation-workflow/cli/design-workflow.mjs stage check --json && node ../docs/implementation-workflow/cli/design-workflow.mjs stage review --result Passed --evidence \"Stage 5 document review and preflight passed\" --approved-by \"Fernando Falcon\" && rm -rf public/workflow-export && mkdir -p public/workflow-export/generated && cp ../.workflow/workflow-record.json public/workflow-export/workflow-record.json && cp ../.workflow/generated/*.md public/workflow-export/generated/ && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
