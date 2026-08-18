@@ -255,12 +255,14 @@
       "id": "ART-TASK-P01-T02",
       "type": "TASK",
       "path": "Phase-01--Task-02.md",
-      "status": "Draft",
+      "status": "Reviewed",
       "baseline": [
         "SRC-DS-001",
         "SRC-REPO-001",
         "SRC-REPO-002"
-      ]
+      ],
+      "statusChangedAt": "2026-08-18T14:42:24.691Z",
+      "statusEvidence": "P01-T02 was reviewed against Stage 11 axe-core evidence, SRC-REPO-002, SPEC-ACC-003, SPEC-VAL-002/003, and PLAN-003/004. Scope is limited to restoring valid Work list semantics while preserving the approved carousel behavior and visual geometry; five required regression checks are declared."
     }
   ],
   "traceItems": [
