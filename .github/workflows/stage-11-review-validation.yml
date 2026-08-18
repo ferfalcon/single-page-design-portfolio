@@ -1,4 +1,4 @@
-name: Stage 11 review validation
+name: Stage 11 correction planning
 
 on:
   pull_request:
@@ -10,98 +10,95 @@ permissions:
   contents: write
 
 jobs:
-  final-review-validation:
+  plan-correction:
     if: github.head_ref == 'agent/stage-10-implementation'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout review branch
+      - name: Checkout workflow branch
         uses: actions/checkout@v4
         with:
           ref: agent/stage-10-implementation
           fetch-depth: 0
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
 
-      - name: Confirm frontend still equals implementation output
-        run: git diff --quiet edd76540e89eb4e82c82ab567c183eb1b9abf0f4 HEAD -- frontend/
-
-      - name: Install and build
-        run: |
-          pnpm --dir frontend install --frozen-lockfile
-          pnpm --dir frontend build
-
-      - name: Install temporary accessibility tooling
-        run: |
-          pnpm --dir frontend add --save-dev @playwright/test@latest @axe-core/playwright@latest --lockfile=false
-          pnpm --dir frontend exec playwright install --with-deps chromium
-
-      - name: Start production preview
+      - name: Rewind and register accessibility correction
         shell: bash
         run: |
           set -euo pipefail
-          pnpm --dir frontend preview --host 127.0.0.1 --port 4321 > /tmp/astro-preview.log 2>&1 &
-          for i in {1..30}; do
-            curl --fail --silent http://127.0.0.1:4321/ > /dev/null && exit 0
-            sleep 1
-          done
-          cat /tmp/astro-preview.log
-          exit 1
+          CLI='node docs/implementation-workflow/cli/design-workflow.mjs'
+          $CLI sync
+          $CLI context --json
 
-      - name: Run final accessibility checks
-        shell: bash
-        run: |
-          mkdir -p frontend/tests
-          cat > frontend/tests/stage-11-accessibility.spec.ts <<'TEST'
-          import { test, expect } from '@playwright/test';
-          import AxeBuilder from '@axe-core/playwright';
+          $CLI stage rewind 9 \
+            --reason 'Stage 11 independent axe-core validation found a serious WCAG 1.3.1 list-structure defect: Work uses li elements with role=group directly under a ul, overriding their native listitem role at 375px, 768px, and 1440px. A corrected implementation output and retest are required before final acceptance.'
 
-          const url = 'http://127.0.0.1:4321/';
+          $CLI trace define IMPL-001 \
+            --owner ART-IMPLEMENTATION-REVIEW \
+            --required true \
+            --references PLAN-003,PLAN-004
 
-          for (const width of [375, 768, 1440]) {
-            test(`axe and semantics at ${width}px`, async ({ page }) => {
-              await page.setViewportSize({ width, height: 900 });
-              await page.goto(url);
+          $CLI task create \
+            --title 'Correct Work carousel list semantics' \
+            --baseline SRC-REPO-002 \
+            --references IMPL-001,PLAN-003,PLAN-004 \
+            --path Phase-01--Task-02.md
 
-              const results = await new AxeBuilder({ page }).analyze();
-              const blocking = results.violations.filter((violation) =>
-                violation.impact === 'critical' || violation.impact === 'serious'
-              );
-              expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
+          $CLI task validation set P01-T02 \
+            --name Build \
+            --kind Build \
+            --required true \
+            --status 'Not executed' \
+            --expected 'The corrected Astro production build succeeds with pnpm build.' \
+            --reason 'Pending correction implementation.' \
+            --references PLAN-004
 
-              await expect(page.getByRole('main')).toBeVisible();
-              await expect(page.getByRole('heading', { level: 1, name: 'Design solutions made easy' })).toHaveCount(1);
-              await expect(page.getByRole('heading', { level: 2 })).toHaveCount(3);
-              await expect(page.getByRole('button', { name: 'Previous project' })).toBeVisible();
-              await expect(page.getByRole('button', { name: 'Next project' })).toBeVisible();
-              await expect(page.locator('[data-carousel-slide]')).toHaveCount(5);
-              await expect(page.locator('[data-carousel-status]')).toHaveAttribute('aria-live', 'polite');
-            });
-          }
+          $CLI task validation set P01-T02 \
+            --name 'Accessibility semantics' \
+            --kind Accessibility \
+            --required true \
+            --status 'Not executed' \
+            --expected 'Axe-core reports no critical or serious violations at 375px, 768px, and 1440px; the carousel retains list semantics, position context, accessible controls, focus retention, and polite announcements.' \
+            --reason 'Pending correction implementation and retest.' \
+            --references IMPL-001,PLAN-003,PLAN-004
 
-          test('keyboard and live announcement remain intact', async ({ page }) => {
-            await page.setViewportSize({ width: 375, height: 900 });
-            await page.goto(url);
-            const next = page.getByRole('button', { name: 'Next project' });
-            await next.focus();
-            await page.keyboard.press('Enter');
-            await page.waitForTimeout(230);
-            await expect(next).toBeFocused();
-            await expect(page.locator('[data-carousel-status]')).toHaveText('Project 4 of 5');
-          });
-          TEST
-          pnpm --dir frontend exec playwright test tests/stage-11-accessibility.spec.ts --reporter=line
+          $CLI task validation set P01-T02 \
+            --name 'Carousel regression' \
+            --kind Test \
+            --required true \
+            --status 'Not executed' \
+            --expected 'Initial Work 03, cyclic one-step navigation, Enter/Space and touch activation, rapid-input serialization, reduced motion, and no-JavaScript fallback remain unchanged.' \
+            --reason 'Pending correction implementation and regression testing.' \
+            --references PLAN-003,PLAN-004
 
-      - name: Self-clean validation runner
+          $CLI task validation set P01-T02 \
+            --name 'Responsive and visual regression' \
+            --kind Responsive \
+            --required true \
+            --status 'Not executed' \
+            --expected 'The semantic correction introduces no layout or visual regression at the 375px, 768px, and 1440px Figma exemplars or 320px reflow.' \
+            --reason 'Pending correction implementation and rendered comparison.' \
+            --references PLAN-004
+
+          $CLI task validation set P01-T02 \
+            --name 'Vercel preview' \
+            --kind Manual \
+            --required true \
+            --status 'Not executed' \
+            --expected 'A Vercel preview for the corrected implementation is READY and renders the corrected carousel markup before final review.' \
+            --reason 'Pending corrected implementation preview.' \
+            --references PLAN-004
+
+          $CLI task ready P01-T02
+          $CLI sync
+          $CLI sync --check
+          $CLI validate
+          $CLI context --json
+
+      - name: Persist correction plan and self-clean
         shell: bash
         run: |
           set -euo pipefail
@@ -110,6 +107,7 @@ jobs:
           rm .github/workflows/stage-11-review-validation.yml
           rmdir .github/workflows 2>/dev/null || true
           rmdir .github 2>/dev/null || true
+          git add .workflow Phase-01--Task-02.md
           git add -u .github/workflows/stage-11-review-validation.yml 2>/dev/null || true
-          git commit -m 'Complete Stage 11 accessibility review'
+          git commit -m 'Plan Stage 11 accessibility correction'
           git push origin HEAD:agent/stage-10-implementation
