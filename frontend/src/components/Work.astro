@@ -18,23 +18,27 @@ const projects = [
   <h2 id="work-title">My Work</h2>
 
   <div class="work-carousel" role="region" aria-roledescription="carousel" aria-labelledby="work-title">
-    <ul id="work-carousel-track" class="work-carousel__track" data-carousel-track>
+    <ul id="work-carousel-track" class="work-carousel__track" role="list" data-carousel-track>
       {projects.map((project, index) => (
         <li
           class="work-carousel__slide"
-          role="group"
-          aria-label={`${index + 1} of ${projects.length}`}
           data-carousel-slide
           data-index={index}
         >
-          <img
-            class="work-carousel__image"
-            src={project.src.src}
-            width={project.src.width}
-            height={project.src.height}
-            alt={project.alt}
-            loading="lazy"
-          />
+          <div
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${index + 1} of ${projects.length}`}
+          >
+            <img
+              class="work-carousel__image"
+              src={project.src.src}
+              width={project.src.width}
+              height={project.src.height}
+              alt={project.alt}
+              loading="lazy"
+            />
+          </div>
         </li>
       ))}
     </ul>
