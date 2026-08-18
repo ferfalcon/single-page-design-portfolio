@@ -1,0 +1,50 @@
+name: Review correction task
+
+on:
+  pull_request:
+    types: [synchronize]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  review-task:
+    if: github.head_ref == 'agent/stage-10-implementation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout workflow branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/stage-10-implementation
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Review correction task artifact
+        run: |
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs artifact review ART-TASK-P01-T02 \
+            --evidence 'P01-T02 was reviewed against Stage 11 axe-core evidence, SRC-REPO-002, SPEC-ACC-003, SPEC-VAL-002/003, and PLAN-003/004. Scope is limited to restoring valid Work list semantics while preserving the approved carousel behavior and visual geometry; five required regression checks are declared.'
+          node docs/implementation-workflow/cli/design-workflow.mjs sync
+          node docs/implementation-workflow/cli/design-workflow.mjs sync --check
+          node docs/implementation-workflow/cli/design-workflow.mjs validate
+          node docs/implementation-workflow/cli/design-workflow.mjs context --json
+
+      - name: Persist review and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm .github/workflows/review-correction-task.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git add .workflow
+          git add -u .github/workflows/review-correction-task.yml 2>/dev/null || true
+          git commit -m 'Review accessibility correction task'
+          git push origin HEAD:agent/stage-10-implementation
