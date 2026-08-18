@@ -998,7 +998,7 @@ There is no migration, persistence, backend rollout, API contract, or architectu
 
 ### Blocking
 
-- None. Stage 6 is approved through `GATE-007`, `AUD-009` is owner-resolved, and the inspected repository has no structural blocker to Stage 7 planning.
+- None. Stage 7 is approved through `GATE-008`, `AUD-009` remains owner-resolved, and the Stage 8 adversarial review found no unresolved technical decision or profile-upgrade trigger. Project-owner approval of Stage 8 remains a workflow gate rather than a product/technical blocker.
 
 ### Non-blocking
 
@@ -1007,7 +1007,7 @@ There is no migration, persistence, backend rollout, API contract, or architectu
 - Exact media-query values are intentionally not fixed by the 375px/768px/1440px exemplars. Implementation selects transition points from rendered failure conditions and validates both anchors and intermediate widths.
 - The repository currently exposes only the production build as an automated frontend check. Browser-based visual, keyboard, focus, contrast, zoom/reflow, reduced-motion, no-JavaScript, and assistive-structure validation remain explicit evidence requirements.
 - The optional visual-clone technique in `PLAN-003` is limited to cyclic edge animation and must remain assistive-hidden/non-interactive; prefer a simpler equivalent implementation if it satisfies the specified geometry and behavior.
-- No task IDs exist yet. Stage 9 will decompose the approved plan after the separate Stage 8 adversarial review.
+- No task IDs exist yet. Stage 9 task decomposition may begin only after the project owner approves Stage 8 and the canonical Stage 8 gate passes.
 
 ## 10. Traceability
 
@@ -1067,11 +1067,11 @@ Stage 7 reviewed the repository-aware plan against the actual frontend and all a
 - [x] Remaining uncertainty is visible and non-blocking: exact exported asset filenames/formats, permitted font delivery, and final failure-driven media-query values are resolved during implementation from source and rendered evidence.
 - [x] The plan remains small enough for the Lite brief; no profile upgrade is warranted.
 
-## 14. Readiness
+## 14. Stage 7 Readiness — Historical Checkpoint
 
-**Stage 7 content complete; ready for canonical Stage 7 preflight and project-owner approval.** Repository inspection, `PLAN-001` through `PLAN-004`, two required review passes, risks, ordering, and validation are documented. The consolidated brief should remain `Reviewed` for the Stage 7 gate.
+Stage 7 planning completed with `PLAN-001` through `PLAN-004`, two required review passes, risks, ordering, and validation documented. The project owner subsequently approved Stage 7 on 2026-08-18 and the canonical workflow recorded `GATE-008` as Passed before advancing to Stage 8.
 
-The Stage 7 gate is intentionally **not** recorded as passed by this change. Stage 8 — adversarial plan review — must not start until explicit project-owner approval is recorded and the workflow advances.
+This section is retained as the Stage 7 checkpoint record; current readiness is owned by the Stage 8 section below.
 
 ## 15. Stage 8 — Adversarial Plan Review
 
@@ -1122,4 +1122,4 @@ This correction preserves `AC-004` for the functioning carousel and `AC-014` for
 
 ### Stage 8 readiness
 
-**Ready for task decomposition.** The Stage 7 plan has been adversarially challenged and corrected without uncovering an unresolved technical decision or a reason to upgrade the Lite profile. Canonical Stage 8 preflight must pass and the project owner must explicitly approve the Stage 8 gate before the workflow may advance to Stage 9. Stage 9 task decomposition and Stage 10 implementation remain intentionally unstarted.
+**Ready for task decomposition, pending project-owner approval.** The Stage 7 plan has been adversarially challenged and corrected without uncovering an unresolved technical decision or a reason to upgrade the Lite profile. CLI validation and generated-state checks are clean; Stage 8 preflight reaches the expected approval-only finding that the Stage 8 plan artifact must be Approved. After explicit project-owner approval, rerun Stage 8 preflight, record the passing Stage 8 gate, and only then advance to Stage 9. Stage 9 task decomposition and Stage 10 implementation remain intentionally unstarted.
